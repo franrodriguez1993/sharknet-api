@@ -11,7 +11,8 @@ exports.getPagination = getPagination;
 /** LIST PRODUCT DATA  **/
 function getPaginationData(data, page, limit) {
     const currentPage = page ? page + 1 : 1;
-    const { count: totalItems, rows: products } = data;
+    let { count: totalItems, rows: products } = data;
+    totalItems = totalItems - 1;
     const totalPages = Math.ceil(totalItems / limit);
     return { totalItems, products, totalPages, currentPage };
 }
