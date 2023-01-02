@@ -13,7 +13,8 @@ const imgRoute_1 = require("./routes/imgRoute");
 const superuser_1 = require("./routes/superuser");
 const notification_1 = require("./routes/notification");
 const app = (0, express_1.default)();
-const whitelist = ["http://localhost:3000"];
+/** =========================  CORS  ==========================  **/
+const urlList = [process.env.CORS_URL1, process.env.CORS_URL2];
 const corsOptions = {
     credentials: true,
     origin: function (origin, callback) {
@@ -21,7 +22,7 @@ const corsOptions = {
             //for bypassing postman req with  no origin
             return callback(null, true);
         }
-        if (whitelist.indexOf(origin) !== -1) {
+        if (urlList.indexOf(origin) !== -1) {
             callback(null, true);
         }
         else {
