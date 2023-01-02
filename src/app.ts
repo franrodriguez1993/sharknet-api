@@ -9,7 +9,9 @@ import { superRouters } from "./routes/superuser";
 import { notificationtRouters } from "./routes/notification";
 const app = express();
 
-const whitelist = ["http://localhost:3000"];
+/** =========================  CORS  ==========================  **/
+
+const urlList = [process.env.CORS_URL1, process.env.CORS_URL2];
 const corsOptions = {
   credentials: true,
   origin: function (origin: any, callback: any) {
@@ -17,7 +19,7 @@ const corsOptions = {
       //for bypassing postman req with  no origin
       return callback(null, true);
     }
-    if (whitelist.indexOf(origin) !== -1) {
+    if (urlList.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
