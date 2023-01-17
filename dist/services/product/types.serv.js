@@ -9,34 +9,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delPTypesServ = exports.listPTypesServ = exports.createPTypesServ = void 0;
 //uuid:
 const uuid_1 = require("uuid");
 //Dao:
 const containers_1 = require("../../containers");
-/**====================== CREATE PRODUCT TYPE ===========================**/
-function createPTypesServ(pt_name, pc_id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (pt_name.trim() === "")
-            return "PRODUCT_TYPE_REQUIRED";
-        else if (pc_id.trim() === "")
-            return "CATEGORY_ID_REQUIRED";
-        const pt_id = (0, uuid_1.v4)();
-        return yield containers_1.daoProductTypes.createType(pt_id, pt_name, pc_id);
-    });
+class typesProductService {
+    /**=============== CREATE PRODUCT TYPE =================**/
+    createPTypesServ(pt_name, pc_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (pt_name.trim() === "")
+                return "PRODUCT_TYPE_REQUIRED";
+            else if (pc_id.trim() === "")
+                return "CATEGORY_ID_REQUIRED";
+            const pt_id = (0, uuid_1.v4)();
+            return yield containers_1.daoProductTypes.createType(pt_id, pt_name, pc_id);
+        });
+    }
+    /**================ LIST PRODUCT TYPE =================**/
+    listPTypesServ() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield containers_1.daoProductTypes.listTypes();
+        });
+    }
+    /**============= DELETE PRODUCT TYPE ==================**/
+    delPTypesServ(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield containers_1.daoProductTypes.deleteTypes(id);
+        });
+    }
 }
-exports.createPTypesServ = createPTypesServ;
-/**====================== LIST PRODUCT TYPE ===========================**/
-function listPTypesServ() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield containers_1.daoProductTypes.listTypes();
-    });
-}
-exports.listPTypesServ = listPTypesServ;
-/**====================== DELETE PRODUCT TYPE ===========================**/
-function delPTypesServ(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield containers_1.daoProductTypes.deleteTypes(id);
-    });
-}
-exports.delPTypesServ = delPTypesServ;
+exports.default = typesProductService;

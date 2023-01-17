@@ -9,26 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getNotificationServ = exports.checkSeenServ = void 0;
 const containers_1 = require("../../containers");
-/** ======================  CHECK SEEN NOTIFICATION  ====================== **/
-function checkSeenServ(notification_id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield containers_1.daoNotification.checkSeen(notification_id);
-    });
+class notificationService {
+    /** ===========  CHECK SEEN NOTIFICATION  ============== **/
+    checkSeenServ(notification_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield containers_1.daoNotification.checkSeen(notification_id);
+        });
+    }
+    /** ================  GET NOTIFICATIONS LIST  =============== **/
+    getNotificationServ(tokenID, user_id, page, size) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //Check Authorization:
+            if (tokenID.uid.toString() !== user_id.toString())
+                return "UNAUTHORIZED_ACTION";
+            //Check user:
+            const user = yield containers_1.daoUser.getUser("id", user_id, true);
+            if (!user)
+                return "USER_NOT_FOUND";
+            return yield containers_1.daoNotification.getNotifications(user_id, page, size);
+        });
+    }
 }
-exports.checkSeenServ = checkSeenServ;
-/** ======================  GET NOTIFICATIONS LIST  ====================== **/
-function getNotificationServ(tokenID, user_id, page, size) {
-    return __awaiter(this, void 0, void 0, function* () {
-        //Check Authorization:
-        if (tokenID.uid.toString() !== user_id.toString())
-            return "UNAUTHORIZED_ACTION";
-        //Check user:
-        const user = yield containers_1.daoUser.getUser("id", user_id, true);
-        if (!user)
-            return "USER_NOT_FOUND";
-        return yield containers_1.daoNotification.getNotifications(user_id, page, size);
-    });
-}
-exports.getNotificationServ = getNotificationServ;
+exports.default = notificationService;

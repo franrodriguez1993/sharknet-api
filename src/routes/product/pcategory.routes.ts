@@ -1,17 +1,25 @@
 import { Router } from "express";
 
 //Controllers:
-import {
-  createCategoryCtrl,
-  listCategoryCtrl,
-  deleteCategoryCtrl,
-} from "../../controllers/product/category.ctrl";
+import categoryProductController from "../../controllers/product/category.ctrl";
+
+const controller = new categoryProductController();
 import { requireAdmin } from "../../middlewares/requireAdmin";
 import { requireToken } from "../../middlewares/requireToken";
 
 const router = Router();
-router.post("/create", requireToken, requireAdmin, createCategoryCtrl);
-router.get("/list", listCategoryCtrl);
-router.delete("/del/:id", requireToken, requireAdmin, deleteCategoryCtrl);
+router.post(
+  "/create",
+  requireToken,
+  requireAdmin,
+  controller.createCategoryCtrl
+);
+router.get("/list", controller.listCategoryCtrl);
+router.delete(
+  "/del/:id",
+  requireToken,
+  requireAdmin,
+  controller.deleteCategoryCtrl
+);
 
 export { router };

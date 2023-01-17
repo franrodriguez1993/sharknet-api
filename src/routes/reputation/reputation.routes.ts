@@ -2,20 +2,14 @@ import { Router } from "express";
 
 //Controllers:
 //REPUTATION USER:
-import {
-  createRepuBuyerCtrl,
-  createRepuSellerCtrl,
-  deleteReputationCtrl,
-  ListRepuBuyerCtrl,
-  listRepuSellerCtrl,
-} from "../../controllers/reputation/RUser.ctrl";
+import repuUserController from "../../controllers/reputation/RUser.ctrl";
+
+const repUserController = new repuUserController();
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //REPUTATION PRODUCTS:
-import {
-  createReputationCtrl,
-  delRepuProductCtrl,
-  listRepuProductCtrl,
-} from "../../controllers/reputation/RProduct.ctrl";
+import reputationProductController from "../../controllers/reputation/RProduct.ctrl";
+
+const repProdController = new reputationProductController();
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //Middlewares:
@@ -30,25 +24,33 @@ router.post(
   "/user/qualify/seller",
   requireToken,
   validatorQualifyUser,
-  createRepuSellerCtrl
+  repUserController.createRepuSellerCtrl
 );
 router.post(
   "/user/qualify/buyer",
   requireToken,
   validatorQualifyUser,
-  createRepuBuyerCtrl
+  repUserController.createRepuBuyerCtrl
 );
 //list:
-router.get("/user/buyer/:id", ListRepuBuyerCtrl);
-router.get("/user/seller/:id", listRepuSellerCtrl);
+router.get("/user/buyer/:id", repUserController.ListRepuBuyerCtrl);
+router.get("/user/seller/:id", repUserController.listRepuSellerCtrl);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //PRODUCT REPUTATION:
 //create:
-router.post("/product/qualify", requireToken, createReputationCtrl);
+router.post(
+  "/product/qualify",
+  requireToken,
+  repProdController.createReputationCtrl
+);
 //list:
-router.get("/product/:id", listRepuProductCtrl);
+router.get("/product/:id", repProdController.listRepuProductCtrl);
 //delete:
-router.delete("/product/del/:id", requireToken, delRepuProductCtrl);
+router.delete(
+  "/product/del/:id",
+  requireToken,
+  repProdController.delRepuProductCtrl
+);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 export { router };

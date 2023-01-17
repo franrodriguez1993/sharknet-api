@@ -9,36 +9,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delImgProductServ = exports.createImgProductServ = void 0;
 //uuid:
 const uuid_1 = require("uuid");
 //DAOs:
 const containers_1 = require("../../containers");
-/** ==================== CREATE IMG PRODUCT ===================== **/
-function createImgProductServ(tokenUID, data) {
-    return __awaiter(this, void 0, void 0, function* () {
-        //Check Product:
-        const product = yield containers_1.daoProduct.getProduct(data.product_id, true);
-        if (!product)
-            return "PRODUCT_NOT_FOUND";
-        if (product.user_id.toString() !== tokenUID.toString())
-            return "INVALID_SELLER";
-        //Check Authorization:
-        if (product.user_id.toString() !== tokenUID.toString())
-            return "UNAUTHORIZED_ACTION";
-        //Check path:
-        if (!data.ip_path)
-            return "INVALID_ROUTE";
-        //Create:
-        const ip_id = (0, uuid_1.v4)();
-        return yield containers_1.daoImgProduct.createImg(Object.assign(Object.assign({}, data), { ip_id }));
-    });
+class imageProductService {
+    /** ============= CREATE IMG PRODUCT ============= **/
+    createImgProductServ(tokenUID, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //Check Product:
+            const product = yield containers_1.daoProduct.getProduct(data.product_id, true);
+            if (!product)
+                return "PRODUCT_NOT_FOUND";
+            if (product.user_id.toString() !== tokenUID.toString())
+                return "INVALID_SELLER";
+            //Check Authorization:
+            if (product.user_id.toString() !== tokenUID.toString())
+                return "UNAUTHORIZED_ACTION";
+            //Check path:
+            if (!data.ip_path)
+                return "INVALID_ROUTE";
+            //Create:
+            const ip_id = (0, uuid_1.v4)();
+            return yield containers_1.daoImgProduct.createImg(Object.assign(Object.assign({}, data), { ip_id }));
+        });
+    }
+    /** ============== DELETE IMG PRODUCT ================ **/
+    delImgProductServ(ip_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield containers_1.daoImgProduct.deleteImg(ip_id);
+        });
+    }
 }
-exports.createImgProductServ = createImgProductServ;
-/** ==================== DELETE IMG PRODUCT ===================== **/
-function delImgProductServ(ip_id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield containers_1.daoImgProduct.deleteImg(ip_id);
-    });
-}
-exports.delImgProductServ = delImgProductServ;
+exports.default = imageProductService;

@@ -9,33 +9,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteScoreServ = exports.listScoreServ = exports.createScoreServ = void 0;
 //uuid:
 const uuid_1 = require("uuid");
 //DAOs:
 const containers_1 = require("../../containers");
-/** ========================= CREATE SCORE ========================= **/
-function createScoreServ(rs_name) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (rs_name.trim() === "")
-            return "NAME_REQUIRED";
-        //create:
-        const rs_id = (0, uuid_1.v4)();
-        return yield containers_1.daoRepuScore.createScore(rs_id, rs_name);
-    });
+class repuScoreService {
+    /** =============== CREATE SCORE ================= **/
+    createScoreServ(rs_name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (rs_name.trim() === "")
+                return "NAME_REQUIRED";
+            //create:
+            const rs_id = (0, uuid_1.v4)();
+            return yield containers_1.daoRepuScore.createScore(rs_id, rs_name);
+        });
+    }
+    /** =================== LIST SCORE ==================== **/
+    listScoreServ() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield containers_1.daoRepuScore.listScores();
+        });
+    }
+    /** ================== DELETE SCORE ================== **/
+    deleteScoreServ(rs_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield containers_1.daoRepuScore.deleteScore(rs_id);
+        });
+    }
 }
-exports.createScoreServ = createScoreServ;
-/** ========================= LIST SCORE ========================= **/
-function listScoreServ() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield containers_1.daoRepuScore.listScores();
-    });
-}
-exports.listScoreServ = listScoreServ;
-/** ========================= DELETE SCORE ========================= **/
-function deleteScoreServ(rs_id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield containers_1.daoRepuScore.deleteScore(rs_id);
-    });
-}
-exports.deleteScoreServ = deleteScoreServ;
+exports.default = repuScoreService;

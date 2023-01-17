@@ -8,61 +8,64 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteScoreCtrl = exports.listScoreCtrl = exports.createScoreCtrl = void 0;
-const RScore_serv_1 = require("../../services/reputation/RScore.serv");
-/** ========================= CREATE SCORE ========================= **/
-function createScoreCtrl(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            //Data:
-            const { name } = req.body;
-            //Service:
-            const score = yield (0, RScore_serv_1.createScoreServ)(name);
-            //return:
-            if (!score)
-                return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-            else if (score === "SCORE_ALREADY_CREATED" || score === "NAME_REQUIRED")
-                return res.status(400).json({ status: 400, msg: score });
-            //Ok:
-            return res.json({ status: 201, msg: "SCORE_CREATED" });
-        }
-        catch (e) {
-            return res.status(500).json({ status: 500, msg: e.message });
-        }
-    });
+const RScore_serv_1 = __importDefault(require("../../services/reputation/RScore.serv"));
+const service = new RScore_serv_1.default();
+class repuScoreController {
+    /** ================= CREATE SCORE ================= **/
+    createScoreCtrl(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                //Data:
+                const { name } = req.body;
+                //Service:
+                const score = yield service.createScoreServ(name);
+                //return:
+                if (!score)
+                    return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+                else if (score === "SCORE_ALREADY_CREATED" || score === "NAME_REQUIRED")
+                    return res.status(400).json({ status: 400, msg: score });
+                //Ok:
+                return res.json({ status: 201, msg: "SCORE_CREATED" });
+            }
+            catch (e) {
+                return res.status(500).json({ status: 500, msg: e.message });
+            }
+        });
+    }
+    /** =================== LIST SCORE ================== **/
+    listScoreCtrl(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                //service:
+                const list = yield service.listScoreServ();
+                return res.json({ status: 200, msg: "OK", data: list });
+            }
+            catch (e) {
+                return res.status(500).json({ status: 500, msg: e.message });
+            }
+        });
+    }
+    /** =============== DELETE SCORE ================= **/
+    deleteScoreCtrl(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                //Data:
+                const { id } = req.params;
+                //Service:
+                const del = yield service.deleteScoreServ(id);
+                if (!del)
+                    return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+                //Return:
+                return res.json({ status: 200, msg: "SCORE_DELETED" });
+            }
+            catch (e) {
+                return res.status(500).json({ status: 500, msg: e.message });
+            }
+        });
+    }
 }
-exports.createScoreCtrl = createScoreCtrl;
-/** ========================= LIST SCORE ========================= **/
-function listScoreCtrl(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            //service:
-            const list = yield (0, RScore_serv_1.listScoreServ)();
-            return res.json({ status: 200, msg: "OK", data: list });
-        }
-        catch (e) {
-            return res.status(500).json({ status: 500, msg: e.message });
-        }
-    });
-}
-exports.listScoreCtrl = listScoreCtrl;
-/** ========================= DELETE SCORE ========================= **/
-function deleteScoreCtrl(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            //Data:
-            const { id } = req.params;
-            //Service:
-            const del = yield (0, RScore_serv_1.deleteScoreServ)(id);
-            if (!del)
-                return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-            //Return:
-            return res.json({ status: 200, msg: "SCORE_DELETED" });
-        }
-        catch (e) {
-            return res.status(500).json({ status: 500, msg: e.message });
-        }
-    });
-}
-exports.deleteScoreCtrl = deleteScoreCtrl;
+exports.default = repuScoreController;

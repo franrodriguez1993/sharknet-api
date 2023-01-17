@@ -1,18 +1,12 @@
 import { Router } from "express";
 
 //Controllers:
-import {
-  createImgProductCtrl,
-  delImgProductCtrl,
-} from "../../controllers/imgCtrl/imgProduct.ctrl";
-import {
-  createImgUserCtrl,
-  delImgUserCtrl,
-} from "../../controllers/imgCtrl/imgUser.ctrl";
+import imageProductController from "../../controllers/imgCtrl/imgProduct.ctrl";
+
+const controller = new imageProductController();
 
 //Middleware:
 import productMulter from "../../middlewares/productMulter";
-import userMulter from "../../middlewares/userMulter";
 import { requireToken } from "../../middlewares/requireToken";
 const router = Router();
 
@@ -21,17 +15,8 @@ router.post(
   "/product/upload/:product",
   requireToken,
   productMulter.single("product"),
-  createImgProductCtrl
+  controller.createImgProductCtrl
 );
-router.delete("/product/del/:id", requireToken, delImgProductCtrl);
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//USER - ROUTES:
-router.post(
-  "/user/upload/:id",
-  userMulter.single("user"),
-  requireToken,
-  createImgUserCtrl
-);
-router.delete("/user/del/:id", requireToken, delImgUserCtrl);
+router.delete("/product/del/:id", requireToken, controller.delImgProductCtrl);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export { router };

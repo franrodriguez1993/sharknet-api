@@ -1,41 +1,45 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
 //Controllers:
-const product_ctrl_1 = require("../../controllers/product/product.ctrl");
+const product_ctrl_1 = __importDefault(require("../../controllers/product/product.ctrl"));
+const controller = new product_ctrl_1.default();
 //Middlewares
 const requireToken_1 = require("../../middlewares/requireToken");
 const validatorManager_1 = require("../../middlewares/validatorManager");
 const router = (0, express_1.Router)();
 exports.router = router;
 //CREATE:
-router.post("/create", requireToken_1.requireToken, validatorManager_1.validatorProduct, product_ctrl_1.createProductCtrl);
-router.post("/favorite", requireToken_1.requireToken, product_ctrl_1.addPFavoriteCtrl);
+router.post("/create", requireToken_1.requireToken, validatorManager_1.validatorProduct, controller.createProductCtrl);
+router.post("/favorite", requireToken_1.requireToken, controller.addPFavoriteCtrl);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //LIST PRODUCTS:
-router.get("/list", product_ctrl_1.listProductsCtrl);
-router.get("/list/:id", product_ctrl_1.getProductCtrl);
-router.get("/list/search/:search", product_ctrl_1.listQueryProductCtrl);
-router.get("/list/status/:status", product_ctrl_1.listPStatusCtrl);
-router.get("/list/brand/:brand", product_ctrl_1.listPBrandCtrl);
-router.get("/list/user/:id", product_ctrl_1.listPUserCtrl);
-router.get("/list/category/:id", product_ctrl_1.listPCategoryCtrl);
-router.get("/list/type/:id", product_ctrl_1.listPTypeCtrl);
-router.get("/list/offer/all", product_ctrl_1.listProductOfferCtrl);
-router.get("/list/favorite/:id", requireToken_1.requireToken, product_ctrl_1.listPFavoriteCtrl); //list user favorite
+router.get("/list", controller.listProductsCtrl);
+router.get("/list/:id", controller.getProductCtrl);
+router.get("/list/search/:search", controller.listQueryProductCtrl);
+router.get("/list/status/:status", controller.listPStatusCtrl);
+router.get("/list/brand/:brand", controller.listPBrandCtrl);
+router.get("/list/user/:id", controller.listPUserCtrl);
+router.get("/list/category/:id", controller.listPCategoryCtrl);
+router.get("/list/type/:id", controller.listPTypeCtrl);
+router.get("/list/offer/all", controller.listProductOfferCtrl);
+router.get("/list/favorite/:id", requireToken_1.requireToken, controller.listPFavoriteCtrl); //list user favorite
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //EDIT:
-router.put("/edit/:id", requireToken_1.requireToken, validatorManager_1.validatorEditProduct, product_ctrl_1.editProductCtrl);
-router.put("/edit/views/:id", product_ctrl_1.updateViewsCtrl);
+router.put("/edit/:id", requireToken_1.requireToken, validatorManager_1.validatorEditProduct, controller.editProductCtrl);
+router.put("/edit/views/:id", controller.updateViewsCtrl);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //CONDITION:
-router.put("/condition/pause/:id", requireToken_1.requireToken, product_ctrl_1.pauseProductCtrl);
-router.put("/condition/reactivate/:id", requireToken_1.requireToken, product_ctrl_1.reactivateProductCtrl);
-router.delete("/condition/delete/:id", requireToken_1.requireToken, product_ctrl_1.deleteProductCtrl);
+router.put("/condition/pause/:id", requireToken_1.requireToken, controller.pauseProductCtrl);
+router.put("/condition/reactivate/:id", requireToken_1.requireToken, controller.reactivateProductCtrl);
+router.delete("/condition/delete/:id", requireToken_1.requireToken, controller.deleteProductCtrl);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //SALE:
-router.post("/sale/buy", requireToken_1.requireToken, product_ctrl_1.buyProductCtrl);
-router.get("/sale/:id", requireToken_1.requireToken, product_ctrl_1.getSaleCtrl);
-router.get("/sale/list/sales/:id", requireToken_1.requireToken, product_ctrl_1.getUserSalesCtrl);
-router.get("/sale/list/buys/:id", requireToken_1.requireToken, product_ctrl_1.getUserBuysCtrl);
+router.post("/sale/buy", requireToken_1.requireToken, controller.buyProductCtrl);
+router.get("/sale/:id", requireToken_1.requireToken, controller.getSaleCtrl);
+router.get("/sale/list/sales/:id", requireToken_1.requireToken, controller.getUserSalesCtrl);
+router.get("/sale/list/buys/:id", requireToken_1.requireToken, controller.getUserBuysCtrl);

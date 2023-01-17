@@ -14,114 +14,119 @@ import { commentInterface } from "../../interfaces/commentInterface/comment.inte
 import { productInterface } from "../../interfaces/productInterface/product.interface";
 import { ReqTokenDataInterface } from "../../interfaces/userInterface/reqTokenData.interface";
 
-/** ===========================  COMMENT PRODUCT ================================**/
-export async function commentProductServ(
-  tokenUID: ReqTokenDataInterface,
-  data: commentInterface
-) {
-  //Check authorization:
-  if (
-    tokenUID.uid.toString() !== data.user_id.toString() ||
-    tokenUID.rol.toString() !== "user"
-  )
-    return "UNAUTHORIZED_ACTION";
-  //CheckUser:
-  const user = await daoUser.getUser("id", data.user_id, true);
-  if (!user) return "USER_NOT_FOUND";
+export default class commentService {
+  /** ===============  COMMENT PRODUCT ===============**/
 
-  //Check product:
-  const product: productInterface | any = await daoProduct.getProduct(
-    data.product_id,
-    true
-  );
-  if (!product) return "PRODUCT_NOT_FOUND";
+  async commentProductServ(
+    tokenUID: ReqTokenDataInterface,
+    data: commentInterface
+  ) {
+    //Check authorization:
+    if (
+      tokenUID.uid.toString() !== data.user_id.toString() ||
+      tokenUID.rol.toString() !== "user"
+    )
+      return "UNAUTHORIZED_ACTION";
+    //CheckUser:
+    const user = await daoUser.getUser("id", data.user_id, true);
+    if (!user) return "USER_NOT_FOUND";
 
-  //Check seller:
-  if (data.user_id.toString() === product.user_id.toString())
-    return "USER_IS_SELLER";
+    //Check product:
+    const product: productInterface | any = await daoProduct.getProduct(
+      data.product_id,
+      true
+    );
+    if (!product) return "PRODUCT_NOT_FOUND";
 
-  //Check if is reply:
-  if (data.comment_reply || data.comment_parent === false)
-    return "COMMENT_IS_REPLY";
+    //Check seller:
+    if (data.user_id.toString() === product.user_id.toString())
+      return "USER_IS_SELLER";
 
-  //create:
-  const comment_id = uuidv4();
-  const comment = await daoComment.createComment({ ...data, comment_id });
+    //Check if is reply:
+    if (data.comment_reply || data.comment_parent === false)
+      return "COMMENT_IS_REPLY";
 
-  if (comment) {
-    //Create user notification:
-    await daoNotification.createNotification({
-      user_id: product.user_id,
-      product_id: data.product_id,
-      notification_type: "NEW_COMMENT",
-    });
-    return comment;
+    //create:
+    const comment_id = uuidv4();
+    const comment = await daoComment.createComment({ ...data, comment_id });
+
+    if (comment) {
+      //Create user notification:
+      await daoNotification.createNotification({
+        user_id: product.user_id,
+        product_id: data.product_id,
+        notification_type: "NEW_COMMENT",
+      });
+      return comment;
+    }
   }
-}
-/** ===========================  REPLY COMMENT ================================**/
-export async function replyCommentServ(
-  tokenUID: string,
-  data: commentInterface
-) {
-  //Check authorization:
-  if (tokenUID.toString() !== data.user_id.toString())
-    return "UNAUTHORIZED_ACTION";
 
-  //CheckUser:
-  const user = await daoUser.getUser("id", data.user_id, true);
-  if (!user) return "USER_NOT_FOUND";
+  /** ===============  REPLY COMMENT =================**/
 
-  //Check product:
-  const product: productInterface | any = await daoProduct.getProduct(
-    data.product_id,
-    true
-  );
-  if (!product) return "PRODUCT_NOT_FOUND";
+  async replyCommentServ(tokenUID: string, data: commentInterface) {
+    //Check authorization:
+    if (tokenUID.toString() !== data.user_id.toString())
+      return "UNAUTHORIZED_ACTION";
 
-  //Check seller:
-  if (data.user_id.toString() !== product.user_id.toString())
-    return "USER_ISNT_SELLER";
+    //CheckUser:
+    const user = await daoUser.getUser("id", data.user_id, true);
+    if (!user) return "USER_NOT_FOUND";
 
-  //Check comment:
-  const comment: commentInterface | any = await daoComment.getComment(
-    data.comment_reply
-  );
-  if (!comment) return "COMMENT_NOT_FOUND";
+    //Check product:
+    const product: productInterface | any = await daoProduct.getProduct(
+      data.product_id,
+      true
+    );
+    if (!product) return "PRODUCT_NOT_FOUND";
 
-  //Check if is reply:
-  if (!data.comment_reply || data.comment_parent === true)
-    return "COMMENT_ISNT_REPLY";
+    //Check seller:
+    if (data.user_id.toString() !== product.user_id.toString())
+      return "USER_ISNT_SELLER";
 
-  //Check if has been already replied:
-  const replied = await daoComment.checkReply(data.comment_reply, data.user_id);
-  if (replied) return "COMMENT_ALREADY_REPLIED";
+    //Check comment:
+    const comment: commentInterface | any = await daoComment.getComment(
+      data.comment_reply
+    );
+    if (!comment) return "COMMENT_NOT_FOUND";
 
-  //Create:
-  const comment_id = uuidv4();
-  const replyComment = await daoComment.createComment({ ...data, comment_id });
+    //Check if is reply:
+    if (!data.comment_reply || data.comment_parent === true)
+      return "COMMENT_ISNT_REPLY";
 
-  if (replyComment) {
-    await daoNotification.createNotification({
-      user_id: comment.user_id,
-      notification_type: "RESPONSE_RECEIVED",
-      product_id: data.product_id,
+    //Check if has been already replied:
+    const replied = await daoComment.checkReply(
+      data.comment_reply,
+      data.user_id
+    );
+    if (replied) return "COMMENT_ALREADY_REPLIED";
+
+    //Create:
+    const comment_id = uuidv4();
+    const replyComment = await daoComment.createComment({
+      ...data,
+      comment_id,
     });
-    return replyComment;
+
+    if (replyComment) {
+      await daoNotification.createNotification({
+        user_id: comment.user_id,
+        notification_type: "RESPONSE_RECEIVED",
+        product_id: data.product_id,
+      });
+      return replyComment;
+    }
   }
-}
 
-/** ===========================  LIST COMMENT ================================**/
-export async function listCommentServ(
-  product_id: string,
-  page: number,
-  size: number
-) {
-  const product = await daoProduct.getProduct(product_id, true);
-  if (!product) return "PRODUCT_NOT_FOUND";
-  return await daoComment.listComment(product_id, page, size);
-}
+  /** ====================  LIST COMMENT =====================**/
 
-/** ===========================  DELETE COMMENT ================================**/
-export async function delCommentServ(comment_id: string) {
-  return await daoComment.deleteComment(comment_id);
+  async listCommentServ(product_id: string, page: number, size: number) {
+    const product = await daoProduct.getProduct(product_id, true);
+    if (!product) return "PRODUCT_NOT_FOUND";
+    return await daoComment.listComment(product_id, page, size);
+  }
+
+  /** ==================  DELETE COMMENT ====================**/
+  async delCommentServ(comment_id: string) {
+    return await daoComment.deleteComment(comment_id);
+  }
 }
