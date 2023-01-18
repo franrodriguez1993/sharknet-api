@@ -9,27 +9,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllRolServ = exports.createRolService = void 0;
 //uuid:
 const uuid_1 = require("uuid");
 //DAOs:
 const containers_1 = require("../../containers");
-/**============================= CREATE ROL ==================================**/
-function createRolService(rol_name) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const rol_id = (0, uuid_1.v4)();
-        if (rol_name.trim() === "")
-            return "ROL_NAME_REQUIRED";
-        const rol = yield containers_1.daoRoles.create(rol_id, rol_name);
-        return rol;
-    });
+class rolUserService {
+    /**================= CREATE ROL =======================**/
+    createRolService(rol_name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rol_id = (0, uuid_1.v4)();
+            if (rol_name.trim() === "")
+                return "ROL_NAME_REQUIRED";
+            const rol = yield containers_1.daoRoles.create(rol_id, rol_name);
+            return rol;
+        });
+    }
+    /**=================== GET ROL =====================**/
+    getAllRolServ() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const rolList = yield containers_1.daoRoles.getRoles();
+            return rolList;
+        });
+    }
 }
-exports.createRolService = createRolService;
-/**============================= GET ROL ==================================**/
-function getAllRolServ() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const rolList = yield containers_1.daoRoles.getRoles();
-        return rolList;
-    });
-}
-exports.getAllRolServ = getAllRolServ;
+exports.default = rolUserService;

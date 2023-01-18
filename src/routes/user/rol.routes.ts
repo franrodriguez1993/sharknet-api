@@ -1,7 +1,10 @@
 import { Router } from "express";
 
 /**============================= CONTROLLERS ==================================**/
-import { createRolCtrl, getAllRolCtrl } from "../../controllers/user/rol.ctrl";
+
+import rolUserController from "../../controllers/user/rol.ctrl";
+
+const controller = new rolUserController();
 
 /**============================= MIDDLEWARES ==================================**/
 import { requireAdmin } from "../../middlewares/requireAdmin";
@@ -9,7 +12,7 @@ import { requireToken } from "../../middlewares/requireToken";
 
 const router = Router();
 
-router.post("/create", requireToken, requireAdmin, createRolCtrl);
-router.get("/list", getAllRolCtrl);
+router.post("/create", requireToken, requireAdmin, controller.createRolCtrl);
+router.get("/list", controller.getAllRolCtrl);
 
 export { router };

@@ -4,20 +4,20 @@ import { v4 as uuidv4 } from "uuid";
 //DAOs:
 import { daoRoles } from "../../containers";
 
-/**============================= CREATE ROL ==================================**/
+export default class rolUserService {
+  /**================= CREATE ROL =======================**/
+  async createRolService(rol_name: string) {
+    const rol_id = uuidv4();
 
-export async function createRolService(rol_name: string) {
-  const rol_id = uuidv4();
+    if (rol_name.trim() === "") return "ROL_NAME_REQUIRED";
 
-  if (rol_name.trim() === "") return "ROL_NAME_REQUIRED";
+    const rol = await daoRoles.create(rol_id, rol_name);
+    return rol;
+  }
 
-  const rol = await daoRoles.create(rol_id, rol_name);
-  return rol;
-}
-
-/**============================= GET ROL ==================================**/
-
-export async function getAllRolServ() {
-  const rolList = await daoRoles.getRoles();
-  return rolList;
+  /**=================== GET ROL =====================**/
+  async getAllRolServ() {
+    const rolList = await daoRoles.getRoles();
+    return rolList;
+  }
 }

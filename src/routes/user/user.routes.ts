@@ -1,21 +1,8 @@
 import { Router } from "express";
 
 //Controllers:
-import {
-  registerUserCtrl,
-  loginUserCtrl,
-  refreshSessionCtrl,
-  getUserIdCtrl,
-  getUserMailCtrl,
-  editProfileCtrl,
-  changeEmailCtrl,
-  changePassCtrl,
-  addBirthdayCtrl,
-  addAddressCtrl,
-  deleteAddressCtrl,
-  addCreditCardCtrl,
-  deleteCreditCardCtrl,
-} from "../../controllers/user/user.ctrl";
+import userController from "../../controllers/user/user.ctrl";
+const controller = new userController();
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //Middlewares:
@@ -35,13 +22,13 @@ import {
 const router = Router();
 
 //LOGIN - REGISTER:
-router.post("/register", validateBodyRegister, registerUserCtrl);
-router.post("/login", validateBodyLogin, loginUserCtrl);
-router.post("/session", requireRefresh, refreshSessionCtrl);
+router.post("/register", validateBodyRegister, controller.registerUserCtrl);
+router.post("/login", validateBodyLogin, controller.loginUserCtrl);
+router.post("/session", requireRefresh, controller.refreshSessionCtrl);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //GET USER:
-router.get("/data/id/:id", getUserIdCtrl);
-router.post("/data/mail", getUserMailCtrl);
+router.get("/data/id/:id", requireToken, controller.getUserIdCtrl);
+router.post("/data/mail", requireToken, controller.getUserMailCtrl);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //UPDATE DATA:
 router.put(
@@ -49,46 +36,50 @@ router.put(
   requireToken,
   checkIdentity,
   validateBodyProfile,
-  editProfileCtrl
+  controller.editProfileCtrl
 );
 router.put(
   "/update/mail/:id",
   requireToken,
   checkIdentity,
   validateBodyProfile,
-  changeEmailCtrl
+  controller.changeEmailCtrl
 );
 router.put(
   "/update/password/:id",
   requireToken,
   checkIdentity,
   validateBodyProfile,
-  changePassCtrl
+  controller.changePassCtrl
 );
 router.put(
   "/update/birthday/:id",
   requireToken,
   checkIdentity,
   validatorBirthdayUser,
-  addBirthdayCtrl
+  controller.addBirthdayCtrl
 );
 router.post(
   "/address/add/:id",
   requireToken,
   checkIdentity,
   validatorAddressUser,
-  addAddressCtrl
+  controller.addAddressCtrl
 );
 router.post(
   "/creditcard/add/:id",
   requireToken,
   checkIdentity,
   validateCreditCard,
-  addCreditCardCtrl
+  controller.addCreditCardCtrl
 );
 //DELETE DATA:
-router.delete("/address/del/:id", requireToken, deleteAddressCtrl);
-router.delete("/creditcard/del/:id", requireToken, deleteCreditCardCtrl);
+router.delete("/address/del/:id", requireToken, controller.deleteAddressCtrl);
+router.delete(
+  "/creditcard/del/:id",
+  requireToken,
+  controller.deleteCreditCardCtrl
+);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 export { router };

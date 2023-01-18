@@ -8,185 +8,190 @@ import { generateToken, generateRefreshToken } from "../../utils/jwtHandler";
 
 // DAOs:
 import { daoUser } from "../../containers";
+
+//Interfaces:
 import { UserInterface } from "../../interfaces/userInterface/user.interface";
 import { birthdayInterface } from "../../interfaces/userInterface/birthday.interface";
 import { addressInterface } from "../../interfaces/userInterface/address.Interface";
 import { creditCardInterface } from "../../interfaces/userInterface/creditCard.interface";
 
-/**============================= REGISTER USER ==================================**/
-export async function registerUserServ(data: UserInterface) {
-  //Check email:
-  const isEmail = await daoUser.getUser("mail", data.user_mail, true);
-  if (isEmail) return "MAIL_IN_USE";
+export default class userService {
+  /**====================== REGISTER USER ======================**/
+  async registerUserServ(data: UserInterface) {
+    //Check email:
+    const isEmail = await daoUser.getUser("mail", data.user_mail, true);
+    if (isEmail) return "MAIL_IN_USE";
 
-  //Check username:
-  const isUsername = await daoUser.getUser(
-    "username",
-    data.user_username,
-    true
-  );
-  if (isUsername) return "USERNAME_IN_USE";
+    //Check username:
+    const isUsername = await daoUser.getUser(
+      "username",
+      data.user_username,
+      true
+    );
+    if (isUsername) return "USERNAME_IN_USE";
 
-  //Register data:
-  const user_id = uuidv4();
-  const hashpass = await encrypt(data.user_password);
+    //Register data:
+    const user_id = uuidv4();
+    const hashpass = await encrypt(data.user_password);
 
-  const user = await daoUser.registerUser({
-    ...data,
-    user_password: hashpass,
-    user_id,
-  });
-  return user;
-}
-/**============================= LOGIN USER ==================================**/
-export async function loginUserServ(mail: string, password: string) {
-  const user: UserInterface | any = await daoUser.getUser("mail", mail);
+    const user = await daoUser.registerUser({
+      ...data,
+      user_password: hashpass,
+      user_id,
+    });
+    return user;
+  }
 
-  //User not found:
-  if (!user) return "USER_NOT_FOUND";
+  /**====================== LOGIN USER =========================**/
+  async loginUserServ(mail: string, password: string) {
+    const user: UserInterface | any = await daoUser.getUser("mail", mail);
 
-  //Check user status:
-  if (user.user_status === "suspended") return "USER_SUSPENDED";
-  if (user.user_status === "deleted") return "USER_DELETED";
+    //User not found:
+    if (!user) return "USER_NOT_FOUND";
 
-  //Verify pass:
-  const comparePass = await verified(password, user.user_password);
-  if (!comparePass) return "INVALID_CREDENTIALS";
+    //Check user status:
+    if (user.user_status === "suspended") return "USER_SUSPENDED";
+    if (user.user_status === "deleted") return "USER_DELETED";
 
-  //Return tokens:
-  const token = generateToken(user.user_id);
-  const refreshToken = generateRefreshToken(user.user_id);
-  return { token, refreshToken, uid: user.user_id };
-}
+    //Verify pass:
+    const comparePass = await verified(password, user.user_password);
+    if (!comparePass) return "INVALID_CREDENTIALS";
 
-/**============================= REFRESH SESSION ==================================**/
-export async function refreshSessionServ(uid: string) {
-  const user: UserInterface | any = await daoUser.getUser("id", uid, true);
-  if (!user) return "USER_NOT_FOUND";
-  else if (user.user_status === "suspended") return "USER_SUSPENDED";
-  else if (user.user_status === "deleted") return "USER_DELETED";
+    //Return tokens:
+    const token = generateToken(user.user_id);
+    const refreshToken = generateRefreshToken(user.user_id);
+    return { token, refreshToken, uid: user.user_id };
+  }
 
-  const token = generateToken(uid);
-  return { token, uid };
-}
+  /**======================= REFRESH SESSION ========================**/
+  async refreshSessionServ(uid: string) {
+    const user: UserInterface | any = await daoUser.getUser("id", uid, true);
+    if (!user) return "USER_NOT_FOUND";
+    else if (user.user_status === "suspended") return "USER_SUSPENDED";
+    else if (user.user_status === "deleted") return "USER_DELETED";
 
-/**============================= GET USER BY ID ==================================**/
-//getUser
-export async function getUserIdServ(id: string) {
-  const user = await daoUser.getUser("id", id);
-  if (!user) return "USER_NOT_FOUND";
-  return user;
-}
+    const token = generateToken(uid);
+    return { token, uid };
+  }
 
-/**============================= GET USER BY MAIL ==================================**/
-/*
+  /**====================== GET USER BY ID ==========================**/
+  async getUserIdServ(id: string) {
+    const user = await daoUser.getUser("id", id);
+    if (!user) return "USER_NOT_FOUND";
+    return user;
+  }
+
+  /**==================== GET USER BY MAIL =====================**/
+  /*
  METHOD: "POST" its more secure to send a mail.
  */
-export async function getUserMailServ(mail: string) {
-  const user = await daoUser.getUser("mail", mail);
-  if (!user) return "USER_NOT_FOUND";
-  return user;
-}
-
-/**============================= EDIT PROFILE USER ==================================**/
-export async function editProfileServ(data: UserInterface) {
-  if (data.user_username) {
-    const check = await daoUser.getUser("username", data.user_username, true);
-    if (check) return "USERNAME_IN_USE";
+  async getUserMailServ(mail: string) {
+    const user = await daoUser.getUser("mail", mail);
+    if (!user) return "USER_NOT_FOUND";
+    return user;
   }
-  const user = await daoUser.updateProfile(data);
 
-  return user;
-}
+  /**==================== EDIT PROFILE USER ====================**/
+  async editProfileServ(data: UserInterface) {
+    if (data.user_username) {
+      const check = await daoUser.getUser("username", data.user_username, true);
+      if (check) return "USERNAME_IN_USE";
+    }
+    const user = await daoUser.updateProfile(data);
 
-/**============================= CHANGE EMAIL ==================================**/
-export async function changeEmailServ(uid: string, mail: string) {
-  //Find user:
-  const user = await daoUser.getUser("id", uid, true);
-  if (!user) return "USER_NOT_FOUND";
+    return user;
+  }
 
-  //Checking mail:
-  if (user.user_mail.toString() === mail.toString()) return "CHANGE_MAIL";
-  const isMail = await daoUser.getUser("mail", mail, true);
-  if (isMail) return "MAIL_IN_USE";
+  /**====================== CHANGE EMAIL ========================**/
+  async changeEmailServ(uid: string, mail: string) {
+    //Find user:
+    const user = await daoUser.getUser("id", uid, true);
+    if (!user) return "USER_NOT_FOUND";
 
-  //Update mail:
-  const updatedUser = await daoUser.changeFields(uid, "mail", mail);
-  return updatedUser;
-}
+    //Checking mail:
+    if (user.user_mail.toString() === mail.toString()) return "CHANGE_MAIL";
+    const isMail = await daoUser.getUser("mail", mail, true);
+    if (isMail) return "MAIL_IN_USE";
 
-/**============================= CHANGE PASSWORD ==================================**/
+    //Update mail:
+    const updatedUser = await daoUser.changeFields(uid, "mail", mail);
+    return updatedUser;
+  }
 
-export async function changePassServ(uid: string, pass: string) {
-  //Find user:
-  const user = await daoUser.getUser("id", uid, true);
-  if (!user) return "USER_NOT_FOUND";
+  /**======================== CHANGE PASSWORD ========================**/
+  async changePassServ(uid: string, pass: string) {
+    //Find user:
+    const user = await daoUser.getUser("id", uid, true);
+    if (!user) return "USER_NOT_FOUND";
 
-  //Hash pass:
-  const hashpass = await encrypt(pass);
+    //Hash pass:
+    const hashpass = await encrypt(pass);
 
-  //Update pass:
-  const updatedUser = await daoUser.changeFields(uid, "password", hashpass);
-  return updatedUser;
-}
+    //Update pass:
+    const updatedUser = await daoUser.changeFields(uid, "password", hashpass);
+    return updatedUser;
+  }
 
-/** ============================= ADD BIRTHDAY ================================== **/
-export async function addBirthdayServ(data: birthdayInterface) {
-  //Check User:
-  const isUser = await daoUser.getUser("id", data.user_id, true);
-  if (!isUser) return "USER_NOT_FOUND";
+  /** =================== ADD BIRTHDAY ====================== **/
+  async addBirthdayServ(data: birthdayInterface) {
+    //Check User:
+    const isUser = await daoUser.getUser("id", data.user_id, true);
+    if (!isUser) return "USER_NOT_FOUND";
 
-  //Create birthday:
-  const birthday_id = uuidv4();
-  const birthday = await daoUser.addBirthday({ ...data, birthday_id });
+    //Create birthday:
+    const birthday_id = uuidv4();
+    const birthday = await daoUser.addBirthday({ ...data, birthday_id });
 
-  //return data:
-  return birthday;
-}
+    //return data:
+    return birthday;
+  }
 
-/** ============================= ADD ADDRESS ================================== **/
-export async function addAddressServ(data: addressInterface) {
-  //Check user:
-  const isUser = await daoUser.getUser("id", data.user_id, true);
-  if (!isUser) return "USER_NOT_FOUND";
+  /** ===================== ADD ADDRESS ========================= **/
+  async addAddressServ(data: addressInterface) {
+    //Check user:
+    const isUser = await daoUser.getUser("id", data.user_id, true);
+    if (!isUser) return "USER_NOT_FOUND";
 
-  //Create address:
-  const address_id = uuidv4();
+    //Create address:
+    const address_id = uuidv4();
 
-  const address = await daoUser.addAddress({ ...data, address_id });
+    const address = await daoUser.addAddress({ ...data, address_id });
 
-  //Return data:
-  return address;
-}
+    //Return data:
+    return address;
+  }
 
-/** ============================= DELETE ADDRESS ================================== **/
-export async function deleteAddressServ(aid: string) {
-  //Delete:
-  const resDelete = await daoUser.deleteAddress(aid);
+  /** ======================= DELETE ADDRESS ========================== **/
 
-  //Return:
-  return resDelete;
-}
+  async deleteAddressServ(aid: string) {
+    //Delete:
+    const resDelete = await daoUser.deleteAddress(aid);
 
-/** ============================= ADD CREDITCARD ================================== **/
-export async function addCreditCardServ(data: creditCardInterface) {
-  //checkUser:
-  const isUser = await daoUser.getUser("id", data.user_id, true);
-  if (!isUser) return "USER_NOT_FOUND";
+    //Return:
+    return resDelete;
+  }
 
-  //Create:
-  const cc_id = uuidv4();
-  const newCreditCard = await daoUser.addCreditCard({ ...data, cc_id });
+  /** ======================= ADD CREDITCARD ========================= **/
+  async addCreditCardServ(data: creditCardInterface) {
+    //checkUser:
+    const isUser = await daoUser.getUser("id", data.user_id, true);
+    if (!isUser) return "USER_NOT_FOUND";
 
-  //Return:
-  return newCreditCard;
-}
+    //Create:
+    const cc_id = uuidv4();
+    const newCreditCard = await daoUser.addCreditCard({ ...data, cc_id });
 
-/** ============================= DELETE CREDITCARD ================================== **/
-export async function deleteCreditCardServ(ccid: string) {
-  //delete:
-  const deleted = await daoUser.deleteCreditCard(ccid);
+    //Return:
+    return newCreditCard;
+  }
 
-  //return:
-  return deleted;
+  /** ========================= DELETE CREDITCARD =========================== **/
+
+  async deleteCreditCardServ(ccid: string) {
+    //delete:
+    const deleted = await daoUser.deleteCreditCard(ccid);
+
+    //return:
+    return deleted;
+  }
 }
