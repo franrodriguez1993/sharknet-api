@@ -8,6 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 //uuid:
 const uuid_1 = require("uuid");
@@ -17,6 +20,9 @@ const bcryptHandler_1 = require("../../utils/bcryptHandler");
 const jwtHandler_1 = require("../../utils/jwtHandler");
 // DAOs:
 const containers_1 = require("../../containers");
+//Image Manager:
+const UploadImages_1 = __importDefault(require("../../utils/UploadImages"));
+const uploaderManager = new UploadImages_1.default();
 class userService {
     /**====================== REGISTER USER ======================**/
     registerUserServ(data) {
@@ -195,6 +201,19 @@ class userService {
             const deleted = yield containers_1.daoUser.deleteCreditCard(ccid);
             //return:
             return deleted;
+        });
+    }
+    /**==================== PROFILE IMAGE =========================**/
+    uploadImageProfile(uid, img) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const folderId = process.env.GD_FOLDER_USERS;
+            //Upload image:
+            const imgProfile = yield uploaderManager.uploadFile(uid, img, folderId);
+            if (!imgProfile)
+                return "ERROR_UPLOADING_IMAGE";
+            //Update user data:
+            const imgId = `https://drive.google.com/uc?id=${imgProfile.imageId}`;
+            return yield containers_1.daoUser.uploadProfileImage(uid, imgId);
         });
     }
 }

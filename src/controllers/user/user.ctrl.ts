@@ -308,4 +308,27 @@ export default class userController {
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
+
+  /**==================== PROFILE IMAGE =========================**/
+  async uploadProfileImage(req: Request, res: Response) {
+    try {
+      //Data:
+      const { file } = req;
+      const { id } = req.params;
+      if (!file)
+        return res.status(400).json({ status: 400, msg: "IMAGE_REQUIRED" });
+
+      //Service:
+      const resUpdate = await service.uploadImageProfile(id, file.buffer);
+      if (resUpdate === "ERROR_UPLOADING_IMAGE") {
+        return res.status(500).json({ status: 500, msg: resUpdate });
+      } else if (resUpdate === "USER_NOT_FOUND") {
+        return res.status(404).json({ status: 404, msg: resUpdate });
+      } else if (resUpdate === "IMAGE_UPDATED") {
+        return res.status(201).json({ status: 201, msg: resUpdate });
+      }
+    } catch (e: any) {
+      return res.status(500).json({ status: 500, msg: e.message });
+    }
+  }
 }

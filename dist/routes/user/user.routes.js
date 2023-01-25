@@ -5,9 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
+const multer_1 = __importDefault(require("multer"));
 //Controllers:
 const user_ctrl_1 = __importDefault(require("../../controllers/user/user.ctrl"));
 const controller = new user_ctrl_1.default();
+const upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() });
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Middlewares:
 const RequireRefresh_1 = __importDefault(require("../../middlewares/RequireRefresh"));
@@ -33,6 +35,7 @@ router.put("/update/password/:id", requireToken_1.requireToken, checkIdentity_1.
 router.put("/update/birthday/:id", requireToken_1.requireToken, checkIdentity_1.checkIdentity, validatorManager_1.validatorBirthdayUser, controller.addBirthdayCtrl);
 router.post("/address/add/:id", requireToken_1.requireToken, checkIdentity_1.checkIdentity, validatorManager_1.validatorAddressUser, controller.addAddressCtrl);
 router.post("/creditcard/add/:id", requireToken_1.requireToken, checkIdentity_1.checkIdentity, validatorManager_1.validateCreditCard, controller.addCreditCardCtrl);
+router.put("/image/:id", requireToken_1.requireToken, checkIdentity_1.checkIdentity, upload.single("image"), controller.uploadProfileImage);
 //DELETE DATA:
 router.delete("/address/del/:id", requireToken_1.requireToken, controller.deleteAddressCtrl);
 router.delete("/creditcard/del/:id", requireToken_1.requireToken, controller.deleteCreditCardCtrl);

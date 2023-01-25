@@ -312,5 +312,24 @@ class daoUserSQL extends base_container_1.default {
             }
         });
     }
+    /** ------------------------- UPLOAD PROFILE IMAGE -------------------------- **/
+    //img: image URL
+    uploadProfileImage(uid, img) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield User_model_1.default.findOne({
+                    where: { user_id: uid },
+                });
+                if (!user)
+                    return "USER_NOT_FOUND";
+                user.set({ user_image: img });
+                yield user.save();
+                return "IMAGE_UPDATED";
+            }
+            catch (e) {
+                throw new Error(e.message);
+            }
+        });
+    }
 }
 exports.daoUserSQL = daoUserSQL;

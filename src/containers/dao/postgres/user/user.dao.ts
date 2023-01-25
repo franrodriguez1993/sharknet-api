@@ -272,4 +272,21 @@ export class daoUserSQL extends basecontainer {
       throw new Error(e.message);
     }
   }
+
+  /** ------------------------- UPLOAD PROFILE IMAGE -------------------------- **/
+  //img: image URL
+  async uploadProfileImage(uid: string, img: string) {
+    try {
+      const user: UserInterface | any = await User.findOne({
+        where: { user_id: uid },
+      });
+      if (!user) return "USER_NOT_FOUND";
+
+      user.set({ user_image: img });
+      await user.save();
+      return "IMAGE_UPDATED";
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
 }

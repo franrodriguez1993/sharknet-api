@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const imgProduct_serv_1 = __importDefault(require("../../services/imageServ/imgProduct.serv"));
+//-----------------------------------------------
 const service = new imgProduct_serv_1.default();
 class imageProductController {
     /** ============ CREATE IMG PRODUCT =========== **/
@@ -22,12 +23,10 @@ class imageProductController {
                 //Data:
                 const { file } = req;
                 const { product } = req.params;
-                const data = {
-                    product_id: product,
-                    ip_path: `${file.path.split("public")[1]}`,
-                };
+                if (!file)
+                    return res.status(400).json({ status: 400, msg: "FILE_REQUIRED" });
                 //Service:
-                const img = yield service.createImgProductServ(req.uid, data);
+                const img = yield service.createImgProductServ(req.uid, product, file.buffer);
                 //Return:
                 if (img === "PRODUCT_NOT_FOUND")
                     return res.status(404).json({ status: 404, msg: img });
@@ -54,6 +53,9 @@ class imageProductController {
                 //Return:
                 if (!del)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+                else if (del === "ERROR_DELETE") {
+                    return res.status(400).json({ status: 400, msg: del });
+                }
                 return res.json({ status: 200, msg: "IMAGE_DELETED" });
             }
             catch (e) {

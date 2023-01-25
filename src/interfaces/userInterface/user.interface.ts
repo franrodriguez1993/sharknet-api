@@ -12,4 +12,5 @@ export interface UserInterface {
   user_status?: string;
   rol_id?: string;
   Rol?: RolInterface;
+  user_image?: string;
 }

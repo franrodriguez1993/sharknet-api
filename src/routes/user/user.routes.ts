@@ -1,8 +1,9 @@
 import { Router } from "express";
-
+import multer from "multer";
 //Controllers:
 import userController from "../../controllers/user/user.ctrl";
 const controller = new userController();
+const upload = multer({ storage: multer.memoryStorage() });
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //Middlewares:
@@ -73,6 +74,14 @@ router.post(
   validateCreditCard,
   controller.addCreditCardCtrl
 );
+router.put(
+  "/image/:id",
+  requireToken,
+  checkIdentity,
+  upload.single("image"),
+  controller.uploadProfileImage
+);
+
 //DELETE DATA:
 router.delete("/address/del/:id", requireToken, controller.deleteAddressCtrl);
 router.delete(

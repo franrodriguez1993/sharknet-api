@@ -8,17 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-//uuid:
-const uuid_1 = require("uuid");
 //DAOs:
 const containers_1 = require("../../containers");
+const UploadImages_1 = __importDefault(require("../../utils/UploadImages"));
+const uploaderManager = new UploadImages_1.default();
 class imageProductService {
     /** ============= CREATE IMG PRODUCT ============= **/
-    createImgProductServ(tokenUID, data) {
+    createImgProductServ(tokenUID, productId, image) {
         return __awaiter(this, void 0, void 0, function* () {
+            const folderId = process.env.GD_FOLDER_PRODUCTS;
             //Check Product:
-            const product = yield containers_1.daoProduct.getProduct(data.product_id, true);
+            const product = yield containers_1.daoProduct.getProduct(productId, true);
             if (!product)
                 return "PRODUCT_NOT_FOUND";
             if (product.user_id.toString() !== tokenUID.toString())
@@ -26,18 +30,30 @@ class imageProductService {
             //Check Authorization:
             if (product.user_id.toString() !== tokenUID.toString())
                 return "UNAUTHORIZED_ACTION";
+            //Upload image to google:
+            const imageData = yield uploaderManager.uploadFile(productId, image, folderId);
             //Check path:
-            if (!data.ip_path)
+            if (!imageData)
                 return "INVALID_ROUTE";
-            //Create:
-            const ip_id = (0, uuid_1.v4)();
-            return yield containers_1.daoImgProduct.createImg(Object.assign(Object.assign({}, data), { ip_id }));
+            //Create path:
+            const ip_path = `https://drive.google.com/uc?id=${imageData.imageId}`;
+            return yield containers_1.daoImgProduct.createImg({
+                product_id: productId,
+                ip_path,
+                ip_id: imageData.imageId,
+            });
         });
     }
     /** ============== DELETE IMG PRODUCT ================ **/
     delImgProductServ(ip_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield containers_1.daoImgProduct.deleteImg(ip_id);
+            const resDelete = yield uploaderManager.deleteFile(ip_id);
+            if (resDelete === 204) {
+                return yield containers_1.daoImgProduct.deleteImg(ip_id);
+            }
+            else {
+                return "ERROR_DELETE";
+            }
         });
     }
 }

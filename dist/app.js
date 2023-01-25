@@ -31,7 +31,6 @@ const corsOptions = {
     },
 };
 app.use((0, cors_1.default)(corsOptions));
-app.use(express_1.default.static("public"));
 app.use(express_1.default.json());
 /** =========================  ROUTER  ==========================  **/
 app.use(user_1.userRouters);

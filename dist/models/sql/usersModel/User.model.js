@@ -15,7 +15,6 @@ const Sale_model_1 = __importDefault(require("../productsModel/Sale.model"));
 const repuUser_model_1 = __importDefault(require("../reputationModel/repuUser.model"));
 const repuProduct_model_1 = __importDefault(require("../reputationModel/repuProduct.model"));
 const comment_model_1 = __importDefault(require("../commentsModel/comment.model"));
-const imageUser_model_1 = __importDefault(require("../imagesModel/imageUser.model"));
 const Notification_model_1 = __importDefault(require("../notificationModel/Notification.model"));
 const ALogUser_model_1 = __importDefault(require("../activityLogs/ALogUser.model"));
 /**=====================================================================**/
@@ -53,6 +52,9 @@ const User = postgres_1.sequelize.define("user", {
     user_status: {
         type: sequelize_1.DataTypes.STRING,
         defaultValue: "active",
+    },
+    user_image: {
+        type: sequelize_1.DataTypes.STRING,
     },
 }, { freezeTableName: true, timestamps: true });
 /** =========================  ASSOCIATIONS  ==========================  **/
@@ -151,13 +153,6 @@ User.hasMany(comment_model_1.default, {
     foreignKey: "user_id",
 });
 comment_model_1.default.belongsTo(User, {
-    foreignKey: "user_id",
-});
-//Image:
-User.hasOne(imageUser_model_1.default, {
-    foreignKey: "user_id",
-});
-imageUser_model_1.default.belongsTo(User, {
     foreignKey: "user_id",
 });
 //ALog User:

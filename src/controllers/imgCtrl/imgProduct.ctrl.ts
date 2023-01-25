@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
 import imageProductService from "../../services/imageServ/imgProduct.serv";
 
+//-----------------------------------------------
 const service = new imageProductService();
 
 export default class imageProductController {
@@ -11,12 +12,15 @@ export default class imageProductController {
       //Data:
       const { file } = req;
       const { product } = req.params;
-      const data = {
-        product_id: product,
-        ip_path: `${file.path.split("public")[1]}`,
-      };
+      if (!file)
+        return res.status(400).json({ status: 400, msg: "FILE_REQUIRED" });
+
       //Service:
-      const img = await service.createImgProductServ(req.uid, data);
+      const img = await service.createImgProductServ(
+        req.uid,
+        product,
+        file.buffer
+      );
 
       //Return:
       if (img === "PRODUCT_NOT_FOUND")
@@ -43,6 +47,9 @@ export default class imageProductController {
       //Return:
       if (!del)
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+      else if (del === "ERROR_DELETE") {
+        return res.status(400).json({ status: 400, msg: del });
+      }
       return res.json({ status: 200, msg: "IMAGE_DELETED" });
     } catch (e: any) {
       return res.status(500).json({ status: 500, msg: e.message });

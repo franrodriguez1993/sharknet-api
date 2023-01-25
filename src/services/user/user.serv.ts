@@ -15,6 +15,10 @@ import { birthdayInterface } from "../../interfaces/userInterface/birthday.inter
 import { addressInterface } from "../../interfaces/userInterface/address.Interface";
 import { creditCardInterface } from "../../interfaces/userInterface/creditCard.interface";
 
+//Image Manager:
+import UploadImages from "../../utils/UploadImages";
+const uploaderManager = new UploadImages();
+
 export default class userService {
   /**====================== REGISTER USER ======================**/
   async registerUserServ(data: UserInterface) {
@@ -193,5 +197,17 @@ export default class userService {
 
     //return:
     return deleted;
+  }
+
+  /**==================== PROFILE IMAGE =========================**/
+  async uploadImageProfile(uid: string, img: Buffer) {
+    const folderId = process.env.GD_FOLDER_USERS;
+    //Upload image:
+    const imgProfile = await uploaderManager.uploadFile(uid, img, folderId);
+    if (!imgProfile) return "ERROR_UPLOADING_IMAGE";
+
+    //Update user data:
+    const imgId = `https://drive.google.com/uc?id=${imgProfile.imageId}`;
+    return await daoUser.uploadProfileImage(uid, imgId);
   }
 }

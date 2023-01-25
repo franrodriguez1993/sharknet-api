@@ -12,7 +12,6 @@ import Sale from "../productsModel/Sale.model";
 import UserReputation from "../reputationModel/repuUser.model";
 import ProductReputation from "../reputationModel/repuProduct.model";
 import Comment from "../commentsModel/comment.model";
-import ImageUser from "../imagesModel/imageUser.model";
 import NotificationUser from "../notificationModel/Notification.model";
 import ActivityLogUser from "../activityLogs/ALogUser.model";
 /**=====================================================================**/
@@ -53,6 +52,9 @@ const User = sequelize.define(
     user_status: {
       type: DataTypes.STRING,
       defaultValue: "active",
+    },
+    user_image: {
+      type: DataTypes.STRING,
     },
   },
   { freezeTableName: true, timestamps: true }
@@ -156,13 +158,7 @@ User.hasMany(Comment, {
 Comment.belongsTo(User, {
   foreignKey: "user_id",
 });
-//Image:
-User.hasOne(ImageUser, {
-  foreignKey: "user_id",
-});
-ImageUser.belongsTo(User, {
-  foreignKey: "user_id",
-});
+
 //ALog User:
 User.hasMany(ActivityLogUser, {
   foreignKey: "user_id",
