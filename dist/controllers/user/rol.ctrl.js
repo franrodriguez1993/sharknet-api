@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("../../utils/logger"));
 // Services:
 const rol_serv_1 = __importDefault(require("../../services/user/rol.serv"));
 const service = new rol_serv_1.default();
@@ -33,6 +34,7 @@ class rolUserController {
                     return res.status(201).json({ status: 201, msg: rol });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.json({ status: 500, msg: e.message });
             }
         });
@@ -45,6 +47,7 @@ class rolUserController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.json({ status: 500, msg: e.message });
             }
         });

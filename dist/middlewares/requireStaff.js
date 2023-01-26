@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requireStaff = void 0;
+const logger_1 = __importDefault(require("../utils/logger"));
 function requireStaff(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -22,6 +26,7 @@ function requireStaff(req, res, next) {
             }
         }
         catch (e) {
+            logger_1.default.error(e.message);
             return res.status(500).json({ status: 500, msg: e.message });
         }
     });

@@ -12,6 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("../../utils/logger"));
+//Service:
 const product_serv_1 = __importDefault(require("../../services/product/product.serv"));
 const service = new product_serv_1.default();
 class productController {
@@ -52,6 +54,7 @@ class productController {
                 return res.status(201).json({ status: 201, msg: "OK", data: product });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -71,6 +74,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -92,6 +96,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -113,6 +118,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -137,6 +143,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -158,6 +165,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -179,6 +187,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -198,6 +207,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -216,6 +226,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: product });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -257,6 +268,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: updatedProduct });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -278,6 +290,7 @@ class productController {
                     return res.json({ status: 200, msg: "OK", data: product });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -304,6 +317,7 @@ class productController {
                     return res.json({ status: 200, msg: favorite });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -328,6 +342,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -370,6 +385,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: sale });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -389,6 +405,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: sale });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -416,6 +433,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -443,6 +461,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -467,6 +486,7 @@ class productController {
                 return res.json({ status: 200, msg: "PRODUCT_PAUSED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -493,6 +513,7 @@ class productController {
                 return res.json({ status: 200, msg: "PRODUCT_REACTIVATED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -517,6 +538,7 @@ class productController {
                 return res.json({ status: 200, msg: "PRODUCT_DELETED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -543,6 +565,7 @@ class productController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });

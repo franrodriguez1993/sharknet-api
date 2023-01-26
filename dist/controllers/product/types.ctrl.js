@@ -12,6 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("../../utils/logger"));
+//Services:
 const types_serv_1 = __importDefault(require("../../services/product/types.serv"));
 const service = new types_serv_1.default();
 class typesProductController {
@@ -34,6 +36,7 @@ class typesProductController {
                     return res.status(201).json({ status: 201, msg: newType });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -48,6 +51,7 @@ class typesProductController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -66,6 +70,7 @@ class typesProductController {
                     return res.json({ status: 200, msg: "PRODUCT_TYPE_DELETED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });

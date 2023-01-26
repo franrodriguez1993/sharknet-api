@@ -1,5 +1,6 @@
-//Services:
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Services:
 import typesProductService from "../../services/product/types.serv";
 
 const service = new typesProductService();
@@ -26,6 +27,7 @@ export default class typesProductController {
       else if (newType === "PRODUCT_TYPE_CREATED")
         return res.status(201).json({ status: 201, msg: newType });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -39,6 +41,7 @@ export default class typesProductController {
       //Return:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -56,6 +59,7 @@ export default class typesProductController {
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
       else return res.json({ status: 200, msg: "PRODUCT_TYPE_DELETED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

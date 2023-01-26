@@ -14,11 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const googleapis_1 = require("googleapis");
 const streamifier_1 = __importDefault(require("streamifier"));
+const configServer_1 = __importDefault(require("../config/configServer"));
+const logger_1 = __importDefault(require("./logger"));
 //VARIABLES:
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI;
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN_GD;
+const CLIENT_ID = configServer_1.default.google.client_id;
+const CLIENT_SECRET = configServer_1.default.google.client_secret;
+const REDIRECT_URI = configServer_1.default.google.redirect_uri;
+const REFRESH_TOKEN = configServer_1.default.google.refresh_token;
 //Cliente OAUTH:
 const oauth2client = new googleapis_1.google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 oauth2client.setCredentials({ refresh_token: REFRESH_TOKEN });
@@ -45,7 +47,7 @@ class UploadImages {
                 return result.data;
             }
             catch (e) {
-                console.log(e.message);
+                logger_1.default.error(e.message);
             }
         });
     }
@@ -69,7 +71,7 @@ class UploadImages {
                 return { imageId: response.data.id, linksData };
             }
             catch (e) {
-                console.log(e.message);
+                logger_1.default.error(e.message);
             }
         });
     }
@@ -83,7 +85,7 @@ class UploadImages {
                 return response.status;
             }
             catch (e) {
-                console.log(e.message);
+                logger_1.default.error(e.message);
             }
         });
     }

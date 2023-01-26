@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
 
 //Service:
 import categoryProductService from "../../services/product/category.serv";
@@ -25,6 +26,7 @@ export default class categoryProductController {
       else if (category === "CATEGORY_CREATED")
         return res.status(201).json({ status: 201, msg: category });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -37,6 +39,7 @@ export default class categoryProductController {
       //return:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -56,6 +59,7 @@ export default class categoryProductController {
       else if (deleted)
         return res.json({ status: 200, msg: "CATEGORY_DELETED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

@@ -4,6 +4,7 @@ import { daoUser } from "../containers";
 import { verifyToken } from "../utils/jwtHandler";
 import { UserPayload } from "../interfaces/userInterface/payload.interface";
 import { UserInterface } from "../interfaces/userInterface/user.interface";
+import logger from "../utils/logger";
 
 export async function requireToken(
   req: RequestExt,
@@ -33,7 +34,9 @@ export async function requireToken(
       return res.json({ status: 403, message: "JWT_EXPIRED" });
     else if (e.message === "invalid token")
       return res.json({ status: 403, message: "INVALID_TOKEN" });
-    //default:
-    return res.json({ status: 500, message: "INTERNAL_SERVER_ERROR" });
+    else {
+      logger.error(e.message);
+      return res.json({ status: 500, message: "INTERNAL_SERVER_ERROR" });
+    }
   }
 }

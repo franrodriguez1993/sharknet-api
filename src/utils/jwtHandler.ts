@@ -1,15 +1,19 @@
 import { sign, verify } from "jsonwebtoken";
 import { UserPayload } from "../interfaces/userInterface/payload.interface";
+import serverConfigurations from "../config/configServer";
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_REFRESH = process.env.JWT_REFRESH;
+const JWT_SECRET = serverConfigurations.server.jwt_secret;
+const JWT_REFRESH = serverConfigurations.server.jwt_refresh_secret;
+const EXPIRATION_JWT = serverConfigurations.server.jwt_expiration;
+const EXPIRATION_JWT_REFRESH =
+  serverConfigurations.server.jwt_refresh_expiration;
 
 /*
 ~~~~~~~~~~~~~~~  SESSION TOKEN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
 const generateToken = (uid: string) => {
-  const jwt = sign({ uid }, JWT_SECRET, { expiresIn: "3h" });
+  const jwt = sign({ uid }, JWT_SECRET, { expiresIn: EXPIRATION_JWT });
   return jwt;
 };
 /*
@@ -25,7 +29,9 @@ const verifyToken = (jwt: string) => {
 ~~~~~~~~~~~~~~~ GENERATE REFRESH TOKEN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 const generateRefreshToken = (uid: string) => {
-  const refresh = sign({ uid }, JWT_REFRESH, { expiresIn: "5d" });
+  const refresh = sign({ uid }, JWT_REFRESH, {
+    expiresIn: EXPIRATION_JWT_REFRESH,
+  });
   return refresh;
 };
 

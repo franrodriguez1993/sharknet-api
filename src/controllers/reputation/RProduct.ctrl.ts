@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Interface:
 import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
+//Service:
 import reputationProductService from "../../services/reputation/RProduct.serv";
-
 const service = new reputationProductService();
 
 export default class reputationProductController {
@@ -35,6 +37,7 @@ export default class reputationProductController {
       //ok:
       return res.json({ status: 201, msg: "PRODUCT_QUALIFIED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -51,6 +54,7 @@ export default class reputationProductController {
       //Return:
       return res.json({ status: 200, msg: "OK", data: del });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -76,6 +80,7 @@ export default class reputationProductController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

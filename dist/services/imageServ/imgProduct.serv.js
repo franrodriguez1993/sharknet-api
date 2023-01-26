@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const configServer_1 = __importDefault(require("../../config/configServer"));
 //DAOs:
 const containers_1 = require("../../containers");
 const UploadImages_1 = __importDefault(require("../../utils/UploadImages"));
@@ -20,7 +21,7 @@ class imageProductService {
     /** ============= CREATE IMG PRODUCT ============= **/
     createImgProductServ(tokenUID, productId, image) {
         return __awaiter(this, void 0, void 0, function* () {
-            const folderId = process.env.GD_FOLDER_PRODUCTS;
+            const folderId = configServer_1.default.google.folders.products;
             //Check Product:
             const product = yield containers_1.daoProduct.getProduct(productId, true);
             if (!product)

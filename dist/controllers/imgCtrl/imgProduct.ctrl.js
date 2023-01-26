@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("../../utils/logger"));
+//Service:
 const imgProduct_serv_1 = __importDefault(require("../../services/imageServ/imgProduct.serv"));
-//-----------------------------------------------
 const service = new imgProduct_serv_1.default();
 class imageProductController {
     /** ============ CREATE IMG PRODUCT =========== **/
@@ -38,6 +39,7 @@ class imageProductController {
                 return res.json({ status: 201, msg: "IMAGE_UPLOADED", data: img });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -59,6 +61,7 @@ class imageProductController {
                 return res.json({ status: 200, msg: "IMAGE_DELETED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });

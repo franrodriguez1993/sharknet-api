@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Interface:
 import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
+//Service:
 import productService from "../../services/product/product.serv";
-
 const service = new productService();
 
 export default class productController {
@@ -42,6 +44,7 @@ export default class productController {
       //Ok:
       return res.status(201).json({ status: 201, msg: "OK", data: product });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -60,6 +63,7 @@ export default class productController {
       //return:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -79,6 +83,7 @@ export default class productController {
       //return:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -98,6 +103,7 @@ export default class productController {
       //return:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -122,6 +128,7 @@ export default class productController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -142,6 +149,7 @@ export default class productController {
       //return:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -161,6 +169,7 @@ export default class productController {
       //return:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -181,6 +190,7 @@ export default class productController {
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -200,6 +210,7 @@ export default class productController {
         return res.status(404).json({ status: 404, msg: "PRODUCT_NOT_FOUND" });
       return res.json({ status: 200, msg: "OK", data: product });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -245,6 +256,7 @@ export default class productController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: updatedProduct });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -265,6 +277,7 @@ export default class productController {
       else if (product === "VIEWS_UPDATED")
         return res.json({ status: 200, msg: "OK", data: product });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -292,6 +305,7 @@ export default class productController {
       else if (favorite === "FAVORITE_ELIMINATED")
         return res.json({ status: 200, msg: favorite });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -316,6 +330,7 @@ export default class productController {
       //ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -362,6 +377,7 @@ export default class productController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: sale });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -381,6 +397,7 @@ export default class productController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: sale });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -408,6 +425,7 @@ export default class productController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -435,6 +453,7 @@ export default class productController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -459,6 +478,7 @@ export default class productController {
       //Ok:
       return res.json({ status: 200, msg: "PRODUCT_PAUSED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -486,6 +506,7 @@ export default class productController {
       //Ok:
       return res.json({ status: 200, msg: "PRODUCT_REACTIVATED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -510,6 +531,7 @@ export default class productController {
       //Ok:
       return res.json({ status: 200, msg: "PRODUCT_DELETED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -545,6 +567,7 @@ export default class productController {
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

@@ -1,7 +1,7 @@
-//Services:
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Services:
 import repuScoreService from "../../services/reputation/RScore.serv";
-
 const service = new repuScoreService();
 
 export default class repuScoreController {
@@ -23,6 +23,7 @@ export default class repuScoreController {
       //Ok:
       return res.json({ status: 201, msg: "SCORE_CREATED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -34,6 +35,7 @@ export default class repuScoreController {
       const list = await service.listScoreServ();
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -52,6 +54,7 @@ export default class repuScoreController {
       //Return:
       return res.json({ status: 200, msg: "SCORE_DELETED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

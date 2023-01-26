@@ -1,5 +1,7 @@
 import cors from "cors";
 import express from "express";
+import serverConfigurations from "./config/configServer";
+/** ------ ROUTES ------  **/
 import { userRouters } from "./routes/user";
 import { productRouters } from "./routes/product";
 import { reputationRouters } from "./routes/reputation";
@@ -7,11 +9,15 @@ import { commentRouter } from "./routes/comment";
 import { imageRouters } from "./routes/imgRoute";
 import { superRouters } from "./routes/superuser";
 import { notificationtRouters } from "./routes/notification";
+
 const app = express();
 
 /** =========================  CORS  ==========================  **/
 
-const urlList = [process.env.CORS_URL1, process.env.CORS_URL2];
+const urlList = [
+  serverConfigurations.cors.first,
+  serverConfigurations.cors.second,
+];
 const corsOptions = {
   credentials: true,
   origin: function (origin: any, callback: any) {

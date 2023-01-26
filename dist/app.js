@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
+const configServer_1 = __importDefault(require("./config/configServer"));
+/** ------ ROUTES ------  **/
 const user_1 = require("./routes/user");
 const product_1 = require("./routes/product");
 const reputation_1 = require("./routes/reputation");
@@ -14,7 +16,10 @@ const superuser_1 = require("./routes/superuser");
 const notification_1 = require("./routes/notification");
 const app = (0, express_1.default)();
 /** =========================  CORS  ==========================  **/
-const urlList = [process.env.CORS_URL1, process.env.CORS_URL2];
+const urlList = [
+    configServer_1.default.cors.first,
+    configServer_1.default.cors.second,
+];
 const corsOptions = {
     credentials: true,
     origin: function (origin, callback) {

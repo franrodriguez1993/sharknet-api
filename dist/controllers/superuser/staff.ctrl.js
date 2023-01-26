@@ -12,6 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("../../utils/logger"));
+//Service:
 const staff_serv_1 = __importDefault(require("../../services/superuser/staff.serv"));
 const service = new staff_serv_1.default();
 class staffController {
@@ -31,6 +33,7 @@ class staffController {
                 return res.json({ status: 200, msg: "OK", data: user });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -51,6 +54,7 @@ class staffController {
                 return res.json({ status: 200, msg: "OK", data: user });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -73,6 +77,7 @@ class staffController {
                 return res.json({ status: 200, msg: "OK", data: del });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -95,6 +100,7 @@ class staffController {
                 return res.json({ status: 200, msg: "OK", data: suspend });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -117,6 +123,7 @@ class staffController {
                 return res.json({ status: 200, msg: "OK", data: reactive });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });

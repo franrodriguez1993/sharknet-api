@@ -1,13 +1,14 @@
 import { google } from "googleapis";
 import streamifier from "streamifier";
 import googleImageInterface from "../interfaces/imageInterface/imgGD.interface";
-
+import serverConfigurations from "../config/configServer";
+import logger from "./logger";
 //VARIABLES:
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const CLIENT_ID = serverConfigurations.google.client_id;
+const CLIENT_SECRET = serverConfigurations.google.client_secret;
 
-const REDIRECT_URI = process.env.REDIRECT_URI;
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN_GD;
+const REDIRECT_URI = serverConfigurations.google.redirect_uri;
+const REFRESH_TOKEN = serverConfigurations.google.refresh_token;
 
 //Cliente OAUTH:
 const oauth2client = new google.auth.OAuth2(
@@ -39,7 +40,7 @@ export default class UploadImages {
       });
       return result.data;
     } catch (e: any) {
-      console.log(e.message);
+      logger.error(e.message);
     }
   }
 
@@ -61,7 +62,7 @@ export default class UploadImages {
       const linksData = await this.generatePublicURL(response.data);
       return { imageId: response.data.id, linksData };
     } catch (e: any) {
-      console.log(e.message);
+      logger.error(e.message);
     }
   }
 
@@ -73,7 +74,7 @@ export default class UploadImages {
       });
       return response.status;
     } catch (e: any) {
-      console.log(e.message);
+      logger.error(e.message);
     }
   }
 }

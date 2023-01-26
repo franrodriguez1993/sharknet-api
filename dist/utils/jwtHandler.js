@@ -1,14 +1,20 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyRefreshToken = exports.generateRefreshToken = exports.verifyToken = exports.generateToken = void 0;
 const jsonwebtoken_1 = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_REFRESH = process.env.JWT_REFRESH;
+const configServer_1 = __importDefault(require("../config/configServer"));
+const JWT_SECRET = configServer_1.default.server.jwt_secret;
+const JWT_REFRESH = configServer_1.default.server.jwt_refresh_secret;
+const EXPIRATION_JWT = configServer_1.default.server.jwt_expiration;
+const EXPIRATION_JWT_REFRESH = configServer_1.default.server.jwt_refresh_expiration;
 /*
 ~~~~~~~~~~~~~~~  SESSION TOKEN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 const generateToken = (uid) => {
-    const jwt = (0, jsonwebtoken_1.sign)({ uid }, JWT_SECRET, { expiresIn: "3h" });
+    const jwt = (0, jsonwebtoken_1.sign)({ uid }, JWT_SECRET, { expiresIn: EXPIRATION_JWT });
     return jwt;
 };
 exports.generateToken = generateToken;
@@ -24,7 +30,9 @@ exports.verifyToken = verifyToken;
 ~~~~~~~~~~~~~~~ GENERATE REFRESH TOKEN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 const generateRefreshToken = (uid) => {
-    const refresh = (0, jsonwebtoken_1.sign)({ uid }, JWT_REFRESH, { expiresIn: "5d" });
+    const refresh = (0, jsonwebtoken_1.sign)({ uid }, JWT_REFRESH, {
+        expiresIn: EXPIRATION_JWT_REFRESH,
+    });
     return refresh;
 };
 exports.generateRefreshToken = generateRefreshToken;

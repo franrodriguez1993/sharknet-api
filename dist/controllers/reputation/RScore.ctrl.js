@@ -12,6 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("../../utils/logger"));
+//Services:
 const RScore_serv_1 = __importDefault(require("../../services/reputation/RScore.serv"));
 const service = new RScore_serv_1.default();
 class repuScoreController {
@@ -32,6 +34,7 @@ class repuScoreController {
                 return res.json({ status: 201, msg: "SCORE_CREATED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -45,6 +48,7 @@ class repuScoreController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -63,6 +67,7 @@ class repuScoreController {
                 return res.json({ status: 200, msg: "SCORE_DELETED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });

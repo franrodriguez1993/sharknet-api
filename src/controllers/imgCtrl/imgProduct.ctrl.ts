@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Interface:
 import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
+//Service:
 import imageProductService from "../../services/imageServ/imgProduct.serv";
-
-//-----------------------------------------------
 const service = new imageProductService();
 
 export default class imageProductController {
@@ -32,6 +33,7 @@ export default class imageProductController {
       //Ok:
       return res.json({ status: 201, msg: "IMAGE_UPLOADED", data: img });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -52,6 +54,7 @@ export default class imageProductController {
       }
       return res.json({ status: 200, msg: "IMAGE_DELETED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

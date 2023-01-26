@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
 // Services:
 import rolUserService from "../../services/user/rol.serv";
-
 const service = new rolUserService();
 
 export default class rolUserController {
@@ -21,6 +21,7 @@ export default class rolUserController {
       else if (rol === "ROL_CREATED")
         return res.status(201).json({ status: 201, msg: rol });
     } catch (e: any) {
+      logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
     }
   }
@@ -31,6 +32,7 @@ export default class rolUserController {
       const list = await service.getAllRolServ();
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
     }
   }

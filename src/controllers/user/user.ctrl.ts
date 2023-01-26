@@ -1,8 +1,9 @@
-//Services:
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Interface:
 import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
+//Services:
 import userService from "../../services/user/user.serv";
-
 const service = new userService();
 
 export default class userController {
@@ -26,7 +27,7 @@ export default class userController {
         return res.status(201).json({ status: 201, msg: user });
       }
     } catch (e: any) {
-      console.log(e);
+      logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
     }
   }
@@ -51,7 +52,7 @@ export default class userController {
       //ok:
       return res.json({ status: 200, msg: "LOGIN", data: login });
     } catch (e: any) {
-      console.log(e);
+      logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
     }
   }
@@ -72,7 +73,7 @@ export default class userController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: session });
     } catch (e: any) {
-      console.log(e);
+      logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
     }
   }
@@ -86,6 +87,7 @@ export default class userController {
         return res.json({ status: 400, msg: user });
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
+      logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
     }
   }
@@ -99,6 +101,7 @@ export default class userController {
         return res.json({ status: 404, msg: user });
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
+      logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
     }
   }
@@ -130,6 +133,7 @@ export default class userController {
       else if (user === "USER_UPDATED")
         return res.json({ status: 200, msg: user });
     } catch (e: any) {
+      logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
     }
   }
@@ -153,6 +157,7 @@ export default class userController {
       //Ok:
       return res.json({ status: 200, msg: "EMAIL_UPDATED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
     }
   }
@@ -172,6 +177,7 @@ export default class userController {
         return res.json({ status: 404, msg: user });
       return res.json({ status: 200, msg: "PASSWORD_UPDATED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -202,6 +208,7 @@ export default class userController {
       )
         return res.json({ status: 201, msg: birthday });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -234,6 +241,7 @@ export default class userController {
       else if (address === "ADDRESS_CREATED")
         return res.json({ status: 201, msg: address });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -252,6 +260,7 @@ export default class userController {
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
       else return res.json({ status: 200, msg: "ADDRESS_DELETED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -287,6 +296,7 @@ export default class userController {
           .status(201)
           .json({ status: 201, msg: "OK", data: newCreditCard });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -305,6 +315,7 @@ export default class userController {
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
       return res.json({ status: 200, msg: "CREDITCARD_DELETED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -328,6 +339,7 @@ export default class userController {
         return res.status(201).json({ status: 201, msg: resUpdate });
       }
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

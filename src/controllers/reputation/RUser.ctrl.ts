@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Interface:
 import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
+//Service:
 import repuUserService from "../../services/reputation/RUser.serv";
-
 const service = new repuUserService();
 
 export default class repuUserController {
@@ -35,6 +37,7 @@ export default class repuUserController {
       //Ok:
       return res.json({ status: 201, msg: "USER_QUALIFIED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -71,6 +74,7 @@ export default class repuUserController {
       //Ok:
       return res.json({ status: 201, msg: "USER_QUALIFIED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -87,6 +91,7 @@ export default class repuUserController {
       //Return:
       return res.json({ status: 200, msg: "OK", data: del });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -110,6 +115,7 @@ export default class repuUserController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -134,6 +140,7 @@ export default class repuUserController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

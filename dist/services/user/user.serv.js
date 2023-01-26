@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//uuid:
+const configServer_1 = __importDefault(require("../../config/configServer"));
 const uuid_1 = require("uuid");
 // BcryptJS:
 const bcryptHandler_1 = require("../../utils/bcryptHandler");
@@ -206,7 +206,7 @@ class userService {
     /**==================== PROFILE IMAGE =========================**/
     uploadImageProfile(uid, img) {
         return __awaiter(this, void 0, void 0, function* () {
-            const folderId = process.env.GD_FOLDER_USERS;
+            const folderId = configServer_1.default.google.folders.users;
             //Upload image:
             const imgProfile = yield uploaderManager.uploadFile(uid, img, folderId);
             if (!imgProfile)

@@ -1,13 +1,14 @@
-//La recomendación de la documentación dice que es mejor importarlo con mayúscula.
+import serverConfigurations from "../configServer";
 import { Sequelize } from "sequelize";
 
 export const sequelize = new Sequelize(
-  process.env.POSTGRES_DB,
-  process.env.POSTGRES_USERNAME,
-  process.env.POSTGRES_PASSWORD,
+  serverConfigurations.postgres.db,
+  serverConfigurations.postgres.username,
+  serverConfigurations.postgres.password,
   {
-    host: process.env.POSTGRES_HOST,
+    host: serverConfigurations.postgres.host,
     dialect: "postgres",
+    logging: false,
   }
 );
 

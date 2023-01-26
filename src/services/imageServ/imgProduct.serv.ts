@@ -1,7 +1,7 @@
+import serverConfigurations from "../../config/configServer";
 //DAOs:
 import { daoImgProduct, daoProduct } from "../../containers";
 //Interface:
-
 import { productInterface } from "../../interfaces/productInterface/product.interface";
 
 import UploadImages from "../../utils/UploadImages";
@@ -14,7 +14,7 @@ export default class imageProductService {
     productId: string,
     image: Buffer
   ) {
-    const folderId = process.env.GD_FOLDER_PRODUCTS;
+    const folderId = serverConfigurations.google.folders.products;
     //Check Product:
     const product: productInterface | any = await daoProduct.getProduct(
       productId,

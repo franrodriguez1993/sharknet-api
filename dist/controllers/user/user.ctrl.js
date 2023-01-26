@@ -12,6 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("../../utils/logger"));
+//Services:
 const user_serv_1 = __importDefault(require("../../services/user/user.serv"));
 const service = new user_serv_1.default();
 class userController {
@@ -38,7 +40,7 @@ class userController {
                 }
             }
             catch (e) {
-                console.log(e);
+                logger_1.default.error(e.message);
                 return res.json({ status: 500, msg: e.message });
             }
         });
@@ -63,7 +65,7 @@ class userController {
                 return res.json({ status: 200, msg: "LOGIN", data: login });
             }
             catch (e) {
-                console.log(e);
+                logger_1.default.error(e.message);
                 return res.json({ status: 500, msg: e.message });
             }
         });
@@ -85,7 +87,7 @@ class userController {
                 return res.json({ status: 200, msg: "OK", data: session });
             }
             catch (e) {
-                console.log(e);
+                logger_1.default.error(e.message);
                 return res.json({ status: 500, msg: e.message });
             }
         });
@@ -101,6 +103,7 @@ class userController {
                 return res.json({ status: 200, msg: "OK", data: user });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.json({ status: 500, msg: e.message });
             }
         });
@@ -116,6 +119,7 @@ class userController {
                 return res.json({ status: 200, msg: "OK", data: user });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.json({ status: 500, msg: e.message });
             }
         });
@@ -147,6 +151,7 @@ class userController {
                     return res.json({ status: 200, msg: user });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.json({ status: 500, msg: e.message });
             }
         });
@@ -169,6 +174,7 @@ class userController {
                 return res.json({ status: 200, msg: "EMAIL_UPDATED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.json({ status: 500, msg: e.message });
             }
         });
@@ -188,6 +194,7 @@ class userController {
                 return res.json({ status: 200, msg: "PASSWORD_UPDATED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -216,6 +223,7 @@ class userController {
                     return res.json({ status: 201, msg: birthday });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -248,6 +256,7 @@ class userController {
                     return res.json({ status: 201, msg: address });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -267,6 +276,7 @@ class userController {
                     return res.json({ status: 200, msg: "ADDRESS_DELETED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -301,6 +311,7 @@ class userController {
                         .json({ status: 201, msg: "OK", data: newCreditCard });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -319,6 +330,7 @@ class userController {
                 return res.json({ status: 200, msg: "CREDITCARD_DELETED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -345,6 +357,7 @@ class userController {
                 }
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });

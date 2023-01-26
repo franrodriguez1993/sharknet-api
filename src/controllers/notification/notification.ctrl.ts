@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Interface:
 import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
+//Service:
 import notificationService from "../../services/notification/notification.serv";
-
 const service = new notificationService();
 
 export default class notificationController {
@@ -22,6 +24,7 @@ export default class notificationController {
       else if (seen === "NOTIFICATION_SEEN")
         return res.json({ status: 200, msg: seen });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -49,6 +52,7 @@ export default class notificationController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

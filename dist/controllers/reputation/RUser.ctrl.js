@@ -12,6 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("../../utils/logger"));
+//Service:
 const RUser_serv_1 = __importDefault(require("../../services/reputation/RUser.serv"));
 const service = new RUser_serv_1.default();
 class repuUserController {
@@ -42,6 +44,7 @@ class repuUserController {
                 return res.json({ status: 201, msg: "USER_QUALIFIED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -75,6 +78,7 @@ class repuUserController {
                 return res.json({ status: 201, msg: "USER_QUALIFIED" });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -91,6 +95,7 @@ class repuUserController {
                 return res.json({ status: 200, msg: "OK", data: del });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -115,6 +120,7 @@ class repuUserController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });
@@ -139,6 +145,7 @@ class repuUserController {
                 return res.json({ status: 200, msg: "OK", data: list });
             }
             catch (e) {
+                logger_1.default.error(e.message);
                 return res.status(500).json({ status: 500, msg: e.message });
             }
         });

@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Interface:
 import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
 //Services:
 import adminService from "../../services/superuser/admin.serv";
-
 const service = new adminService();
 
 export default class adminController {
@@ -20,6 +21,7 @@ export default class adminController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -38,6 +40,7 @@ export default class adminController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -56,6 +59,7 @@ export default class adminController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -74,6 +78,7 @@ export default class adminController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -93,6 +98,7 @@ export default class adminController {
       //Ok:
       return res.json({ status: 200, msg: "USER_DELETED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -113,6 +119,7 @@ export default class adminController {
       //Ok:
       return res.json({ status: 200, msg: "USER_SUSPENDED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -132,6 +139,7 @@ export default class adminController {
         return res.status(404).json({ status: 404, msg: reactive });
       return res.json({ status: 200, msg: "OK", data: reactive });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -152,6 +160,7 @@ export default class adminController {
         return res.status(404).json({ status: 404, msg: list });
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -174,6 +183,7 @@ export default class adminController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

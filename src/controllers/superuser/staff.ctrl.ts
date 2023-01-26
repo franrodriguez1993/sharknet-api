@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
+//Interface:
 import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
+//Service:
 import staffService from "../../services/superuser/staff.serv";
 const service = new staffService();
 
@@ -19,6 +22,7 @@ export default class staffController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -38,6 +42,7 @@ export default class staffController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -60,6 +65,7 @@ export default class staffController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: del });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -83,6 +89,7 @@ export default class staffController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: suspend });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -105,6 +112,7 @@ export default class staffController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: reactive });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

@@ -1,9 +1,10 @@
-//Service:
 import { Request, Response } from "express";
-import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
+import logger from "../../utils/logger";
+//Service:
 import commentService from "../../services/comment/comment.serv";
-
 const service = new commentService();
+//Interface:
+import { RequestExt } from "../../interfaces/userInterface/ReqExt.interface";
 
 export default class commentController {
   /** =================  COMMENT PRODUCT ==================**/
@@ -34,6 +35,7 @@ export default class commentController {
       //Ok:
       return res.json({ status: 201, msg: "COMMENT_CREATED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -73,6 +75,7 @@ export default class commentController {
       //Ok:
       return res.json({ status: 201, msg: "REPLY_CREATED" });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -99,6 +102,7 @@ export default class commentController {
       //Ok:
       return res.json({ status: 200, msg: "OK", data: list });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
@@ -115,6 +119,7 @@ export default class commentController {
       //Return:
       return res.json({ status: 200, msg: "OK", data: del });
     } catch (e: any) {
+      logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }

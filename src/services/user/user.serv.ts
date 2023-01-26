@@ -1,4 +1,4 @@
-//uuid:
+import serverConfigurations from "../../config/configServer";
 import { v4 as uuidv4 } from "uuid";
 // BcryptJS:
 import { encrypt, verified } from "../../utils/bcryptHandler";
@@ -201,7 +201,7 @@ export default class userService {
 
   /**==================== PROFILE IMAGE =========================**/
   async uploadImageProfile(uid: string, img: Buffer) {
-    const folderId = process.env.GD_FOLDER_USERS;
+    const folderId = serverConfigurations.google.folders.users;
     //Upload image:
     const imgProfile = await uploaderManager.uploadFile(uid, img, folderId);
     if (!imgProfile) return "ERROR_UPLOADING_IMAGE";

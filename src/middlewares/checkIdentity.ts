@@ -2,6 +2,7 @@
 //If is not the user or staff/admin reject the request.
 
 import { NextFunction, Response } from "express";
+import logger from "../utils/logger";
 import { RequestExt } from "../interfaces/userInterface/ReqExt.interface";
 
 export async function checkIdentity(
@@ -19,6 +20,7 @@ export async function checkIdentity(
       return res.status(401).json({ status: 401, msg: "UNAUTHORIZED_REQUEST" });
     }
   } catch (e: any) {
+    logger.error(e.message);
     return res.status(500).json({ status: 500, msg: e.message });
   }
 }

@@ -8,10 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requireToken = void 0;
 const containers_1 = require("../containers");
 const jwtHandler_1 = require("../utils/jwtHandler");
+const logger_1 = __importDefault(require("../utils/logger"));
 function requireToken(req, res, next) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -36,8 +40,10 @@ function requireToken(req, res, next) {
                 return res.json({ status: 403, message: "JWT_EXPIRED" });
             else if (e.message === "invalid token")
                 return res.json({ status: 403, message: "INVALID_TOKEN" });
-            //default:
-            return res.json({ status: 500, message: "INTERNAL_SERVER_ERROR" });
+            else {
+                logger_1.default.error(e.message);
+                return res.json({ status: 500, message: "INTERNAL_SERVER_ERROR" });
+            }
         }
     });
 }
