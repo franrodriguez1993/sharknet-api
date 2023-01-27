@@ -13,6 +13,7 @@ import Address from "../../../../models/sql/usersModel/Address.model";
 import ProductCategory from "../../../../models/sql/productsModel/PCategory.models";
 import ProductFavorite from "../../../../models/sql/productsModel/PFavorite.models";
 import ImageProduct from "../../../../models/sql/imagesModel/ImageProd.model";
+import Rol from "../../../../models/sql/usersModel/Rol.model";
 
 //Utils:
 import {
@@ -191,7 +192,11 @@ export class daoProductSQL extends basecontainer {
           attributes: { exclude: ["address_id", "user_id", "pt_id"] },
           include: [
             { model: ProductTypes, include: [{ model: ProductCategory }] },
-            { model: User, attributes: ["user_username", "user_id"] },
+            {
+              model: User,
+              attributes: ["user_username", "user_id", "user_image"],
+              include: [{ model: Rol }],
+            },
             { model: Address },
             { model: ImageProduct, attributes: ["ip_id", "ip_path"] },
           ],
