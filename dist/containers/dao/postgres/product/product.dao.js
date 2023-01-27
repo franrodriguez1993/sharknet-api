@@ -24,6 +24,7 @@ const Address_model_1 = __importDefault(require("../../../../models/sql/usersMod
 const PCategory_models_1 = __importDefault(require("../../../../models/sql/productsModel/PCategory.models"));
 const PFavorite_models_1 = __importDefault(require("../../../../models/sql/productsModel/PFavorite.models"));
 const ImageProd_model_1 = __importDefault(require("../../../../models/sql/imagesModel/ImageProd.model"));
+const Rol_model_1 = __importDefault(require("../../../../models/sql/usersModel/Rol.model"));
 //Utils:
 const paginationfunction_1 = require("../../../../utils/paginationfunction");
 /**------------------------------------------------------------------------**/
@@ -171,7 +172,11 @@ class daoProductSQL extends base_container_1.default {
                         attributes: { exclude: ["address_id", "user_id", "pt_id"] },
                         include: [
                             { model: PType_models_1.default, include: [{ model: PCategory_models_1.default }] },
-                            { model: User_model_1.default, attributes: ["user_username", "user_id"] },
+                            {
+                                model: User_model_1.default,
+                                attributes: ["user_username", "user_id", "user_image"],
+                                include: [{ model: Rol_model_1.default }],
+                            },
                             { model: Address_model_1.default },
                             { model: ImageProd_model_1.default, attributes: ["ip_id", "ip_path"] },
                         ],
