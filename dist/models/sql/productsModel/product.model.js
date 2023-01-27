@@ -50,6 +50,9 @@ const Product = postgres_1.sequelize.define("product", {
     product_status: {
         type: sequelize_1.DataTypes.STRING,
     },
+    product_thumbnail: {
+        type: sequelize_1.DataTypes.STRING,
+    },
     product_views: {
         type: sequelize_1.DataTypes.INTEGER,
         defaultValue: 0,

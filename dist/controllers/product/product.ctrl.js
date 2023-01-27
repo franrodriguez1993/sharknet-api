@@ -570,5 +570,34 @@ class productController {
             }
         });
     }
+    /**~~~~~~~~~~~~~~~~~  IMAGE THUMBNAIL PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
+    updateThumbnailCtrl(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                //Data:
+                const { id } = req.params;
+                const { file, uid } = req;
+                //Service:
+                const resUpdate = yield service.updateThumbnailServ(uid, id, file.buffer);
+                //Return:
+                if (resUpdate === "PRODUCT_NOT_FOUND") {
+                    return res.status(404).json({ status: 404, msg: resUpdate });
+                }
+                else if (resUpdate === "INVALID_SELLER") {
+                    return res.status(400).json({ status: 400, msg: resUpdate });
+                }
+                else if (resUpdate === "ERROR_UPLOADING_PHOTO") {
+                    return res.status(500).json({ status: 500, msg: resUpdate });
+                }
+                else if (resUpdate === "THUMBNAIL_UPDATED") {
+                    return res.status(201).json({ status: 201, msg: resUpdate });
+                }
+            }
+            catch (e) {
+                logger_1.default.error(e.message);
+                return res.status(500).json({ status: 500, msg: e.message });
+            }
+        });
+    }
 }
 exports.default = productController;

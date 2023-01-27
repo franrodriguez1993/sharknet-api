@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
+const multer_1 = __importDefault(require("multer"));
+const upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() });
 //Controllers:
 const product_ctrl_1 = __importDefault(require("../../controllers/product/product.ctrl"));
 const controller = new product_ctrl_1.default();
@@ -32,6 +34,7 @@ router.get("/list/favorite/:id", requireToken_1.requireToken, controller.listPFa
 //EDIT:
 router.put("/edit/:id", requireToken_1.requireToken, validatorManager_1.validatorEditProduct, controller.editProductCtrl);
 router.put("/edit/views/:id", controller.updateViewsCtrl);
+router.put("/edit/thumbnail/:id", requireToken_1.requireToken, upload.single("product"), controller.updateThumbnailCtrl);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //CONDITION:
 router.put("/condition/pause/:id", requireToken_1.requireToken, controller.pauseProductCtrl);

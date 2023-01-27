@@ -366,5 +366,23 @@ class daoProductSQL extends base_container_1.default {
             }
         });
     }
+    /**~~~~~~~~~~~~~~~~~  IMAGE THUMBNAIL PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
+    updateThumbnail(product_id, path) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const product = yield product_model_1.default.findOne({
+                    where: { product_id },
+                });
+                if (!product)
+                    return "PRODUCT_NOT_FOUND";
+                product.set({ product_thumbnail: path });
+                yield product.save();
+                return "THUMBNAIL_UPDATED";
+            }
+            catch (e) {
+                throw new Error(e.message);
+            }
+        });
+    }
 }
 exports.daoProductSQL = daoProductSQL;

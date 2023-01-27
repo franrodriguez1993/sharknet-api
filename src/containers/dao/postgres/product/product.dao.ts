@@ -369,4 +369,19 @@ export class daoProductSQL extends basecontainer {
       throw new Error(e.message);
     }
   }
+
+  /**~~~~~~~~~~~~~~~~~  IMAGE THUMBNAIL PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
+  async updateThumbnail(product_id: string, path: string) {
+    try {
+      const product: productInterface | any = await Product.findOne({
+        where: { product_id },
+      });
+      if (!product) return "PRODUCT_NOT_FOUND";
+      product.set({ product_thumbnail: path });
+      await product.save();
+      return "THUMBNAIL_UPDATED";
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
 }

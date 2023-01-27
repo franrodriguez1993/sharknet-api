@@ -1,5 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
+import serverConfigurations from "../../config/configServer";
 
+import UploadImages from "../../utils/UploadImages";
+const uploaderManager = new UploadImages();
 //Dao:
 import { daoNotification, daoProduct, daoSale } from "../../containers";
 import { daoUser } from "../../containers";
@@ -337,6 +340,7 @@ export default class productService {
   ) {
     //Normalize brand name:
     const newSearch = search.split("_").join(" ").toLowerCase();
+    //Price params:
     if (Number.isNaN(pmin)) pmin = 0;
     if (Number.isNaN(pmax)) pmax = 10000000;
     return await daoProduct.searchQueryProducts(
@@ -349,5 +353,35 @@ export default class productService {
       pmin,
       pmax
     );
+  }
+
+  /**~~~~~~~~~~~~~~~~~  IMAGE THUMBNAIL PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
+  async updateThumbnailServ(
+    tokenUID: string,
+    product_id: string,
+    image: Buffer
+  ) {
+    const folderId = serverConfigurations.google.folders.products;
+
+    //Check Product:
+    const product: productInterface | any = await daoProduct.getProduct(
+      product_id,
+      true
+    );
+    if (!product) return "PRODUCT_NOT_FOUND";
+    if (product.user_id.toString() !== tokenUID.toString())
+      return "INVALID_SELLER";
+
+    //Upload image to google:
+    const imageData = await uploaderManager.uploadFile(
+      product_id,
+      image,
+      folderId
+    );
+    //Check path:
+    if (!imageData) return "ERROR_UPLOADING_PHOTO";
+    //Create path:
+    const product_thumbnail = `https://drive.google.com/uc?id=${imageData.imageId}`;
+    return await daoProduct.updateThumbnail(product_id, product_thumbnail);
   }
 }

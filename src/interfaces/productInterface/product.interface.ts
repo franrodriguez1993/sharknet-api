@@ -11,6 +11,7 @@ export interface productInterface {
   product_offer?: number;
   product_views?: number;
   product_description?: string;
+  product_thumbnail?: string;
   product_status?: string;
   product_warranty?: string;
   address_id?: string;

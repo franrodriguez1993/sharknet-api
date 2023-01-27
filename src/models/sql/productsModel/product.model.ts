@@ -47,6 +47,9 @@ const Product = sequelize.define(
     product_status: {
       type: DataTypes.STRING,
     },
+    product_thumbnail: {
+      type: DataTypes.STRING,
+    },
     product_views: {
       type: DataTypes.INTEGER,
       defaultValue: 0,

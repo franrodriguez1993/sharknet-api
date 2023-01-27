@@ -571,4 +571,30 @@ export default class productController {
       return res.status(500).json({ status: 500, msg: e.message });
     }
   }
+
+  /**~~~~~~~~~~~~~~~~~  IMAGE THUMBNAIL PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
+  async updateThumbnailCtrl(req: RequestExt, res: Response) {
+    try {
+      //Data:
+      const { id } = req.params;
+      const { file, uid } = req;
+
+      //Service:
+      const resUpdate = await service.updateThumbnailServ(uid, id, file.buffer);
+
+      //Return:
+      if (resUpdate === "PRODUCT_NOT_FOUND") {
+        return res.status(404).json({ status: 404, msg: resUpdate });
+      } else if (resUpdate === "INVALID_SELLER") {
+        return res.status(400).json({ status: 400, msg: resUpdate });
+      } else if (resUpdate === "ERROR_UPLOADING_PHOTO") {
+        return res.status(500).json({ status: 500, msg: resUpdate });
+      } else if (resUpdate === "THUMBNAIL_UPDATED") {
+        return res.status(201).json({ status: 201, msg: resUpdate });
+      }
+    } catch (e: any) {
+      logger.error(e.message);
+      return res.status(500).json({ status: 500, msg: e.message });
+    }
+  }
 }

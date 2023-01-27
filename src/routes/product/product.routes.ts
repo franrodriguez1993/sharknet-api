@@ -1,8 +1,10 @@
 import { Router } from "express";
 
+import multer from "multer";
+const upload = multer({ storage: multer.memoryStorage() });
+
 //Controllers:
 import productController from "../../controllers/product/product.ctrl";
-
 const controller = new productController();
 
 //Middlewares
@@ -13,6 +15,7 @@ import {
 } from "../../middlewares/validatorManager";
 
 const router = Router();
+
 //CREATE:
 router.post(
   "/create",
@@ -42,6 +45,12 @@ router.put(
   controller.editProductCtrl
 );
 router.put("/edit/views/:id", controller.updateViewsCtrl);
+router.put(
+  "/edit/thumbnail/:id",
+  requireToken,
+  upload.single("product"),
+  controller.updateThumbnailCtrl
+);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //CONDITION:
 router.put("/condition/pause/:id", requireToken, controller.pauseProductCtrl);

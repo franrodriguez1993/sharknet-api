@@ -8,8 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
+const configServer_1 = __importDefault(require("../../config/configServer"));
+const UploadImages_1 = __importDefault(require("../../utils/UploadImages"));
+const uploaderManager = new UploadImages_1.default();
 //Dao:
 const containers_1 = require("../../containers");
 const containers_2 = require("../../containers");
@@ -286,11 +292,32 @@ class productService {
         return __awaiter(this, void 0, void 0, function* () {
             //Normalize brand name:
             const newSearch = search.split("_").join(" ").toLowerCase();
+            //Price params:
             if (Number.isNaN(pmin))
                 pmin = 0;
             if (Number.isNaN(pmax))
                 pmax = 10000000;
             return yield containers_1.daoProduct.searchQueryProducts(newSearch, page, size, status, category, type, pmin, pmax);
+        });
+    }
+    /**~~~~~~~~~~~~~~~~~  IMAGE THUMBNAIL PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
+    updateThumbnailServ(tokenUID, product_id, image) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const folderId = configServer_1.default.google.folders.products;
+            //Check Product:
+            const product = yield containers_1.daoProduct.getProduct(product_id, true);
+            if (!product)
+                return "PRODUCT_NOT_FOUND";
+            if (product.user_id.toString() !== tokenUID.toString())
+                return "INVALID_SELLER";
+            //Upload image to google:
+            const imageData = yield uploaderManager.uploadFile(product_id, image, folderId);
+            //Check path:
+            if (!imageData)
+                return "ERROR_UPLOADING_PHOTO";
+            //Create path:
+            const product_thumbnail = `https://drive.google.com/uc?id=${imageData.imageId}`;
+            return yield containers_1.daoProduct.updateThumbnail(product_id, product_thumbnail);
         });
     }
 }
