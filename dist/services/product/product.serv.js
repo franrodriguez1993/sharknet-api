@@ -43,7 +43,13 @@ class productService {
             product.product_status = product.product_status.toString().toLowerCase();
             //Create:
             product.product_id = (0, uuid_1.v4)();
-            return yield containers_1.daoProduct.createProduct(product);
+            const newProduct = yield containers_1.daoProduct.createProduct(product);
+            if (newProduct) {
+                return newProduct.product_id;
+            }
+            else {
+                return "ERROR_CREATING";
+            }
         });
     }
     /**=============== LIST ALL PRODUCTS ================**/

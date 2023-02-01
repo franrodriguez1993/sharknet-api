@@ -46,7 +46,14 @@ export default class productService {
 
     //Create:
     product.product_id = uuidv4();
-    return await daoProduct.createProduct(product);
+    const newProduct: productInterface | any = await daoProduct.createProduct(
+      product
+    );
+    if (newProduct) {
+      return newProduct.product_id;
+    } else {
+      return "ERROR_CREATING";
+    }
   }
 
   /**=============== LIST ALL PRODUCTS ================**/

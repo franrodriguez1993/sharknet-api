@@ -1,5 +1,6 @@
 import { sequelize } from "../../../config/sql/postgres";
 import { DataTypes } from "sequelize";
+
 /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Association Models ~~~~~~~~~~~~~~~~~~~~~~~~~~~~  **/
 import ProductTypes from "./PType.models";
 import Adress from "../usersModel/Address.model";

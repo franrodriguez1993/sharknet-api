@@ -39,7 +39,10 @@ export default class productController {
         return res.status(404).json({ status: 404, msg: product });
       else if (product === "UNAUTHORIZED_ACTION")
         return res.status(401).json({ status: 401, msg: product });
-      else if (product === "INVALID_USER_ADDRESS")
+      else if (
+        product === "INVALID_USER_ADDRESS" ||
+        product === "ERROR_CREATING"
+      )
         return res.status(400).json({ status: 400, msg: product });
       //Ok:
       return res.status(201).json({ status: 201, msg: "OK", data: product });
