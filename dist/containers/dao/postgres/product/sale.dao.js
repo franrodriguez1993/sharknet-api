@@ -133,6 +133,7 @@ class daoSaleSQL extends base_container_1.default {
                         where: { sale_seller: user_id },
                         limit,
                         offset,
+                        order: [["createdAt", "DESC"]],
                         attributes: { exclude: ["sale_buyer", "sale_seller"] },
                         include: [
                             {
@@ -165,6 +166,7 @@ class daoSaleSQL extends base_container_1.default {
                         where: { sale_buyer: user_id },
                         limit,
                         offset,
+                        order: [["createdAt", "DESC"]],
                         attributes: { exclude: ["sale_buyer", "sale_seller"] },
                         include: [
                             {

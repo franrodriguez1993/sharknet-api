@@ -125,6 +125,7 @@ export class daoSaleSQL extends basecontainer {
           where: { sale_seller: user_id },
           limit,
           offset,
+          order: [["createdAt", "DESC"]],
           attributes: { exclude: ["sale_buyer", "sale_seller"] },
           include: [
             {
@@ -156,6 +157,7 @@ export class daoSaleSQL extends basecontainer {
           where: { sale_buyer: user_id },
           limit,
           offset,
+          order: [["createdAt", "DESC"]],
           attributes: { exclude: ["sale_buyer", "sale_seller"] },
           include: [
             {

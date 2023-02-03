@@ -71,6 +71,7 @@ class daoCommentSQL extends base_container_1.default {
                     where: { product_id, comment_parent: true },
                     limit,
                     offset,
+                    order: [["createdAt", "DESC"]],
                     attributes: { exclude: ["user_id", "product_id"] },
                     include: [
                         {

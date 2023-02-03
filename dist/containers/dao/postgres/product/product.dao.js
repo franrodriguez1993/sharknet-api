@@ -110,7 +110,7 @@ class daoProductSQL extends base_container_1.default {
                         option.where = { product_condition: "active" };
                 }
                 //Return:
-                const data = yield product_model_1.default.findAndCountAll(Object.assign(Object.assign({}, option), { attributes: { exclude: ["address_id", "user_id", "pt_id", "pc_id"] }, include: [
+                const data = yield product_model_1.default.findAndCountAll(Object.assign(Object.assign({}, option), { attributes: { exclude: ["address_id", "user_id", "pt_id", "pc_id"] }, order: [["createdAt", "DESC"]], include: [
                         { model: PType_models_1.default },
                         { model: User_model_1.default, attributes: ["user_username", "user_id"] },
                         { model: Address_model_1.default },
@@ -145,7 +145,7 @@ class daoProductSQL extends base_container_1.default {
                         product_brand: { [Op.substring]: attribute },
                     }, product_condition: "active", product_price: { [Op.between]: [pmin, pmax] } });
                 const data = yield product_model_1.default.findAndCountAll(Object.assign(Object.assign({}, options), { limit,
-                    offset, attributes: { exclude: ["address_id", "user_id", "pt_id", "pc_id"] }, include: [
+                    offset, order: [["createdAt", "DESC"]], attributes: { exclude: ["address_id", "user_id", "pt_id", "pc_id"] }, include: [
                         { model: PType_models_1.default },
                         { model: User_model_1.default, attributes: ["user_username", "user_id"] },
                         { model: Address_model_1.default },
@@ -303,6 +303,7 @@ class daoProductSQL extends base_container_1.default {
                     where: { user_id: uid },
                     limit,
                     offset,
+                    order: [["createdAt", "DESC"]],
                     include: [
                         {
                             model: product_model_1.default,

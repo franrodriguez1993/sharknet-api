@@ -63,6 +63,7 @@ class daoNotificationSQL {
                     where: { user_id },
                     limit,
                     offset,
+                    order: [["createdAt", "DESC"]],
                 });
                 return (0, paginationfunction_1.getPaginationNotification)(data, page, limit);
             }

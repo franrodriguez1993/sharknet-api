@@ -51,6 +51,7 @@ export class daoRepuProductSQL extends basecontainer {
         where: { product_id },
         limit,
         offset,
+        order: [["createdAt", "DESC"]],
         attributes: ["pr_description", "pr_id"],
         include: [
           {

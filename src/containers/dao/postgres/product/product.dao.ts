@@ -112,6 +112,7 @@ export class daoProductSQL extends basecontainer {
       const data = await Product.findAndCountAll({
         ...option,
         attributes: { exclude: ["address_id", "user_id", "pt_id", "pc_id"] },
+        order: [["createdAt", "DESC"]],
         include: [
           { model: ProductTypes },
           { model: User, attributes: ["user_username", "user_id"] },
@@ -166,6 +167,7 @@ export class daoProductSQL extends basecontainer {
         ...options,
         limit,
         offset,
+        order: [["createdAt", "DESC"]],
         attributes: { exclude: ["address_id", "user_id", "pt_id", "pc_id"] },
         include: [
           { model: ProductTypes },
@@ -320,6 +322,7 @@ export class daoProductSQL extends basecontainer {
         where: { user_id: uid },
         limit,
         offset,
+        order: [["createdAt", "DESC"]],
         include: [
           {
             model: Product,

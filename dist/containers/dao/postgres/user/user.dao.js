@@ -54,10 +54,12 @@ class daoUserSQL extends base_container_1.default {
             const options = {
                 where: {},
                 include: [],
+                attributes: { exclude: [] },
             };
             //Fields:
             if (field === "id") {
                 options.where = { user_id: attribute };
+                options.attributes.exclude = ["user_password"];
             }
             else if (field === "mail") {
                 options.where = { user_mail: attribute };

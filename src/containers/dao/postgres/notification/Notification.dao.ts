@@ -51,6 +51,7 @@ export class daoNotificationSQL {
         where: { user_id },
         limit,
         offset,
+        order: [["createdAt", "DESC"]],
       });
       return getPaginationNotification(data, page, limit);
     } catch (e: any) {

@@ -59,6 +59,7 @@ class LogActivitySQL {
                     where: { user_id },
                     limit,
                     offset,
+                    order: [["createdAt", "DESC"]],
                     attributes: { exclude: ["activity_event"] },
                     include: [
                         {
