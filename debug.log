@@ -11,3 +11,7 @@
 [2023-02-03T08:22:23.630] [ERROR] default - Illegal arguments: string, undefined
 [2023-02-03T08:24:08.488] [ERROR] default - Illegal arguments: string, undefined
 [2023-02-03T08:28:33.895] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-03T14:57:08.510] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-03T15:01:21.583] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-03T15:01:23.575] [ERROR] default - column user_creditCards.product_id does not exist
+[2023-02-03T15:02:40.964] [INFO] default -  Running in dev mode: http://localhost:5000/

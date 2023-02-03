@@ -3,6 +3,7 @@ import { birthdayInterface } from "../../../../interfaces/userInterface/birthday
 import { creditCardInterface } from "../../../../interfaces/userInterface/creditCard.interface";
 import { RolInterface } from "../../../../interfaces/userInterface/rol.interface";
 import { UserInterface } from "../../../../interfaces/userInterface/user.interface";
+import ProductFavorite from "../../../../models/sql/productsModel/PFavorite.models";
 import Address from "../../../../models/sql/usersModel/Address.model";
 import Birthday from "../../../../models/sql/usersModel/Birthday.model";
 import CreditCard from "../../../../models/sql/usersModel/CreditCard.model";
@@ -61,6 +62,10 @@ export class daoUserSQL extends basecontainer {
         { model: Birthday, attributes: { exclude: ["user_id"] } },
         { model: Address, attributes: { exclude: ["user_id"] } },
         { model: CreditCard, attributes: { exclude: ["user_id"] } },
+        {
+          model: ProductFavorite,
+          attributes: ["product_id"],
+        },
       ];
     }
     try {

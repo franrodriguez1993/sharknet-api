@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.daoUserSQL = void 0;
+const PFavorite_models_1 = __importDefault(require("../../../../models/sql/productsModel/PFavorite.models"));
 const Address_model_1 = __importDefault(require("../../../../models/sql/usersModel/Address.model"));
 const Birthday_model_1 = __importDefault(require("../../../../models/sql/usersModel/Birthday.model"));
 const CreditCard_model_1 = __importDefault(require("../../../../models/sql/usersModel/CreditCard.model"));
@@ -74,6 +75,10 @@ class daoUserSQL extends base_container_1.default {
                     { model: Birthday_model_1.default, attributes: { exclude: ["user_id"] } },
                     { model: Address_model_1.default, attributes: { exclude: ["user_id"] } },
                     { model: CreditCard_model_1.default, attributes: { exclude: ["user_id"] } },
+                    {
+                        model: PFavorite_models_1.default,
+                        attributes: ["product_id"],
+                    },
                 ];
             }
             try {
