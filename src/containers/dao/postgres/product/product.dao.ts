@@ -82,6 +82,13 @@ export class daoProductSQL extends basecontainer {
           option.where = { user_id: attribute, product_condition: "active" };
           break;
         }
+        case "user": {
+          option.where = {
+            user_id: attribute,
+            product_condition: { [Op.ne]: "deleted" },
+          };
+          break;
+        }
         case "brand": {
           option.where = {
             product_brand: attribute,

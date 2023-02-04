@@ -125,6 +125,7 @@ class productController {
         });
     }
     /**================== LIST PRODUCTS BY USER ====================**/
+    //Difference: seller is for more products in "product section" and user is for user panel administration.
     listPUserCtrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -135,6 +136,32 @@ class productController {
                 const size = parseInt(req.query.size);
                 //Service:
                 const list = yield service.listPUserServ(id, page, size);
+                //return:
+                if (!list)
+                    return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+                else if (list === "USER_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: list });
+                //Ok:
+                return res.json({ status: 200, msg: "OK", data: list });
+            }
+            catch (e) {
+                logger_1.default.error(e.message);
+                return res.status(500).json({ status: 500, msg: e.message });
+            }
+        });
+    }
+    /**================== LIST PRODUCTS BY SELLER ====================**/
+    //Difference: seller is for more products in "product section" and user is for user panel administration.
+    listPSellerCtrl(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                //data:
+                const { id } = req.params;
+                // query parameters:
+                const page = parseInt(req.query.page);
+                const size = parseInt(req.query.size);
+                //Service:
+                const list = yield service.listPSellerServ(id, page, size);
                 //return:
                 if (!list)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });

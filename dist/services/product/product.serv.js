@@ -72,14 +72,24 @@ class productService {
             return yield containers_1.daoProduct.listProducts("brand", search, page, size);
         });
     }
-    /**============ LIST PRODUCTS BY USER =================**/
-    listPUserServ(id, page, size) {
+    /**============ LIST PRODUCTS BY SELLER =================**/
+    listPSellerServ(id, page, size) {
         return __awaiter(this, void 0, void 0, function* () {
             //check User:
             const user = yield containers_2.daoUser.getUser("id", id, true);
             if (!user)
                 return "USER_NOT_FOUND";
             return yield containers_1.daoProduct.listProducts("seller", id, page, size);
+        });
+    }
+    /**============ LIST PRODUCTS BY SELLER =================**/
+    listPUserServ(id, page, size) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //check User:
+            const user = yield containers_2.daoUser.getUser("id", id, true);
+            if (!user)
+                return "USER_NOT_FOUND";
+            return yield containers_1.daoProduct.listProducts("user", id, page, size);
         });
     }
     /**============== LIST PRODUCTS BY CATEGORY =================**/

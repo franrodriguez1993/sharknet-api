@@ -92,6 +92,7 @@ export default class productController {
   }
 
   /**================= LIST PRODUCTS BY BRAND ====================**/
+
   async listPBrandCtrl(req: Request, res: Response) {
     try {
       //data:
@@ -112,6 +113,8 @@ export default class productController {
   }
 
   /**================== LIST PRODUCTS BY USER ====================**/
+  //Difference: seller is for more products in "product section" and user is for user panel administration.
+
   async listPUserCtrl(req: Request, res: Response) {
     try {
       //data:
@@ -122,6 +125,32 @@ export default class productController {
 
       //Service:
       const list = await service.listPUserServ(id, page, size);
+
+      //return:
+      if (!list)
+        return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+      else if (list === "USER_NOT_FOUND")
+        return res.status(404).json({ status: 404, msg: list });
+      //Ok:
+      return res.json({ status: 200, msg: "OK", data: list });
+    } catch (e: any) {
+      logger.error(e.message);
+      return res.status(500).json({ status: 500, msg: e.message });
+    }
+  }
+
+  /**================== LIST PRODUCTS BY SELLER ====================**/
+  //Difference: seller is for more products in "product section" and user is for user panel administration.
+  async listPSellerCtrl(req: Request, res: Response) {
+    try {
+      //data:
+      const { id } = req.params;
+      // query parameters:
+      const page: number = parseInt(req.query.page as string);
+      const size: number = parseInt(req.query.size as string);
+
+      //Service:
+      const list = await service.listPSellerServ(id, page, size);
 
       //return:
       if (!list)

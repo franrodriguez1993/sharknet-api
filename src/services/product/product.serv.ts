@@ -74,12 +74,20 @@ export default class productService {
     return await daoProduct.listProducts("brand", search, page, size);
   }
 
-  /**============ LIST PRODUCTS BY USER =================**/
-  async listPUserServ(id: string, page: number, size: number) {
+  /**============ LIST PRODUCTS BY SELLER =================**/
+  async listPSellerServ(id: string, page: number, size: number) {
     //check User:
     const user = await daoUser.getUser("id", id, true);
     if (!user) return "USER_NOT_FOUND";
     return await daoProduct.listProducts("seller", id, page, size);
+  }
+
+  /**============ LIST PRODUCTS BY SELLER =================**/
+  async listPUserServ(id: string, page: number, size: number) {
+    //check User:
+    const user = await daoUser.getUser("id", id, true);
+    if (!user) return "USER_NOT_FOUND";
+    return await daoProduct.listProducts("user", id, page, size);
   }
 
   /**============== LIST PRODUCTS BY CATEGORY =================**/

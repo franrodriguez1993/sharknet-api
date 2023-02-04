@@ -26,6 +26,7 @@ router.get("/list/search/:search", controller.listQueryProductCtrl);
 router.get("/list/status/:status", controller.listPStatusCtrl);
 router.get("/list/brand/:brand", controller.listPBrandCtrl);
 router.get("/list/user/:id", controller.listPUserCtrl);
+router.get("/list/seller/:id", controller.listPSellerCtrl);
 router.get("/list/category/:id", controller.listPCategoryCtrl);
 router.get("/list/type/:id", controller.listPTypeCtrl);
 router.get("/list/offer/all", controller.listProductOfferCtrl);
