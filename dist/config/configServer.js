@@ -30,5 +30,10 @@ const serverConfigurations = {
             users: process.env.GD_FOLDER_USERS,
         },
     },
+    imageKit: {
+        publicKey: process.env.IK_PUBLIC_KEY,
+        privateKey: process.env.IK_PRIVATE_KEY,
+        urlEndPoing: process.env.IK_URL_ENDPOINT,
+    },
 };
 exports.default = serverConfigurations;

@@ -12,16 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const configServer_1 = __importDefault(require("../../config/configServer"));
 //DAOs:
 const containers_1 = require("../../containers");
-const UploadImages_1 = __importDefault(require("../../utils/UploadImages"));
-const uploaderManager = new UploadImages_1.default();
+const imageKitClass_1 = __importDefault(require("../../utils/imageKitClass"));
+const uploaderManager = new imageKitClass_1.default();
 class imageProductService {
     /** ============= CREATE IMG PRODUCT ============= **/
     createImgProductServ(tokenUID, productId, image) {
         return __awaiter(this, void 0, void 0, function* () {
-            const folderId = configServer_1.default.google.folders.products;
             //Check Product:
             const product = yield containers_1.daoProduct.getProduct(productId, true);
             if (!product)
@@ -32,29 +30,23 @@ class imageProductService {
             if (product.user_id.toString() !== tokenUID.toString())
                 return "UNAUTHORIZED_ACTION";
             //Upload image to google:
-            const imageData = yield uploaderManager.uploadFile(productId, image, folderId);
+            const imageData = yield uploaderManager.uploadImage(image);
             //Check path:
             if (!imageData)
                 return "INVALID_ROUTE";
-            //Create path:
-            const ip_path = `https://drive.google.com/uc?id=${imageData.imageId}`;
+            const urlImg = imageData.url;
             return yield containers_1.daoImgProduct.createImg({
                 product_id: productId,
-                ip_path,
-                ip_id: imageData.imageId,
+                ip_path: urlImg,
+                ip_id: imageData.fileId,
             });
         });
     }
     /** ============== DELETE IMG PRODUCT ================ **/
     delImgProductServ(ip_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const resDelete = yield uploaderManager.deleteFile(ip_id);
-            if (resDelete === 204) {
-                return yield containers_1.daoImgProduct.deleteImg(ip_id);
-            }
-            else {
-                return "ERROR_DELETE";
-            }
+            yield uploaderManager.deleteImage(ip_id);
+            return yield containers_1.daoImgProduct.deleteImg(ip_id);
         });
     }
 }

@@ -13,9 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
-const configServer_1 = __importDefault(require("../../config/configServer"));
-const UploadImages_1 = __importDefault(require("../../utils/UploadImages"));
-const uploaderManager = new UploadImages_1.default();
+const imageKitClass_1 = __importDefault(require("../../utils/imageKitClass"));
+const uploaderManager = new imageKitClass_1.default();
 //Dao:
 const containers_1 = require("../../containers");
 const containers_2 = require("../../containers");
@@ -319,7 +318,6 @@ class productService {
     /**~~~~~~~~~~~~~~~~~  IMAGE THUMBNAIL PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
     updateThumbnailServ(tokenUID, product_id, image) {
         return __awaiter(this, void 0, void 0, function* () {
-            const folderId = configServer_1.default.google.folders.products;
             //Check Product:
             const product = yield containers_1.daoProduct.getProduct(product_id, true);
             if (!product)
@@ -327,13 +325,13 @@ class productService {
             if (product.user_id.toString() !== tokenUID.toString())
                 return "INVALID_SELLER";
             //Upload image to google:
-            const imageData = yield uploaderManager.uploadFile(product_id, image, folderId);
+            const imageData = yield uploaderManager.uploadImage(image);
             //Check path:
             if (!imageData)
                 return "ERROR_UPLOADING_PHOTO";
             //Create path:
-            const product_thumbnail = `https://drive.google.com/uc?id=${imageData.imageId}`;
-            return yield containers_1.daoProduct.updateThumbnail(product_id, product_thumbnail);
+            const urlImg = imageData.url;
+            return yield containers_1.daoProduct.updateThumbnail(product_id, urlImg);
         });
     }
 }

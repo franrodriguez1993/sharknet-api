@@ -1,11 +1,10 @@
-import serverConfigurations from "../../config/configServer";
 //DAOs:
 import { daoImgProduct, daoProduct } from "../../containers";
 //Interface:
 import { productInterface } from "../../interfaces/productInterface/product.interface";
+import imageKitClass from "../../utils/imageKitClass";
 
-import UploadImages from "../../utils/UploadImages";
-const uploaderManager = new UploadImages();
+const uploaderManager = new imageKitClass();
 
 export default class imageProductService {
   /** ============= CREATE IMG PRODUCT ============= **/
@@ -14,7 +13,6 @@ export default class imageProductService {
     productId: string,
     image: Buffer
   ) {
-    const folderId = serverConfigurations.google.folders.products;
     //Check Product:
     const product: productInterface | any = await daoProduct.getProduct(
       productId,
@@ -28,31 +26,21 @@ export default class imageProductService {
       return "UNAUTHORIZED_ACTION";
 
     //Upload image to google:
-    const imageData = await uploaderManager.uploadFile(
-      productId,
-      image,
-      folderId
-    );
+    const imageData = await uploaderManager.uploadImage(image);
 
     //Check path:
     if (!imageData) return "INVALID_ROUTE";
-
-    //Create path:
-    const ip_path = `https://drive.google.com/uc?id=${imageData.imageId}`;
+    const urlImg = imageData.url;
     return await daoImgProduct.createImg({
       product_id: productId,
-      ip_path,
-      ip_id: imageData.imageId,
+      ip_path: urlImg,
+      ip_id: imageData.fileId,
     });
   }
 
   /** ============== DELETE IMG PRODUCT ================ **/
   async delImgProductServ(ip_id: string) {
-    const resDelete = await uploaderManager.deleteFile(ip_id);
-    if (resDelete === 204) {
-      return await daoImgProduct.deleteImg(ip_id);
-    } else {
-      return "ERROR_DELETE";
-    }
+    await uploaderManager.deleteImage(ip_id);
+    return await daoImgProduct.deleteImg(ip_id);
   }
 }

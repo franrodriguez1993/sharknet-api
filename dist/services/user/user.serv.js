@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const configServer_1 = __importDefault(require("../../config/configServer"));
 const uuid_1 = require("uuid");
 // BcryptJS:
 const bcryptHandler_1 = require("../../utils/bcryptHandler");
@@ -21,8 +20,8 @@ const jwtHandler_1 = require("../../utils/jwtHandler");
 // DAOs:
 const containers_1 = require("../../containers");
 //Image Manager:
-const UploadImages_1 = __importDefault(require("../../utils/UploadImages"));
-const uploaderManager = new UploadImages_1.default();
+const imageKitClass_1 = __importDefault(require("../../utils/imageKitClass"));
+const uploaderManager = new imageKitClass_1.default();
 class userService {
     /**====================== REGISTER USER ======================**/
     registerUserServ(data) {
@@ -206,14 +205,13 @@ class userService {
     /**==================== PROFILE IMAGE =========================**/
     uploadImageProfile(uid, img) {
         return __awaiter(this, void 0, void 0, function* () {
-            const folderId = configServer_1.default.google.folders.users;
             //Upload image:
-            const imgProfile = yield uploaderManager.uploadFile(uid, img, folderId);
+            const imgProfile = yield uploaderManager.uploadImage(img);
             if (!imgProfile)
                 return "ERROR_UPLOADING_IMAGE";
             //Update user data:
-            const imgId = `https://drive.google.com/uc?id=${imgProfile.imageId}`;
-            return yield containers_1.daoUser.uploadProfileImage(uid, imgId);
+            const urlImg = imgProfile.url;
+            return yield containers_1.daoUser.uploadProfileImage(uid, urlImg);
         });
     }
 }

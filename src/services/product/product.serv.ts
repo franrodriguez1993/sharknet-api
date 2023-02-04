@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
-import serverConfigurations from "../../config/configServer";
 
-import UploadImages from "../../utils/UploadImages";
-const uploaderManager = new UploadImages();
+import imageKitClass from "../../utils/imageKitClass";
+
+const uploaderManager = new imageKitClass();
 //Dao:
 import { daoNotification, daoProduct, daoSale } from "../../containers";
 import { daoUser } from "../../containers";
@@ -376,8 +376,6 @@ export default class productService {
     product_id: string,
     image: Buffer
   ) {
-    const folderId = serverConfigurations.google.folders.products;
-
     //Check Product:
     const product: productInterface | any = await daoProduct.getProduct(
       product_id,
@@ -388,15 +386,12 @@ export default class productService {
       return "INVALID_SELLER";
 
     //Upload image to google:
-    const imageData = await uploaderManager.uploadFile(
-      product_id,
-      image,
-      folderId
-    );
+    const imageData = await uploaderManager.uploadImage(image);
+
     //Check path:
     if (!imageData) return "ERROR_UPLOADING_PHOTO";
     //Create path:
-    const product_thumbnail = `https://drive.google.com/uc?id=${imageData.imageId}`;
-    return await daoProduct.updateThumbnail(product_id, product_thumbnail);
+    const urlImg = imageData.url;
+    return await daoProduct.updateThumbnail(product_id, urlImg);
   }
 }

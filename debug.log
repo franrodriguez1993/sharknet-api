@@ -15,3 +15,5 @@
 [2023-02-03T15:01:21.583] [INFO] default -  Running in dev mode: http://localhost:5000/
 [2023-02-03T15:01:23.575] [ERROR] default - column user_creditCards.product_id does not exist
 [2023-02-03T15:02:40.964] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-04T18:13:27.898] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-04T18:27:36.666] [INFO] default -  Running in dev mode: http://localhost:5000/

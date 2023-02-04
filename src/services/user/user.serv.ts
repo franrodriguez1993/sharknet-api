@@ -1,4 +1,3 @@
-import serverConfigurations from "../../config/configServer";
 import { v4 as uuidv4 } from "uuid";
 // BcryptJS:
 import { encrypt, verified } from "../../utils/bcryptHandler";
@@ -16,8 +15,8 @@ import { addressInterface } from "../../interfaces/userInterface/address.Interfa
 import { creditCardInterface } from "../../interfaces/userInterface/creditCard.interface";
 
 //Image Manager:
-import UploadImages from "../../utils/UploadImages";
-const uploaderManager = new UploadImages();
+import imageKitClass from "../../utils/imageKitClass";
+const uploaderManager = new imageKitClass();
 
 export default class userService {
   /**====================== REGISTER USER ======================**/
@@ -201,13 +200,12 @@ export default class userService {
 
   /**==================== PROFILE IMAGE =========================**/
   async uploadImageProfile(uid: string, img: Buffer) {
-    const folderId = serverConfigurations.google.folders.users;
     //Upload image:
-    const imgProfile = await uploaderManager.uploadFile(uid, img, folderId);
+    const imgProfile = await uploaderManager.uploadImage(img);
     if (!imgProfile) return "ERROR_UPLOADING_IMAGE";
 
     //Update user data:
-    const imgId = `https://drive.google.com/uc?id=${imgProfile.imageId}`;
-    return await daoUser.uploadProfileImage(uid, imgId);
+    const urlImg = imgProfile.url;
+    return await daoUser.uploadProfileImage(uid, urlImg);
   }
 }

@@ -55,9 +55,6 @@ class imageProductController {
                 //Return:
                 if (!del)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (del === "ERROR_DELETE") {
-                    return res.status(400).json({ status: 400, msg: del });
-                }
                 return res.json({ status: 200, msg: "IMAGE_DELETED" });
             }
             catch (e) {
