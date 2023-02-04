@@ -356,7 +356,7 @@ export class daoProductSQL extends basecontainer {
       throw new Error(e.message);
     }
   }
-  /**~~~~~~~~~~~~~~~~~  PAUSE PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
+  /**~~~~~~~~~~~~~~~~~  REACTIVATE PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
   async reactivateProduct(product_id: string) {
     try {
       const product: productInterface | any = await Product.findOne({
@@ -365,7 +365,7 @@ export class daoProductSQL extends basecontainer {
       if (!product) return "PRODUCT_NOT_FOUND";
       if (product.product_condition.toString() === "deleted")
         return "PRODUCT_IS_DELETED";
-      product.set({ product_condition: "paused" });
+      product.set({ product_condition: "active" });
       return await product.save();
     } catch (e: any) {
       throw new Error(e.message);

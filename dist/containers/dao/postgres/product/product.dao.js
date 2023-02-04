@@ -343,7 +343,7 @@ class daoProductSQL extends base_container_1.default {
             }
         });
     }
-    /**~~~~~~~~~~~~~~~~~  PAUSE PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
+    /**~~~~~~~~~~~~~~~~~  REACTIVATE PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
     reactivateProduct(product_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -354,7 +354,7 @@ class daoProductSQL extends base_container_1.default {
                     return "PRODUCT_NOT_FOUND";
                 if (product.product_condition.toString() === "deleted")
                     return "PRODUCT_IS_DELETED";
-                product.set({ product_condition: "paused" });
+                product.set({ product_condition: "active" });
                 return yield product.save();
             }
             catch (e) {
