@@ -17,3 +17,7 @@
 [2023-02-03T15:02:40.964] [INFO] default -  Running in dev mode: http://localhost:5000/
 [2023-02-04T18:13:27.898] [INFO] default -  Running in dev mode: http://localhost:5000/
 [2023-02-04T18:27:36.666] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-05T16:13:37.962] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-05T16:19:09.907] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-05T16:19:14.242] [ERROR] default - user_reputation is not associated to sale_product!
+[2023-02-05T16:21:03.247] [INFO] default -  Running in dev mode: http://localhost:5000/

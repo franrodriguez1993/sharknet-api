@@ -11,6 +11,7 @@ import {
   getPagination,
   getPaginationSales,
 } from "../../../../utils/paginationfunction";
+import UserReputation from "../../../../models/sql/reputationModel/repuUser.model";
 export class daoSaleSQL extends basecontainer {
   constructor() {
     super(Sale);
@@ -148,6 +149,7 @@ export class daoSaleSQL extends basecontainer {
               as: "buyer",
               attributes: ["user_username", "user_mail", "user_id"],
             },
+            { model: UserReputation },
           ],
         });
         //return:
