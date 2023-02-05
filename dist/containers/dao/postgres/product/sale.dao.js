@@ -148,6 +148,7 @@ class daoSaleSQL extends base_container_1.default {
                                             "product_name",
                                             "product_brand",
                                             "product_price",
+                                            "product_thumbnail",
                                         ],
                                     },
                                 ],
@@ -182,6 +183,7 @@ class daoSaleSQL extends base_container_1.default {
                                             "product_name",
                                             "product_brand",
                                             "product_price",
+                                            "product_thumbnail",
                                         ],
                                     },
                                 ],
@@ -191,6 +193,7 @@ class daoSaleSQL extends base_container_1.default {
                                 as: "seller",
                                 attributes: ["user_username", "user_mail", "user_id"],
                             },
+                            { model: repuUser_model_1.default },
                         ],
                     });
                     return (0, paginationfunction_1.getPaginationSales)(data, page, limit);

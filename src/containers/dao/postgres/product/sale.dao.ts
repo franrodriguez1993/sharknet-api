@@ -140,6 +140,7 @@ export class daoSaleSQL extends basecontainer {
                     "product_name",
                     "product_brand",
                     "product_price",
+                    "product_thumbnail",
                   ],
                 },
               ],
@@ -173,6 +174,7 @@ export class daoSaleSQL extends basecontainer {
                     "product_name",
                     "product_brand",
                     "product_price",
+                    "product_thumbnail",
                   ],
                 },
               ],
@@ -182,6 +184,7 @@ export class daoSaleSQL extends basecontainer {
               as: "seller",
               attributes: ["user_username", "user_mail", "user_id"],
             },
+            { model: UserReputation },
           ],
         });
         return getPaginationSales(data, page, limit);
