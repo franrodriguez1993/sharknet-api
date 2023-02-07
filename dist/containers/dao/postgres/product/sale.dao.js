@@ -22,6 +22,7 @@ const product_model_1 = __importDefault(require("../../../../models/sql/products
 const User_model_1 = __importDefault(require("../../../../models/sql/usersModel/User.model"));
 const paginationfunction_1 = require("../../../../utils/paginationfunction");
 const repuUser_model_1 = __importDefault(require("../../../../models/sql/reputationModel/repuUser.model"));
+const repuProduct_model_1 = __importDefault(require("../../../../models/sql/reputationModel/repuProduct.model"));
 class daoSaleSQL extends base_container_1.default {
     constructor() {
         super(Sale_model_1.default);
@@ -194,6 +195,7 @@ class daoSaleSQL extends base_container_1.default {
                                 attributes: ["user_username", "user_mail", "user_id"],
                             },
                             { model: repuUser_model_1.default },
+                            { model: repuProduct_model_1.default },
                         ],
                     });
                     return (0, paginationfunction_1.getPaginationSales)(data, page, limit);

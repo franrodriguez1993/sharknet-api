@@ -8,6 +8,7 @@ const postgres_1 = require("../../../config/sql/postgres");
 /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Association Models ~~~~~~~~~~~~~~~~~~~~~~~~~~~~  **/
 const SaleProduct_models_1 = __importDefault(require("./SaleProduct.models"));
 const repuUser_model_1 = __importDefault(require("../reputationModel/repuUser.model"));
+const repuProduct_model_1 = __importDefault(require("../reputationModel/repuProduct.model"));
 /**~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ **/
 const Sale = postgres_1.sequelize.define("sale_receipt", {
     sale_id: {
@@ -43,6 +44,12 @@ Sale.hasMany(repuUser_model_1.default, {
     foreignKey: "sale_id",
 });
 repuUser_model_1.default.belongsTo(Sale, {
+    foreignKey: "sale_id",
+});
+Sale.hasMany(repuProduct_model_1.default, {
+    foreignKey: "sale_id",
+});
+repuProduct_model_1.default.belongsTo(Sale, {
     foreignKey: "sale_id",
 });
 /**=====================================================================**/

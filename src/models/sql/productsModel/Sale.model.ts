@@ -4,6 +4,7 @@ import { sequelize } from "../../../config/sql/postgres";
 /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Association Models ~~~~~~~~~~~~~~~~~~~~~~~~~~~~  **/
 import SaleProducts from "./SaleProduct.models";
 import UserReputation from "../reputationModel/repuUser.model";
+import ProductReputation from "../reputationModel/repuProduct.model";
 /**~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ **/
 const Sale = sequelize.define(
   "sale_receipt",
@@ -44,6 +45,12 @@ Sale.hasMany(UserReputation, {
   foreignKey: "sale_id",
 });
 UserReputation.belongsTo(Sale, {
+  foreignKey: "sale_id",
+});
+Sale.hasMany(ProductReputation, {
+  foreignKey: "sale_id",
+});
+ProductReputation.belongsTo(Sale, {
   foreignKey: "sale_id",
 });
 /**=====================================================================**/
