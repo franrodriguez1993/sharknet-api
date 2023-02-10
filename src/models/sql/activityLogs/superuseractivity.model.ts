@@ -3,7 +3,7 @@ import { DataTypes } from "sequelize";
 
 /** --------- Association models --------- **/
 import ActivityLogUser from "./ALogUser.model";
-
+import User from "../usersModel/User.model";
 /** ---------------------------------------**/
 const SuperuserActivity = sequelize.define(
   "superuser_activity",
@@ -35,5 +35,11 @@ SuperuserActivity.belongsTo(ActivityLogUser, {
   foreignKey: "activity_event",
   as: "action",
 });
+
+//User target:
+SuperuserActivity.hasOne(User, {
+  foreignKey: "user_id",
+});
+User.belongsTo(SuperuserActivity, { foreignKey: "user_id" });
 
 export default SuperuserActivity;

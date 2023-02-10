@@ -19,6 +19,7 @@ const paginationfunction_1 = require("../../../../utils/paginationfunction");
 //Models:
 const superuseractivity_model_1 = __importDefault(require("../../../../models/sql/activityLogs/superuseractivity.model"));
 const ALogUser_model_1 = __importDefault(require("../../../../models/sql/activityLogs/ALogUser.model"));
+const User_model_1 = __importDefault(require("../../../../models/sql/usersModel/User.model"));
 class LogActivitySQL {
     constructor() { }
     /** ----------- CREATE USER LOG ----------- **/
@@ -65,6 +66,9 @@ class LogActivitySQL {
                         {
                             model: ALogUser_model_1.default,
                             attributes: ["alu_action", "user_id"],
+                            include: [
+                                { model: User_model_1.default, attributes: ["user_mail", "user_username"] },
+                            ],
                             as: "action",
                         },
                     ],

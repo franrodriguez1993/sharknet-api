@@ -9,6 +9,7 @@ import {
 //Models:
 import SuperuserActivity from "../../../../models/sql/activityLogs/superuseractivity.model";
 import ActivityLogUser from "../../../../models/sql/activityLogs/ALogUser.model";
+import User from "../../../../models/sql/usersModel/User.model";
 
 export class LogActivitySQL {
   constructor() {}
@@ -59,6 +60,9 @@ export class LogActivitySQL {
           {
             model: ActivityLogUser,
             attributes: ["alu_action", "user_id"],
+            include: [
+              { model: User, attributes: ["user_mail", "user_username"] },
+            ],
             as: "action",
           },
         ],

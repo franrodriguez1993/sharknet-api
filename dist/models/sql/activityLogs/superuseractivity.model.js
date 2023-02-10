@@ -7,6 +7,7 @@ const postgres_1 = require("../../../config/sql/postgres");
 const sequelize_1 = require("sequelize");
 /** --------- Association models --------- **/
 const ALogUser_model_1 = __importDefault(require("./ALogUser.model"));
+const User_model_1 = __importDefault(require("../usersModel/User.model"));
 /** ---------------------------------------**/
 const SuperuserActivity = postgres_1.sequelize.define("superuser_activity", {
     sa_id: {
@@ -33,4 +34,9 @@ SuperuserActivity.belongsTo(ALogUser_model_1.default, {
     foreignKey: "activity_event",
     as: "action",
 });
+//User target:
+SuperuserActivity.hasOne(User_model_1.default, {
+    foreignKey: "user_id",
+});
+User_model_1.default.belongsTo(SuperuserActivity, { foreignKey: "user_id" });
 exports.default = SuperuserActivity;
