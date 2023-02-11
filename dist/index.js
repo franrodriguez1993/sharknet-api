@@ -23,7 +23,7 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             //sincronizamos con postgres:
-            yield postgres_1.sequelize.sync({ alter: true });
+            yield postgres_1.sequelize.sync();
             app_1.default.listen(PORT, () => {
                 if (configServer_1.default.server.mode === "P") {
                     logger_1.default.info(` Running in production mode: ${URL_API}`);

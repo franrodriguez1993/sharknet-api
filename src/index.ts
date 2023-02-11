@@ -9,7 +9,7 @@ const URL_API = serverConfigurations.server.url_api;
 async function main() {
   try {
     //sincronizamos con postgres:
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     app.listen(PORT, () => {
       if (serverConfigurations.server.mode === "P") {
         logger.info(` Running in production mode: ${URL_API}`);
