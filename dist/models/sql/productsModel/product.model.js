@@ -15,6 +15,7 @@ const repuProduct_model_1 = __importDefault(require("../reputationModel/repuProd
 const comment_model_1 = __importDefault(require("../commentsModel/comment.model"));
 const ImageProd_model_1 = __importDefault(require("../imagesModel/ImageProd.model"));
 const PCategory_models_1 = __importDefault(require("./PCategory.models"));
+const Notification_model_1 = __importDefault(require("../notificationModel/Notification.model"));
 /**~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ **/
 const Product = postgres_1.sequelize.define("product", {
     product_id: {
@@ -147,5 +148,7 @@ Product.hasMany(ImageProd_model_1.default, {
 ImageProd_model_1.default.belongsTo(Product, {
     foreignKey: "product_id",
 });
+Notification_model_1.default.hasOne(Product, { foreignKey: "product_id" });
+Product.belongsTo(Notification_model_1.default, { foreignKey: "product_id" });
 /**=====================================================================**/
 exports.default = Product;

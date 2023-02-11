@@ -11,6 +11,7 @@ import ProductReputation from "../reputationModel/repuProduct.model";
 import Comment from "../commentsModel/comment.model";
 import ImageProduct from "../imagesModel/ImageProd.model";
 import ProductCategory from "./PCategory.models";
+import NotificationUser from "../notificationModel/Notification.model";
 /**~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ **/
 const Product = sequelize.define(
   "product",
@@ -149,5 +150,8 @@ ImageProduct.belongsTo(Product, {
   foreignKey: "product_id",
 });
 
+NotificationUser.hasOne(Product, { foreignKey: "product_id" });
+
+Product.belongsTo(NotificationUser, { foreignKey: "product_id" });
 /**=====================================================================**/
 export default Product;

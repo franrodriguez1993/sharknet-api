@@ -19,6 +19,7 @@ const uuid_1 = require("uuid");
 const Notification_model_1 = __importDefault(require("../../../../models/sql/notificationModel/Notification.model"));
 //pagination:
 const paginationfunction_1 = require("../../../../utils/paginationfunction");
+const product_model_1 = __importDefault(require("../../../../models/sql/productsModel/product.model"));
 class daoNotificationSQL {
     constructor() { }
     /** -------------- CREATE NOTIFICATION -------------- **/
@@ -64,6 +65,9 @@ class daoNotificationSQL {
                     limit,
                     offset,
                     order: [["createdAt", "DESC"]],
+                    include: [
+                        { model: product_model_1.default, attributes: ["product_name", "product_thumbnail"] },
+                    ],
                 });
                 return (0, paginationfunction_1.getPaginationNotification)(data, page, limit);
             }

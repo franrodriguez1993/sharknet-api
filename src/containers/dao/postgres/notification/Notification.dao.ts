@@ -12,6 +12,7 @@ import {
   getPagination,
   getPaginationNotification,
 } from "../../../../utils/paginationfunction";
+import Product from "../../../../models/sql/productsModel/product.model";
 export class daoNotificationSQL {
   constructor() {}
 
@@ -52,6 +53,9 @@ export class daoNotificationSQL {
         limit,
         offset,
         order: [["createdAt", "DESC"]],
+        include: [
+          { model: Product, attributes: ["product_name", "product_thumbnail"] },
+        ],
       });
       return getPaginationNotification(data, page, limit);
     } catch (e: any) {
