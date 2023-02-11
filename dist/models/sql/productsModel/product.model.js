@@ -148,7 +148,13 @@ Product.hasMany(ImageProd_model_1.default, {
 ImageProd_model_1.default.belongsTo(Product, {
     foreignKey: "product_id",
 });
-Notification_model_1.default.hasOne(Product, { foreignKey: "product_id" });
-Product.belongsTo(Notification_model_1.default, { foreignKey: "product_id" });
+Product.hasMany(Notification_model_1.default, {
+    foreignKey: "product_id",
+    sourceKey: "product_id",
+});
+Notification_model_1.default.belongsTo(Product, {
+    foreignKey: "product_id",
+    targetKey: "product_id",
+});
 /**=====================================================================**/
 exports.default = Product;
