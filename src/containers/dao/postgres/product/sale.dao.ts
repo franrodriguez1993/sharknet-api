@@ -165,6 +165,7 @@ export class daoSaleSQL extends basecontainer {
                   "product_brand",
                   "product_price",
                   "product_thumbnail",
+                  "user_id",
                 ],
               },
             ],

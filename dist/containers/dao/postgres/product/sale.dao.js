@@ -157,6 +157,7 @@ class daoSaleSQL extends base_container_1.default {
                                         "product_brand",
                                         "product_price",
                                         "product_thumbnail",
+                                        "user_id",
                                     ],
                                 },
                             ],
