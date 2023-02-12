@@ -106,15 +106,6 @@ ProductFavorite.belongsTo(User, {
   foreignKey: "user_id",
   targetKey: "user_id",
 });
-//Sale - seller:
-User.hasMany(Sale, {
-  as: "seller",
-  foreignKey: "sale_seller",
-});
-Sale.belongsTo(User, {
-  as: "seller",
-  foreignKey: "sale_seller",
-});
 //Sale - buyer:
 User.hasMany(Sale, {
   as: "buyer",

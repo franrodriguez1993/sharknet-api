@@ -30,3 +30,38 @@
 [2023-02-10T16:58:20.340] [INFO] default -  Running in dev mode: http://localhost:5000/
 [2023-02-11T15:51:39.131] [INFO] default -  Running in dev mode: http://localhost:5000/
 [2023-02-12T08:41:48.477] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T09:12:51.116] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T09:21:00.769] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T09:22:40.983] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T09:29:20.979] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T09:35:41.748] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T09:35:44.932] [ERROR] default - Cannot read properties of undefined (reading 'quantity')
+[2023-02-12T09:39:51.870] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:06:19.265] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:09:51.621] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:11:43.656] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:17:19.897] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:18:19.243] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:18:22.226] [ERROR] default - Cannot read properties of null (reading 'product_stock')
+[2023-02-12T10:20:48.428] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:23:02.108] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:26:03.573] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:32:45.548] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:35:30.581] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:41:42.903] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:53:53.736] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T10:59:36.473] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T11:03:04.186] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T12:38:49.931] [ERROR] default - Unknown constraint error
+[2023-02-12T12:46:00.161] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T12:47:22.484] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T12:53:11.136] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T13:07:05.775] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T13:09:52.643] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T13:10:08.871] [ERROR] default - WHERE parameter "product_id" has invalid "undefined" value
+[2023-02-12T13:13:36.764] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T13:13:40.303] [ERROR] default - WHERE parameter "product_id" has invalid "undefined" value
+[2023-02-12T13:17:16.615] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T15:46:23.969] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T15:51:14.154] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-02-12T16:05:57.638] [INFO] default -  Running in dev mode: http://localhost:5000/

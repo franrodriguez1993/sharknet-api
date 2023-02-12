@@ -13,61 +13,95 @@ import {
 } from "../../../../utils/paginationfunction";
 import UserReputation from "../../../../models/sql/reputationModel/repuUser.model";
 import ProductReputation from "../../../../models/sql/reputationModel/repuProduct.model";
+import {
+  productSale,
+  saleProductsInterface,
+} from "../../../../interfaces/productInterface/saleProducts.interface";
 export class daoSaleSQL extends basecontainer {
   constructor() {
     super(Sale);
   }
 
   /** ---------------------------------- BUY PRODUCT  ----------------------------- **/
-  async Buy(data: saleInterface) {
+  async Buy(data: saleProductsInterface) {
     try {
-      //Check product:
-      const product: productInterface | any = await daoProduct.getProduct(
+      //Function to get quantity in the map function:
+      function getQuantity(id: string) {
+        let p = data.sale_product.find((p) => p.pid === id);
+        return p.quantity;
+      }
+      //Check products:
+      async function checkProducts(products: Array<productSale>) {
+        const productList = await Promise.all(
+          products.map(async (p) => {
+            return await daoProduct.getProduct(p.pid, true);
+          })
+        );
+        //Return an array of booleans
+        const checkValues = productList.map((p: any) =>
+          p !== null
+            ? p.product_condition === "active" &&
+              p.product_stock > getQuantity(p.product_id) &&
+              p.user_id !== data.sale_buyer
+            : false
+        );
+
+        //We return an array with the products and an array with the booleans:
+        return { productList, checkValues };
+      }
+
+      const { productList, checkValues } = await checkProducts(
         data.sale_product
       );
-      if (!product) return "PRODUCT_NOT_FOUND";
-      if (product.product_stock < data.sale_quantity) return "NO_STOCK";
+
+      if (checkValues.some((i) => i === false)) {
+        return "INVALID_PRODUCTS";
+      }
 
       //Calculating price:
-      let sale_price: number;
-      if (product.product_offer !== 0) {
-        sale_price =
-          (product.product_price * data.sale_quantity * product.product_offer) /
-          100;
-      } else {
-        sale_price = product.product_price * data.sale_quantity;
-      }
+      const prices = productList.map((p: any) =>
+        p.product_offer !== 0
+          ? (p.product_price *
+              getQuantity(p.product_id) *
+              (100 - p.product_offer)) /
+            100
+          : p.product_price * getQuantity(p.product_id)
+      );
+      const sale_price = prices.reduce((a, b) => a + b);
 
       //Creating sale:
       const sale = await Sale.create({
         sale_id: data.sale_id,
-        sale_seller: data.sale_seller,
         sale_buyer: data.sale_buyer,
         sale_amount: sale_price,
         sale_instalments: data.sale_instalments,
         cc_id: data.cc_id,
       });
       if (!sale) return "ERROR_CREATING";
-      //create sale product:
-      const sp_id = uuidv4();
-      const sale_product = await SaleProducts.create({
-        sp_id,
-        sp_quantity: data.sale_quantity,
-        product_id: data.sale_product,
-        sale_id: data.sale_id,
-      });
-      //Checking sale product:
-      if (!sale_product) {
-        await this.deleteSale(data.sale_id);
 
-        return "ERROR_CREATING";
-      }
-      //update product stock:
-      product.product_stock = product.product_stock - data.sale_quantity;
-      await product.save();
+      //create sale products:
+
+      const productsSale = await Promise.all(
+        data.sale_product.map(async (p) => {
+          return await SaleProducts.create({
+            sp_id: `${uuidv4()}`,
+            sp_quantity: p.quantity,
+            product_id: p.pid,
+            user_id: p.uid,
+            sale_id: data.sale_id,
+          });
+        })
+      );
+
+      Promise.all(
+        productList.map(async (p: any) => {
+          p.product_stock = p.product_stock - getQuantity(p.product_id);
+          await p.save();
+        })
+      );
 
       //everything ok:
-      return { sale_product, sale };
+      return { sale, productsSale };
     } catch (e: any) {
       throw new Error(e.message);
     }
@@ -78,7 +112,7 @@ export class daoSaleSQL extends basecontainer {
     try {
       return await Sale.findOne({
         where: { sale_id },
-        attributes: { exclude: ["sale_buyer", "sale_seller"] },
+        attributes: { exclude: ["sale_buyer"] },
         include: [
           {
             model: SaleProducts,
@@ -100,11 +134,6 @@ export class daoSaleSQL extends basecontainer {
             as: "buyer",
             attributes: ["user_username", "user_mail", "user_id"],
           },
-          {
-            model: User,
-            as: "seller",
-            attributes: ["user_username", "user_mail", "user_id"],
-          },
         ],
       });
     } catch (e: any) {
@@ -112,89 +141,72 @@ export class daoSaleSQL extends basecontainer {
     }
   }
   /** ---------------------------------- LIST USER SALES ----------------------------- **/
-  //type: "sale" or "buy"
-  async listSales(
-    user_id: string,
-    type: string,
-    page: number = 0,
-    size: number = 0
-  ) {
+
+  async listSales(user_id: string, page: number = 0, size: number = 0) {
     try {
       //Paginatión:
       const { limit, offset } = getPagination(page, size);
-      if (type === "sale") {
-        const data = await Sale.findAndCountAll({
-          where: { sale_seller: user_id },
-          limit,
-          offset,
-          order: [["createdAt", "DESC"]],
-          attributes: { exclude: ["sale_buyer", "sale_seller"] },
-          include: [
-            {
-              model: SaleProducts,
-              attributes: ["sp_id", "sp_quantity"],
-              include: [
-                {
-                  model: Product,
-                  attributes: [
-                    "product_id",
-                    "product_name",
-                    "product_brand",
-                    "product_price",
-                    "product_thumbnail",
-                  ],
-                },
-              ],
-            },
-            {
-              model: User,
-              as: "buyer",
-              attributes: ["user_username", "user_mail", "user_id"],
-            },
-            { model: UserReputation },
-          ],
-        });
-        //return:
-        return getPaginationSales(data, page, limit);
-      } else {
-        const data = await Sale.findAndCountAll({
-          where: { sale_buyer: user_id },
-          limit,
-          offset,
-          order: [["createdAt", "DESC"]],
-          attributes: { exclude: ["sale_buyer", "sale_seller"] },
-          include: [
-            {
-              model: SaleProducts,
-              attributes: ["sp_id", "sp_quantity"],
-              include: [
-                {
-                  model: Product,
-                  attributes: [
-                    "product_id",
-                    "product_name",
-                    "product_brand",
-                    "product_price",
-                    "product_thumbnail",
-                  ],
-                },
-              ],
-            },
-            {
-              model: User,
-              as: "seller",
-              attributes: ["user_username", "user_mail", "user_id"],
-            },
-            { model: UserReputation },
-            { model: ProductReputation },
-          ],
-        });
-        return getPaginationSales(data, page, limit);
-      }
+      const data = await Sale.findAndCountAll({
+        where: { sale_buyer: user_id },
+        limit,
+        offset,
+        order: [["createdAt", "DESC"]],
+        attributes: { exclude: ["sale_buyer"] },
+        include: [
+          {
+            model: SaleProducts,
+            attributes: ["sp_id", "sp_quantity"],
+            include: [
+              {
+                model: Product,
+                attributes: [
+                  "product_id",
+                  "product_name",
+                  "product_brand",
+                  "product_price",
+                  "product_thumbnail",
+                ],
+              },
+            ],
+          },
+          { model: UserReputation },
+          { model: ProductReputation },
+        ],
+      });
+      return getPaginationSales(data, page, limit);
     } catch (e: any) {
       throw new Error(e.message);
     }
   }
+
+  /**  GET PRODUCTS SOLD  **/
+  async getProductSold(user_id: string, page: number = 0, size: number = 0) {
+    try {
+      //Paginatión:
+      const { limit, offset } = getPagination(page, size);
+      const data = await SaleProducts.findAndCountAll({
+        where: { user_id },
+        attributes: { exclude: ["product_id", "user_id", "updatedAt"] },
+        limit,
+        offset,
+        order: [["createdAt", "DESC"]],
+        include: [
+          { model: Product },
+          {
+            model: Sale,
+            attributes: ["sale_id", "sale_buyer"],
+            include: [{ model: UserReputation }],
+          },
+        ],
+      });
+
+      //return:
+      return getPaginationSales(data, page, limit);
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
+
   /** ---------------------------------- DELETE SALE  ----------------------------- **/
   async deleteSale(sale_id: string) {
     try {

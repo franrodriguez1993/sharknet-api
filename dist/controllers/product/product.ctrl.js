@@ -381,10 +381,8 @@ class productController {
             try {
                 //Data:
                 const bodySale = {
-                    sale_seller: req.body.seller,
                     sale_buyer: req.body.buyer,
-                    sale_product: req.body.product,
-                    sale_quantity: req.body.quantity,
+                    sale_product: req.body.products,
                     sale_instalments: req.body.instalments,
                     cc_id: req.body.creditCard,
                 };
@@ -402,10 +400,8 @@ class productController {
                     sale === "PRODUCT_NOT_FOUND")
                     return res.status(404).json({ status: 404, msg: sale });
                 else if (sale === "ERROR_CREATING" ||
-                    sale === "NO_STOCK" ||
                     sale === "INVALID_CREDITCARD" ||
-                    sale === "INCORRECT_SELLER" ||
-                    sale === "SELLER_CANT_BUY_OWN_PRODUCT")
+                    sale === "INVALID_PRODUCTS")
                     return res.status(400).json({ status: 400, msg: sale });
                 else if (sale === "UNAUTHORIZED_ACTION")
                     return res.status(401).json({ status: 401, msg: sale });

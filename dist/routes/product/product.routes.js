@@ -44,6 +44,7 @@ router.delete("/condition/delete/:id", requireToken_1.requireToken, controller.d
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //SALE:
 router.post("/sale/buy", requireToken_1.requireToken, controller.buyProductCtrl);
+router.post("/sale/test", requireToken_1.requireToken, controller.buyProductCtrl);
 router.get("/sale/:id", requireToken_1.requireToken, controller.getSaleCtrl);
 router.get("/sale/list/sales/:id", requireToken_1.requireToken, controller.getUserSalesCtrl);
 router.get("/sale/list/buys/:id", requireToken_1.requireToken, controller.getUserBuysCtrl);

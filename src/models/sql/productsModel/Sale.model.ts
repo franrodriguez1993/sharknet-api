@@ -13,9 +13,6 @@ const Sale = sequelize.define(
       type: DataTypes.STRING,
       primaryKey: true,
     },
-    sale_seller: {
-      type: DataTypes.STRING,
-    },
     sale_buyer: {
       type: DataTypes.STRING,
     },

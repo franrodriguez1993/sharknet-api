@@ -8,6 +8,9 @@ const SaleProducts = sequelize.define(
       type: DataTypes.STRING,
       primaryKey: true,
     },
+    user_id: {
+      type: DataTypes.STRING,
+    },
     sp_quantity: {
       type: DataTypes.INTEGER,
     },

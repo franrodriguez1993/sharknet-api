@@ -34,6 +34,7 @@ function main() {
             });
         }
         catch (e) {
+            console.log(e);
             logger_1.default.error(e.message);
         }
     });

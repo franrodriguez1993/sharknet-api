@@ -15,9 +15,6 @@ const Sale = postgres_1.sequelize.define("sale_receipt", {
         type: sequelize_1.DataTypes.STRING,
         primaryKey: true,
     },
-    sale_seller: {
-        type: sequelize_1.DataTypes.STRING,
-    },
     sale_buyer: {
         type: sequelize_1.DataTypes.STRING,
     },

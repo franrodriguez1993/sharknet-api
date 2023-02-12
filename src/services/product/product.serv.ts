@@ -13,6 +13,7 @@ import { saleInterface } from "../../interfaces/productInterface/sale.interface"
 import { addressInterface } from "../../interfaces/userInterface/address.Interface";
 import { creditCardInterface } from "../../interfaces/userInterface/creditCard.interface";
 import { ReqTokenDataInterface } from "../../interfaces/userInterface/reqTokenData.interface";
+import { saleProductsInterface } from "../../interfaces/productInterface/saleProducts.interface";
 
 export default class productService {
   /**============== CREATE PRODUCT =============**/
@@ -200,19 +201,20 @@ export default class productService {
   }
 
   /** ================= BUY PRODUCT  =================== **/
-  async buyProductServ(tokenData: ReqTokenDataInterface, data: saleInterface) {
+  async buyProductServ(
+    tokenData: ReqTokenDataInterface,
+    data: saleProductsInterface
+  ) {
     try {
       //Check Authorization:
       if (
         tokenData.uid.toString() !== data.sale_buyer.toString() ||
-        tokenData.rol.toString() !== "user" ||
-        tokenData.uid.toString() === data.sale_seller.toString()
+        tokenData.rol.toString() !== "user"
       )
         return "UNAUTHORIZED_ACTION";
       //check users:
       const buyer = await daoUser.getUser("id", data.sale_buyer);
-      const seller = await daoUser.getUser("id", data.sale_seller);
-      if (!buyer || !seller) return "USER_NOT_FOUND";
+      if (!buyer) return "USER_NOT_FOUND";
 
       //check creditCard:
       const creditCard: creditCardInterface | any = await daoUser.getCreditCard(
@@ -222,29 +224,22 @@ export default class productService {
       if (creditCard.user_id.toString() !== data.sale_buyer.toString())
         return "INVALID_CREDITCARD";
 
-      //Check product and seller:
-      const product: productInterface | any = await daoProduct.getProduct(
-        data.sale_product,
-        true
-      );
-      if (product.user_id.toString() !== data.sale_seller.toString())
-        return "INCORRECT_SELLER";
-      if (product.user_id.toString() === data.sale_buyer.toString())
-        return "SELLER_CANT_BUY_OWN_PRODUCT";
-
       //Create sale:
       const sale_id = uuidv4();
-      const sale = await daoSale.Buy({ ...data, sale_id });
+      const sale: any = await daoSale.Buy({ ...data, sale_id });
 
       if (sale) {
-        //Notification to seller:
-        await daoNotification.createNotification({
-          user_id: data.sale_seller,
-          notification_type: "PRODUCT_SOLD",
-          product_id: data.sale_product,
-        });
-        return sale;
+        await Promise.all(
+          sale.productsSale.map(async (p: any) => {
+            await daoNotification.createNotification({
+              user_id: p.user_id,
+              notification_type: "PRODUCT_SOLD",
+              product_id: p.product_id,
+            });
+          })
+        );
       }
+      return sale;
     } catch (e: any) {
       throw new Error(e.message);
     }
@@ -271,7 +266,7 @@ export default class productService {
     if (tokenID.uid.toString() !== user_id.toString())
       return "UNAUTHORIZED_ACTION";
 
-    return await daoSale.listSales(user_id, "sale", page, size);
+    return await daoSale.getProductSold(user_id, page, size);
   }
 
   /** ================== LIST USER BUYS  ================== **/
@@ -290,7 +285,7 @@ export default class productService {
     if (tokenID.uid.toString() !== user_id.toString())
       return "UNAUTHORIZED_ACTION";
 
-    return await daoSale.listSales(user_id, "buy", page, size);
+    return await daoSale.listSales(user_id, page, size);
   }
 
   /** ================ PAUSE PRODUCT  ================== **/

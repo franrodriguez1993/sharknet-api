@@ -213,7 +213,6 @@ export class daoProductSQL extends basecontainer {
       } else {
         option.parameters = {
           where: { product_id: id },
-          attributes: ["product_id", "user_id"],
         };
       }
       return await Product.findOne(option.parameters);

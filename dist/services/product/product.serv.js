@@ -193,13 +193,11 @@ class productService {
             try {
                 //Check Authorization:
                 if (tokenData.uid.toString() !== data.sale_buyer.toString() ||
-                    tokenData.rol.toString() !== "user" ||
-                    tokenData.uid.toString() === data.sale_seller.toString())
+                    tokenData.rol.toString() !== "user")
                     return "UNAUTHORIZED_ACTION";
                 //check users:
                 const buyer = yield containers_2.daoUser.getUser("id", data.sale_buyer);
-                const seller = yield containers_2.daoUser.getUser("id", data.sale_seller);
-                if (!buyer || !seller)
+                if (!buyer)
                     return "USER_NOT_FOUND";
                 //check creditCard:
                 const creditCard = yield containers_2.daoUser.getCreditCard(data.cc_id);
@@ -207,24 +205,19 @@ class productService {
                     return "CREDITCARD_NOT_FOUND";
                 if (creditCard.user_id.toString() !== data.sale_buyer.toString())
                     return "INVALID_CREDITCARD";
-                //Check product and seller:
-                const product = yield containers_1.daoProduct.getProduct(data.sale_product, true);
-                if (product.user_id.toString() !== data.sale_seller.toString())
-                    return "INCORRECT_SELLER";
-                if (product.user_id.toString() === data.sale_buyer.toString())
-                    return "SELLER_CANT_BUY_OWN_PRODUCT";
                 //Create sale:
                 const sale_id = (0, uuid_1.v4)();
                 const sale = yield containers_1.daoSale.Buy(Object.assign(Object.assign({}, data), { sale_id }));
                 if (sale) {
-                    //Notification to seller:
-                    yield containers_1.daoNotification.createNotification({
-                        user_id: data.sale_seller,
-                        notification_type: "PRODUCT_SOLD",
-                        product_id: data.sale_product,
-                    });
-                    return sale;
+                    yield Promise.all(sale.productsSale.map((p) => __awaiter(this, void 0, void 0, function* () {
+                        yield containers_1.daoNotification.createNotification({
+                            user_id: p.user_id,
+                            notification_type: "PRODUCT_SOLD",
+                            product_id: p.product_id,
+                        });
+                    })));
                 }
+                return sale;
             }
             catch (e) {
                 throw new Error(e.message);
@@ -247,7 +240,7 @@ class productService {
             //Chech Authorization:
             if (tokenID.uid.toString() !== user_id.toString())
                 return "UNAUTHORIZED_ACTION";
-            return yield containers_1.daoSale.listSales(user_id, "sale", page, size);
+            return yield containers_1.daoSale.getProductSold(user_id, page, size);
         });
     }
     /** ================== LIST USER BUYS  ================== **/
@@ -260,7 +253,7 @@ class productService {
             //Chech Authorization:
             if (tokenID.uid.toString() !== user_id.toString())
                 return "UNAUTHORIZED_ACTION";
-            return yield containers_1.daoSale.listSales(user_id, "buy", page, size);
+            return yield containers_1.daoSale.listSales(user_id, page, size);
         });
     }
     /** ================ PAUSE PRODUCT  ================== **/

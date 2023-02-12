@@ -68,6 +68,7 @@ router.delete(
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //SALE:
 router.post("/sale/buy", requireToken, controller.buyProductCtrl);
+router.post("/sale/test", requireToken, controller.buyProductCtrl);
 router.get("/sale/:id", requireToken, controller.getSaleCtrl);
 router.get("/sale/list/sales/:id", requireToken, controller.getUserSalesCtrl);
 router.get("/sale/list/buys/:id", requireToken, controller.getUserBuysCtrl);

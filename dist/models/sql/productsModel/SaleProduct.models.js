@@ -7,6 +7,9 @@ const SaleProducts = postgres_1.sequelize.define("sale_product", {
         type: sequelize_1.DataTypes.STRING,
         primaryKey: true,
     },
+    user_id: {
+        type: sequelize_1.DataTypes.STRING,
+    },
     sp_quantity: {
         type: sequelize_1.DataTypes.INTEGER,
     },

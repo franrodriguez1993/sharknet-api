@@ -192,7 +192,6 @@ class daoProductSQL extends base_container_1.default {
                 else {
                     option.parameters = {
                         where: { product_id: id },
-                        attributes: ["product_id", "user_id"],
                     };
                 }
                 return yield product_model_1.default.findOne(option.parameters);

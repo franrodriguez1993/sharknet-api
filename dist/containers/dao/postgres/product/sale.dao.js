@@ -31,26 +31,42 @@ class daoSaleSQL extends base_container_1.default {
     Buy(data) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                //Check product:
-                const product = yield __1.daoProduct.getProduct(data.sale_product);
-                if (!product)
-                    return "PRODUCT_NOT_FOUND";
-                if (product.product_stock < data.sale_quantity)
-                    return "NO_STOCK";
+                //Function to get quantity in the map function:
+                function getQuantity(id) {
+                    let p = data.sale_product.find((p) => p.pid === id);
+                    return p.quantity;
+                }
+                //Check products:
+                function checkProducts(products) {
+                    return __awaiter(this, void 0, void 0, function* () {
+                        const productList = yield Promise.all(products.map((p) => __awaiter(this, void 0, void 0, function* () {
+                            return yield __1.daoProduct.getProduct(p.pid, true);
+                        })));
+                        //Return an array of booleans
+                        const checkValues = productList.map((p) => p !== null
+                            ? p.product_condition === "active" &&
+                                p.product_stock > getQuantity(p.product_id) &&
+                                p.user_id !== data.sale_buyer
+                            : false);
+                        //We return an array with the products and an array with the booleans:
+                        return { productList, checkValues };
+                    });
+                }
+                const { productList, checkValues } = yield checkProducts(data.sale_product);
+                if (checkValues.some((i) => i === false)) {
+                    return "INVALID_PRODUCTS";
+                }
                 //Calculating price:
-                let sale_price;
-                if (product.product_offer !== 0) {
-                    sale_price =
-                        (product.product_price * data.sale_quantity * product.product_offer) /
-                            100;
-                }
-                else {
-                    sale_price = product.product_price * data.sale_quantity;
-                }
+                const prices = productList.map((p) => p.product_offer !== 0
+                    ? (p.product_price *
+                        getQuantity(p.product_id) *
+                        (100 - p.product_offer)) /
+                        100
+                    : p.product_price * getQuantity(p.product_id));
+                const sale_price = prices.reduce((a, b) => a + b);
                 //Creating sale:
                 const sale = yield Sale_model_1.default.create({
                     sale_id: data.sale_id,
-                    sale_seller: data.sale_seller,
                     sale_buyer: data.sale_buyer,
                     sale_amount: sale_price,
                     sale_instalments: data.sale_instalments,
@@ -58,24 +74,22 @@ class daoSaleSQL extends base_container_1.default {
                 });
                 if (!sale)
                     return "ERROR_CREATING";
-                //create sale product:
-                const sp_id = (0, uuid_1.v4)();
-                const sale_product = yield SaleProduct_models_1.default.create({
-                    sp_id,
-                    sp_quantity: data.sale_quantity,
-                    product_id: data.sale_product,
-                    sale_id: data.sale_id,
-                });
-                //Checking sale product:
-                if (!sale_product) {
-                    yield this.deleteSale(data.sale_id);
-                    return "ERROR_CREATING";
-                }
-                //update product stock:
-                product.product_stock = product.product_stock - data.sale_quantity;
-                yield product.save();
+                //create sale products:
+                const productsSale = yield Promise.all(data.sale_product.map((p) => __awaiter(this, void 0, void 0, function* () {
+                    return yield SaleProduct_models_1.default.create({
+                        sp_id: `${(0, uuid_1.v4)()}`,
+                        sp_quantity: p.quantity,
+                        product_id: p.pid,
+                        user_id: p.uid,
+                        sale_id: data.sale_id,
+                    });
+                })));
+                Promise.all(productList.map((p) => __awaiter(this, void 0, void 0, function* () {
+                    p.product_stock = p.product_stock - getQuantity(p.product_id);
+                    yield p.save();
+                })));
                 //everything ok:
-                return { sale_product, sale };
+                return { sale, productsSale };
             }
             catch (e) {
                 throw new Error(e.message);
@@ -88,7 +102,7 @@ class daoSaleSQL extends base_container_1.default {
             try {
                 return yield Sale_model_1.default.findOne({
                     where: { sale_id },
-                    attributes: { exclude: ["sale_buyer", "sale_seller"] },
+                    attributes: { exclude: ["sale_buyer"] },
                     include: [
                         {
                             model: SaleProduct_models_1.default,
@@ -110,11 +124,6 @@ class daoSaleSQL extends base_container_1.default {
                             as: "buyer",
                             attributes: ["user_username", "user_mail", "user_id"],
                         },
-                        {
-                            model: User_model_1.default,
-                            as: "seller",
-                            attributes: ["user_username", "user_mail", "user_id"],
-                        },
                     ],
                 });
             }
@@ -124,82 +133,68 @@ class daoSaleSQL extends base_container_1.default {
         });
     }
     /** ---------------------------------- LIST USER SALES ----------------------------- **/
-    //type: "sale" or "buy"
-    listSales(user_id, type, page = 0, size = 0) {
+    listSales(user_id, page = 0, size = 0) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 //Paginatión:
                 const { limit, offset } = (0, paginationfunction_1.getPagination)(page, size);
-                if (type === "sale") {
-                    const data = yield Sale_model_1.default.findAndCountAll({
-                        where: { sale_seller: user_id },
-                        limit,
-                        offset,
-                        order: [["createdAt", "DESC"]],
-                        attributes: { exclude: ["sale_buyer", "sale_seller"] },
-                        include: [
-                            {
-                                model: SaleProduct_models_1.default,
-                                attributes: ["sp_id", "sp_quantity"],
-                                include: [
-                                    {
-                                        model: product_model_1.default,
-                                        attributes: [
-                                            "product_id",
-                                            "product_name",
-                                            "product_brand",
-                                            "product_price",
-                                            "product_thumbnail",
-                                        ],
-                                    },
-                                ],
-                            },
-                            {
-                                model: User_model_1.default,
-                                as: "buyer",
-                                attributes: ["user_username", "user_mail", "user_id"],
-                            },
-                            { model: repuUser_model_1.default },
-                        ],
-                    });
-                    //return:
-                    return (0, paginationfunction_1.getPaginationSales)(data, page, limit);
-                }
-                else {
-                    const data = yield Sale_model_1.default.findAndCountAll({
-                        where: { sale_buyer: user_id },
-                        limit,
-                        offset,
-                        order: [["createdAt", "DESC"]],
-                        attributes: { exclude: ["sale_buyer", "sale_seller"] },
-                        include: [
-                            {
-                                model: SaleProduct_models_1.default,
-                                attributes: ["sp_id", "sp_quantity"],
-                                include: [
-                                    {
-                                        model: product_model_1.default,
-                                        attributes: [
-                                            "product_id",
-                                            "product_name",
-                                            "product_brand",
-                                            "product_price",
-                                            "product_thumbnail",
-                                        ],
-                                    },
-                                ],
-                            },
-                            {
-                                model: User_model_1.default,
-                                as: "seller",
-                                attributes: ["user_username", "user_mail", "user_id"],
-                            },
-                            { model: repuUser_model_1.default },
-                            { model: repuProduct_model_1.default },
-                        ],
-                    });
-                    return (0, paginationfunction_1.getPaginationSales)(data, page, limit);
-                }
+                const data = yield Sale_model_1.default.findAndCountAll({
+                    where: { sale_buyer: user_id },
+                    limit,
+                    offset,
+                    order: [["createdAt", "DESC"]],
+                    attributes: { exclude: ["sale_buyer"] },
+                    include: [
+                        {
+                            model: SaleProduct_models_1.default,
+                            attributes: ["sp_id", "sp_quantity"],
+                            include: [
+                                {
+                                    model: product_model_1.default,
+                                    attributes: [
+                                        "product_id",
+                                        "product_name",
+                                        "product_brand",
+                                        "product_price",
+                                        "product_thumbnail",
+                                    ],
+                                },
+                            ],
+                        },
+                        { model: repuUser_model_1.default },
+                        { model: repuProduct_model_1.default },
+                    ],
+                });
+                return (0, paginationfunction_1.getPaginationSales)(data, page, limit);
+            }
+            catch (e) {
+                throw new Error(e.message);
+            }
+        });
+    }
+    /**  GET PRODUCTS SOLD  **/
+    getProductSold(user_id, page = 0, size = 0) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                //Paginatión:
+                const { limit, offset } = (0, paginationfunction_1.getPagination)(page, size);
+                const data = yield SaleProduct_models_1.default.findAndCountAll({
+                    where: { user_id },
+                    attributes: { exclude: ["product_id", "user_id", "updatedAt"] },
+                    limit,
+                    offset,
+                    order: [["createdAt", "DESC"]],
+                    include: [
+                        { model: product_model_1.default },
+                        {
+                            model: Sale_model_1.default,
+                            attributes: ["sale_id", "sale_buyer"],
+                            include: [{ model: repuUser_model_1.default }],
+                        },
+                    ],
+                });
+                //return:
+                return (0, paginationfunction_1.getPaginationSales)(data, page, limit);
             }
             catch (e) {
                 throw new Error(e.message);
