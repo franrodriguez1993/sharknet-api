@@ -37,8 +37,6 @@ export default class repuUserService {
         return "INVALID_QUALIFIER";
       if (data.ur_rol !== "seller") return "INCORRECT_ROL";
     } else if (mode === "buyer") {
-      if (sale.seller.user_id.toString() !== data.ur_qualifier.toString())
-        return "INVALID_QUALIFIER";
       if (data.ur_rol !== "buyer") return "INCORRECT_ROL";
     }
 
