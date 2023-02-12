@@ -20,5 +20,7 @@ router.post("/create", requireToken_1.requireToken, validatorManager_1.validator
 router.post("/reply", requireToken_1.requireToken, validatorManager_1.validatorComment, controller.replyCommentCtrl);
 //List:
 router.get("/list/:id", controller.listCommentCtrl);
+//Get by id:
+router.get("/:id", requireToken_1.requireToken, controller.getCommentByIdCtrl);
 //Delete (admin)
 router.delete("/del/:id", requireToken_1.requireToken, controller.delCommentCtrl);

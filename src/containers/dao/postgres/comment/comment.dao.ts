@@ -79,6 +79,32 @@ export class daoCommentSQL extends basecontainer {
     }
   }
 
+  /** --------------- GET COMMENT BY ID --------------- **/
+  async getCommentByID(comment_id: string) {
+    try {
+      return await Comment.findOne({
+        where: { comment_id },
+        include: [
+          {
+            model: User,
+            attributes: ["user_username", "user_name", "user_lastname"],
+          },
+          {
+            model: Comment,
+            include: [
+              {
+                model: User,
+                attributes: ["user_username", "user_name", "user_lastname"],
+              },
+            ],
+          },
+        ],
+      });
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
+
   /** --------------- DELETE COMMENTS --------------- **/
   async deleteComment(comment_id: string) {
     try {

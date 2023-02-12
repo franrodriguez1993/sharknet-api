@@ -99,6 +99,15 @@ class commentService {
             return yield containers_1.daoComment.listComment(product_id, page, size);
         });
     }
+    /** ===============  GET COMMENT BY ID ===============**/
+    getCommentByIDServ(comment_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const comment = yield containers_1.daoComment.getCommentByID(comment_id);
+            if (!comment)
+                return "COMMENT_NOT_FOUND";
+            return comment;
+        });
+    }
     /** ==================  DELETE COMMENT ====================**/
     delCommentServ(comment_id) {
         return __awaiter(this, void 0, void 0, function* () {

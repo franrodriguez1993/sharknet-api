@@ -111,6 +111,25 @@ class commentController {
             }
         });
     }
+    /** ===========  GET COMMENT BY ID ==============**/
+    getCommentByIdCtrl(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const comment = yield service.getCommentByIDServ(id);
+                if (comment === "COMMENT_NOT_FOUND") {
+                    return res.status(404).json({ status: 404, msg: comment });
+                }
+                else {
+                    return res.json({ status: 200, msg: "OK", data: comment });
+                }
+            }
+            catch (e) {
+                logger_1.default.error(e.message);
+                return res.status(500).json({ status: 500, msg: e.message });
+            }
+        });
+    }
     /** ===========  DELETE COMMENT ==============**/
     delCommentCtrl(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

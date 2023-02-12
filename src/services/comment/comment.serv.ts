@@ -125,6 +125,13 @@ export default class commentService {
     return await daoComment.listComment(product_id, page, size);
   }
 
+  /** ===============  GET COMMENT BY ID ===============**/
+  async getCommentByIDServ(comment_id: string) {
+    const comment = await daoComment.getCommentByID(comment_id);
+    if (!comment) return "COMMENT_NOT_FOUND";
+    return comment;
+  }
+
   /** ==================  DELETE COMMENT ====================**/
   async delCommentServ(comment_id: string) {
     return await daoComment.deleteComment(comment_id);

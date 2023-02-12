@@ -98,6 +98,34 @@ class daoCommentSQL extends base_container_1.default {
             }
         });
     }
+    /** --------------- GET COMMENT BY ID --------------- **/
+    getCommentByID(comment_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield comment_model_1.default.findOne({
+                    where: { comment_id },
+                    include: [
+                        {
+                            model: User_model_1.default,
+                            attributes: ["user_username", "user_name", "user_lastname"],
+                        },
+                        {
+                            model: comment_model_1.default,
+                            include: [
+                                {
+                                    model: User_model_1.default,
+                                    attributes: ["user_username", "user_name", "user_lastname"],
+                                },
+                            ],
+                        },
+                    ],
+                });
+            }
+            catch (e) {
+                throw new Error(e.message);
+            }
+        });
+    }
     /** --------------- DELETE COMMENTS --------------- **/
     deleteComment(comment_id) {
         return __awaiter(this, void 0, void 0, function* () {

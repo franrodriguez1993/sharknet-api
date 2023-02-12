@@ -27,6 +27,8 @@ router.post(
 );
 //List:
 router.get("/list/:id", controller.listCommentCtrl);
+//Get by id:
+router.get("/:id", requireToken, controller.getCommentByIdCtrl);
 //Delete (admin)
 router.delete("/del/:id", requireToken, controller.delCommentCtrl);
 

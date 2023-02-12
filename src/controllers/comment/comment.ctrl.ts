@@ -107,6 +107,23 @@ export default class commentController {
     }
   }
 
+  /** ===========  GET COMMENT BY ID ==============**/
+  async getCommentByIdCtrl(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const comment = await service.getCommentByIDServ(id);
+
+      if (comment === "COMMENT_NOT_FOUND") {
+        return res.status(404).json({ status: 404, msg: comment });
+      } else {
+        return res.json({ status: 200, msg: "OK", data: comment });
+      }
+    } catch (e: any) {
+      logger.error(e.message);
+      return res.status(500).json({ status: 500, msg: e.message });
+    }
+  }
+
   /** ===========  DELETE COMMENT ==============**/
   async delCommentCtrl(req: Request, res: Response) {
     try {
