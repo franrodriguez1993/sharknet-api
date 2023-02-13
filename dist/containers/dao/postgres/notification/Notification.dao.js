@@ -56,19 +56,23 @@ class daoNotificationSQL {
         });
     }
     /** -------------- GET NOTIFICATIONS -------------- **/
-    getNotifications(user_id, page = 0, size = 0) {
+    getNotifications(user_id, page = 0, size = 0, seen = "") {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { limit, offset } = (0, paginationfunction_1.getPagination)(page, size);
-                const data = yield Notification_model_1.default.findAndCountAll({
-                    where: { user_id },
-                    limit,
-                    offset,
-                    order: [["createdAt", "DESC"]],
-                    include: [
+                const options = {
+                    where: {},
+                };
+                if (seen === "check") {
+                    options.where = { user_id, notification_seen: false };
+                }
+                else {
+                    options.where = { user_id };
+                }
+                const data = yield Notification_model_1.default.findAndCountAll(Object.assign(Object.assign({}, options), { limit,
+                    offset, order: [["createdAt", "DESC"]], include: [
                         { model: product_model_1.default, attributes: ["product_name", "product_thumbnail"] },
-                    ],
-                });
+                    ] }));
                 return (0, paginationfunction_1.getPaginationNotification)(data, page, limit);
             }
             catch (e) {

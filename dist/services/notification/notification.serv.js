@@ -18,7 +18,7 @@ class notificationService {
         });
     }
     /** ================  GET NOTIFICATIONS LIST  =============== **/
-    getNotificationServ(tokenID, user_id, page, size) {
+    getNotificationServ(tokenID, user_id, page, size, seen) {
         return __awaiter(this, void 0, void 0, function* () {
             //Check Authorization:
             if (tokenID.uid.toString() !== user_id.toString())
@@ -27,7 +27,7 @@ class notificationService {
             const user = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!user)
                 return "USER_NOT_FOUND";
-            return yield containers_1.daoNotification.getNotifications(user_id, page, size);
+            return yield containers_1.daoNotification.getNotifications(user_id, page, size, seen);
         });
     }
 }

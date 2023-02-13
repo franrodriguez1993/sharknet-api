@@ -45,11 +45,24 @@ export class daoNotificationSQL {
   }
 
   /** -------------- GET NOTIFICATIONS -------------- **/
-  async getNotifications(user_id: string, page: number = 0, size: number = 0) {
+  async getNotifications(
+    user_id: string,
+    page: number = 0,
+    size: number = 0,
+    seen: string = ""
+  ) {
     try {
       const { limit, offset } = getPagination(page, size);
+      const options = {
+        where: {},
+      };
+      if (seen === "check") {
+        options.where = { user_id, notification_seen: false };
+      } else {
+        options.where = { user_id };
+      }
       const data = await NotificationUser.findAndCountAll({
-        where: { user_id },
+        ...options,
         limit,
         offset,
         order: [["createdAt", "DESC"]],

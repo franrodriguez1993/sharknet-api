@@ -39,9 +39,16 @@ export default class notificationController {
       // query parameters:
       const page: number = parseInt(req.query.page as string);
       const size: number = parseInt(req.query.size as string);
+      const seen: string = req.query.seen as string;
 
       //Service:
-      const list = await service.getNotificationServ(tokenID, id, page, size);
+      const list = await service.getNotificationServ(
+        tokenID,
+        id,
+        page,
+        size,
+        seen
+      );
 
       //Return:
       if (list === "UNAUTHORIZED_ACTION")

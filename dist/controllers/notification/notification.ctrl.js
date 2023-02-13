@@ -49,8 +49,9 @@ class notificationController {
                 // query parameters:
                 const page = parseInt(req.query.page);
                 const size = parseInt(req.query.size);
+                const seen = req.query.seen;
                 //Service:
-                const list = yield service.getNotificationServ(tokenID, id, page, size);
+                const list = yield service.getNotificationServ(tokenID, id, page, size, seen);
                 //Return:
                 if (list === "UNAUTHORIZED_ACTION")
                     return res.status(401).json({ status: 401, msg: list });
