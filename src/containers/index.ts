@@ -4,9 +4,7 @@ import { daoPTypeSQL } from "./dao/postgres/product/ptype.dao";
 import { daoProductSQL } from "./dao/postgres/product/product.dao";
 import { daoPCategotySQL } from "./dao/postgres/product/pcategory.dao";
 import { daoSaleSQL } from "./dao/postgres/product/sale.dao";
-import { daoRepuScoreSQL } from "./dao/postgres/reputation/repuScore.dao";
-import { daoRepuUserSQL } from "./dao/postgres/reputation/repuUser.dao";
-import { daoRepuProductSQL } from "./dao/postgres/reputation/repuProduct.dao";
+
 import { daoCommentSQL } from "./dao/postgres/comment/comment.dao";
 import { daoImgProductSQL } from "./dao/postgres/imagedao/imgProduct.dao";
 import { daoStaffSQL } from "./dao/postgres/superuser/staff.dao";
@@ -21,9 +19,7 @@ export const daoProductTypes = new daoPTypeSQL();
 export const daoProductCategory = new daoPCategotySQL();
 export const daoProduct = new daoProductSQL();
 export const daoSale = new daoSaleSQL();
-export const daoRepuScore = new daoRepuScoreSQL();
-export const daoRepuUser = new daoRepuUserSQL();
-export const daoRepuProduct = new daoRepuProductSQL();
+
 export const daoComment = new daoCommentSQL();
 export const daoImgProduct = new daoImgProductSQL();
 export const daoStaff = new daoStaffSQL();

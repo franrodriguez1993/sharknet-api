@@ -9,8 +9,6 @@ import Address from "./Address.model";
 import CreditCard from "./CreditCard.model";
 import ProductFavorite from "../productsModel/PFavorite.models";
 import Sale from "../productsModel/Sale.model";
-import UserReputation from "../reputationModel/repuUser.model";
-import ProductReputation from "../reputationModel/repuProduct.model";
 import Comment from "../commentsModel/comment.model";
 import NotificationUser from "../notificationModel/Notification.model";
 import ActivityLogUser from "../activityLogs/ALogUser.model";
@@ -115,33 +113,7 @@ Sale.belongsTo(User, {
   as: "buyer",
   foreignKey: "sale_buyer",
 });
-//Reputation user- qualifier:
-User.hasMany(UserReputation, {
-  as: "qualifier",
-  foreignKey: "ur_qualifier",
-});
-UserReputation.belongsTo(User, {
-  as: "qualifier",
-  foreignKey: "ur_qualifier",
-});
-//Reputation user - receiver:
-User.hasMany(UserReputation, {
-  as: "receiver",
-  foreignKey: "ur_receiver",
-});
-UserReputation.belongsTo(User, {
-  as: "receiver",
-  foreignKey: "ur_receiver",
-});
-//Reputation product:
-User.hasMany(ProductReputation, {
-  as: "product_qualifier",
-  foreignKey: "pr_qualifier",
-});
-ProductReputation.belongsTo(User, {
-  as: "product_qualifier",
-  foreignKey: "pr_qualifier",
-});
+
 //Comment:
 User.hasMany(Comment, {
   foreignKey: "user_id",

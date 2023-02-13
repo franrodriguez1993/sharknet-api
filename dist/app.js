@@ -9,7 +9,6 @@ const configServer_1 = __importDefault(require("./config/configServer"));
 /** ------ ROUTES ------  **/
 const user_1 = require("./routes/user");
 const product_1 = require("./routes/product");
-const reputation_1 = require("./routes/reputation");
 const comment_1 = require("./routes/comment");
 const imgRoute_1 = require("./routes/imgRoute");
 const superuser_1 = require("./routes/superuser");
@@ -40,7 +39,6 @@ app.use(express_1.default.json());
 /** =========================  ROUTER  ==========================  **/
 app.use(user_1.userRouters);
 app.use(product_1.productRouters);
-app.use(reputation_1.reputationRouters);
 app.use(comment_1.commentRouter);
 app.use(imgRoute_1.imageRouters);
 app.use(superuser_1.superRouters);

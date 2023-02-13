@@ -11,8 +11,7 @@ import {
   getPagination,
   getPaginationSales,
 } from "../../../../utils/paginationfunction";
-import UserReputation from "../../../../models/sql/reputationModel/repuUser.model";
-import ProductReputation from "../../../../models/sql/reputationModel/repuProduct.model";
+
 import {
   productSale,
   saleProductsInterface,
@@ -170,8 +169,6 @@ export class daoSaleSQL extends basecontainer {
               },
             ],
           },
-          { model: UserReputation },
-          { model: ProductReputation },
         ],
       });
       return getPaginationSales(data, page, limit);
@@ -196,7 +193,6 @@ export class daoSaleSQL extends basecontainer {
           {
             model: Sale,
             attributes: ["sale_id", "sale_buyer"],
-            include: [{ model: UserReputation }],
           },
         ],
       });

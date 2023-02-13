@@ -12,8 +12,6 @@ const Address_model_1 = __importDefault(require("./Address.model"));
 const CreditCard_model_1 = __importDefault(require("./CreditCard.model"));
 const PFavorite_models_1 = __importDefault(require("../productsModel/PFavorite.models"));
 const Sale_model_1 = __importDefault(require("../productsModel/Sale.model"));
-const repuUser_model_1 = __importDefault(require("../reputationModel/repuUser.model"));
-const repuProduct_model_1 = __importDefault(require("../reputationModel/repuProduct.model"));
 const comment_model_1 = __importDefault(require("../commentsModel/comment.model"));
 const Notification_model_1 = __importDefault(require("../notificationModel/Notification.model"));
 const ALogUser_model_1 = __importDefault(require("../activityLogs/ALogUser.model"));
@@ -111,33 +109,6 @@ User.hasMany(Sale_model_1.default, {
 Sale_model_1.default.belongsTo(User, {
     as: "buyer",
     foreignKey: "sale_buyer",
-});
-//Reputation user- qualifier:
-User.hasMany(repuUser_model_1.default, {
-    as: "qualifier",
-    foreignKey: "ur_qualifier",
-});
-repuUser_model_1.default.belongsTo(User, {
-    as: "qualifier",
-    foreignKey: "ur_qualifier",
-});
-//Reputation user - receiver:
-User.hasMany(repuUser_model_1.default, {
-    as: "receiver",
-    foreignKey: "ur_receiver",
-});
-repuUser_model_1.default.belongsTo(User, {
-    as: "receiver",
-    foreignKey: "ur_receiver",
-});
-//Reputation product:
-User.hasMany(repuProduct_model_1.default, {
-    as: "product_qualifier",
-    foreignKey: "pr_qualifier",
-});
-repuProduct_model_1.default.belongsTo(User, {
-    as: "product_qualifier",
-    foreignKey: "pr_qualifier",
 });
 //Comment:
 User.hasMany(comment_model_1.default, {

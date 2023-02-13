@@ -4,7 +4,6 @@ import serverConfigurations from "./config/configServer";
 /** ------ ROUTES ------  **/
 import { userRouters } from "./routes/user";
 import { productRouters } from "./routes/product";
-import { reputationRouters } from "./routes/reputation";
 import { commentRouter } from "./routes/comment";
 import { imageRouters } from "./routes/imgRoute";
 import { superRouters } from "./routes/superuser";
@@ -39,7 +38,6 @@ app.use(express.json());
 /** =========================  ROUTER  ==========================  **/
 app.use(userRouters);
 app.use(productRouters);
-app.use(reputationRouters);
 app.use(commentRouter);
 app.use(imageRouters);
 app.use(superRouters);

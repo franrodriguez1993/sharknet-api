@@ -7,7 +7,6 @@ import Adress from "../usersModel/Address.model";
 import User from "../usersModel/User.model";
 import ProductFavorite from "./PFavorite.models";
 import SaleProducts from "./SaleProduct.models";
-import ProductReputation from "../reputationModel/repuProduct.model";
 import Comment from "../commentsModel/comment.model";
 import ImageProduct from "../imagesModel/ImageProd.model";
 import ProductCategory from "./PCategory.models";
@@ -128,13 +127,7 @@ Product.hasMany(SaleProducts, {
 SaleProducts.belongsTo(Product, {
   foreignKey: "product_id",
 });
-// Reputation product:
-Product.hasMany(ProductReputation, {
-  foreignKey: "product_id",
-});
-ProductReputation.belongsTo(Product, {
-  foreignKey: "product_id",
-});
+
 //Comments:
 Product.hasMany(Comment, {
   foreignKey: "product_id",

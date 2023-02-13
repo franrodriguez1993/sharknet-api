@@ -11,7 +11,6 @@ const Address_model_1 = __importDefault(require("../usersModel/Address.model"));
 const User_model_1 = __importDefault(require("../usersModel/User.model"));
 const PFavorite_models_1 = __importDefault(require("./PFavorite.models"));
 const SaleProduct_models_1 = __importDefault(require("./SaleProduct.models"));
-const repuProduct_model_1 = __importDefault(require("../reputationModel/repuProduct.model"));
 const comment_model_1 = __importDefault(require("../commentsModel/comment.model"));
 const ImageProd_model_1 = __importDefault(require("../imagesModel/ImageProd.model"));
 const PCategory_models_1 = __importDefault(require("./PCategory.models"));
@@ -125,13 +124,6 @@ Product.hasMany(SaleProduct_models_1.default, {
     foreignKey: "product_id",
 });
 SaleProduct_models_1.default.belongsTo(Product, {
-    foreignKey: "product_id",
-});
-// Reputation product:
-Product.hasMany(repuProduct_model_1.default, {
-    foreignKey: "product_id",
-});
-repuProduct_model_1.default.belongsTo(Product, {
     foreignKey: "product_id",
 });
 //Comments:
