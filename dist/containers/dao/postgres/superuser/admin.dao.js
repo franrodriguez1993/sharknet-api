@@ -107,7 +107,7 @@ class daoAdminSQL extends superUser_container_1.superUser {
         });
     }
     /** --------- DELETE USER --------- */
-    deleteUser(user_id) {
+    deleteUserAdmin(user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield __1.daoUser.getUser("id", user_id);
@@ -120,7 +120,7 @@ class daoAdminSQL extends superUser_container_1.superUser {
         });
     }
     /** --------- SUSPEND USER --------- */
-    suspendUser(user_id) {
+    suspendUserAdmin(user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield __1.daoUser.getUser("id", user_id);
@@ -133,7 +133,7 @@ class daoAdminSQL extends superUser_container_1.superUser {
         });
     }
     /** --------- REACTIVATE USER --------- */
-    reactivateUser(user_id) {
+    reactivateUserAdmin(user_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield __1.daoUser.getUser("id", user_id);

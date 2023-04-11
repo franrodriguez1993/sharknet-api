@@ -82,12 +82,14 @@ class daoSaleSQL extends base_container_1.default {
                         sale_id: data.sale_id,
                     });
                 })));
+                //Update product quantity:
                 Promise.all(productList.map((p) => __awaiter(this, void 0, void 0, function* () {
                     p.product_stock = p.product_stock - getQuantity(p.product_id);
                     yield p.save();
                 })));
                 //everything ok:
-                return { sale, productsSale };
+                sale.productsSale = productsSale;
+                return sale;
             }
             catch (e) {
                 throw new Error(e.message);

@@ -3,7 +3,7 @@ import { RequestExt } from "../interfaces/userInterface/ReqExt.interface";
 import { daoUser } from "../containers";
 import { verifyToken } from "../utils/jwtHandler";
 import { UserPayload } from "../interfaces/userInterface/payload.interface";
-import { UserInterface } from "../interfaces/userInterface/user.interface";
+import { userObjectIF } from "../interfaces/userInterface/user.interface";
 import logger from "../utils/logger";
 
 export async function requireToken(
@@ -19,9 +19,7 @@ export async function requireToken(
     token = token.split(" ")[1];
     const verifiedToken = verifyToken(token) as UserPayload;
 
-    const user: UserInterface | any = await daoUser.getUserRol(
-      verifiedToken.uid
-    );
+    const user: userObjectIF = await daoUser.getUserRol(verifiedToken.uid);
     if (!user)
       return res.status(404).json({ status: 404, msg: "USER_NOT_FOUND" });
     req.rol = user.Rol.rol_name;

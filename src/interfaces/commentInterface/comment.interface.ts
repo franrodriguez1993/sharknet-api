@@ -1,4 +1,6 @@
-export interface commentInterface {
+import { Model } from "sequelize";
+
+export interface commentBodyIF {
   comment_id?: string;
   product_id?: string;
   user_id?: string;
@@ -6,3 +8,5 @@ export interface commentInterface {
   comment_reply?: string;
   comment_parent?: boolean;
 }
+
+export interface commentObjectIF extends commentBodyIF, Model<commentBodyIF> {}

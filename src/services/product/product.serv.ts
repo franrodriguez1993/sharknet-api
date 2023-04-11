@@ -8,10 +8,13 @@ import { daoNotification, daoProduct, daoSale } from "../../containers";
 import { daoUser } from "../../containers";
 
 //Interfaces:
-import { productInterface } from "../../interfaces/productInterface/product.interface";
-import { saleInterface } from "../../interfaces/productInterface/sale.interface";
-import { addressInterface } from "../../interfaces/userInterface/address.Interface";
-import { creditCardInterface } from "../../interfaces/userInterface/creditCard.interface";
+import {
+  productBodyIF,
+  productObjectIF,
+} from "../../interfaces/productInterface/product.interface";
+import { saleObjectIF } from "../../interfaces/productInterface/sale.interface";
+import { addressObjectIF } from "../../interfaces/userInterface/address.Interface";
+import { creditCardObjectIF } from "../../interfaces/userInterface/creditCard.interface";
 import { ReqTokenDataInterface } from "../../interfaces/userInterface/reqTokenData.interface";
 import { saleProductsInterface } from "../../interfaces/productInterface/saleProducts.interface";
 
@@ -19,7 +22,7 @@ export default class productService {
   /**============== CREATE PRODUCT =============**/
   async createProductServ(
     tokenData: ReqTokenDataInterface,
-    product: productInterface
+    product: productBodyIF
   ) {
     //Compare token ID with the seller ID:
     if (
@@ -34,7 +37,7 @@ export default class productService {
     if (!isUser) return "USER_NOT_FOUND";
 
     //Check address:
-    const isAddress: addressInterface | any = await daoUser.getAddress(
+    const isAddress: addressObjectIF = await daoUser.getAddress(
       product.address_id
     );
     if (!isAddress) return "ADDRESS_NOT_FOUND";
@@ -47,9 +50,7 @@ export default class productService {
 
     //Create:
     product.product_id = uuidv4();
-    const newProduct: productInterface | any = await daoProduct.createProduct(
-      product
-    );
+    const newProduct: productObjectIF = await daoProduct.createProduct(product);
     if (newProduct) {
       return newProduct.product_id;
     } else {
@@ -114,12 +115,9 @@ export default class productService {
   }
 
   /**============== EDIT PRODUCT ================**/
-  async editProductServ(
-    tokenData: ReqTokenDataInterface,
-    data: productInterface
-  ) {
+  async editProductServ(tokenData: ReqTokenDataInterface, data: productBodyIF) {
     //Check Product:
-    const product: productInterface | any = await daoProduct.getProduct(
+    const product: productObjectIF = await daoProduct.getProduct(
       data.product_id,
       true
     );
@@ -135,7 +133,7 @@ export default class productService {
 
     //Check address:
     if (data.address_id !== "") {
-      const checkAddress: addressInterface | any = await daoUser.getAddress(
+      const checkAddress: addressObjectIF = await daoUser.getAddress(
         data.address_id
       );
       if (!checkAddress) return "ADDRESS_NOT_FOUND";
@@ -168,10 +166,7 @@ export default class productService {
     //Check ids:
     const isUser = await daoUser.getUser("id", uid, true);
     if (!isUser) return "USER_NOT_FOUND";
-    const isProduct: productInterface | any = await daoProduct.getProduct(
-      pid,
-      true
-    );
+    const isProduct: productObjectIF = await daoProduct.getProduct(pid, true);
     if (!isProduct) return "PRODUCT_NOT_FOUND";
     if (isProduct.user_id.toString() === uid.toString())
       return "IS_YOUR_PRODUCT";
@@ -217,7 +212,7 @@ export default class productService {
       if (!buyer) return "USER_NOT_FOUND";
 
       //check creditCard:
-      const creditCard: creditCardInterface | any = await daoUser.getCreditCard(
+      const creditCard: creditCardObjectIF = await daoUser.getCreditCard(
         data.cc_id
       );
       if (!creditCard) return "CREDITCARD_NOT_FOUND";
@@ -291,7 +286,7 @@ export default class productService {
   /** ================ PAUSE PRODUCT  ================== **/
   async pauseProductServ(tokenID: ReqTokenDataInterface, product_id: string) {
     //Check product:
-    const product: productInterface | any = await daoProduct.getProduct(
+    const product: productObjectIF = await daoProduct.getProduct(
       product_id,
       true
     );
@@ -309,7 +304,7 @@ export default class productService {
     product_id: string
   ) {
     //Check product:
-    const product: productInterface | any = await daoProduct.getProduct(
+    const product: productObjectIF = await daoProduct.getProduct(
       product_id,
       true
     );
@@ -324,7 +319,7 @@ export default class productService {
   /** ================== DELETE PRODUCT  =================== **/
   async deleteProductServ(tokenID: ReqTokenDataInterface, product_id: string) {
     //Check product:
-    const product: productInterface | any = await daoProduct.getProduct(
+    const product: productObjectIF = await daoProduct.getProduct(
       product_id,
       true
     );
@@ -372,7 +367,7 @@ export default class productService {
     image: Buffer
   ) {
     //Check Product:
-    const product: productInterface | any = await daoProduct.getProduct(
+    const product: productObjectIF = await daoProduct.getProduct(
       product_id,
       true
     );

@@ -15,7 +15,6 @@ const Sale_model_1 = __importDefault(require("../productsModel/Sale.model"));
 const comment_model_1 = __importDefault(require("../commentsModel/comment.model"));
 const Notification_model_1 = __importDefault(require("../notificationModel/Notification.model"));
 const ALogUser_model_1 = __importDefault(require("../activityLogs/ALogUser.model"));
-/**=====================================================================**/
 const User = postgres_1.sequelize.define("user", {
     user_id: {
         type: sequelize_1.DataTypes.STRING,

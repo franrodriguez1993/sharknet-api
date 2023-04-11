@@ -10,8 +10,11 @@ import {
 } from "../../containers";
 
 //Interfaces:
-import { commentInterface } from "../../interfaces/commentInterface/comment.interface";
-import { productInterface } from "../../interfaces/productInterface/product.interface";
+import {
+  commentBodyIF,
+  commentObjectIF,
+} from "../../interfaces/commentInterface/comment.interface";
+import { productObjectIF } from "../../interfaces/productInterface/product.interface";
 import { ReqTokenDataInterface } from "../../interfaces/userInterface/reqTokenData.interface";
 
 export default class commentService {
@@ -19,7 +22,7 @@ export default class commentService {
 
   async commentProductServ(
     tokenUID: ReqTokenDataInterface,
-    data: commentInterface
+    data: commentBodyIF
   ) {
     //Check authorization:
     if (
@@ -32,7 +35,7 @@ export default class commentService {
     if (!user) return "USER_NOT_FOUND";
 
     //Check product:
-    const product: productInterface | any = await daoProduct.getProduct(
+    const product: productObjectIF = await daoProduct.getProduct(
       data.product_id,
       true
     );
@@ -63,7 +66,7 @@ export default class commentService {
 
   /** ===============  REPLY COMMENT =================**/
 
-  async replyCommentServ(tokenUID: string, data: commentInterface) {
+  async replyCommentServ(tokenUID: string, data: commentBodyIF) {
     //Check authorization:
     if (tokenUID.toString() !== data.user_id.toString())
       return "UNAUTHORIZED_ACTION";
@@ -73,7 +76,7 @@ export default class commentService {
     if (!user) return "USER_NOT_FOUND";
 
     //Check product:
-    const product: productInterface | any = await daoProduct.getProduct(
+    const product: productObjectIF = await daoProduct.getProduct(
       data.product_id,
       true
     );
@@ -84,7 +87,7 @@ export default class commentService {
       return "USER_ISNT_SELLER";
 
     //Check comment:
-    const comment: commentInterface | any = await daoComment.getComment(
+    const comment: commentObjectIF = await daoComment.getComment(
       data.comment_reply
     );
     if (!comment) return "COMMENT_NOT_FOUND";

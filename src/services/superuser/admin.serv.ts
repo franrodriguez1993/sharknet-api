@@ -83,7 +83,7 @@ export default class adminService {
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";
 
-    const resDelete = await daoAdmin.deleteUser(user_id);
+    const resDelete = await daoAdmin.deleteUserAdmin(user_id);
 
     //Create log Activity:
     if (resDelete) {
@@ -107,7 +107,7 @@ export default class adminService {
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";
 
-    const resSuspend = await daoAdmin.suspendUser(user_id);
+    const resSuspend = await daoAdmin.suspendUserAdmin(user_id);
 
     //Create log Activity:
     if (resSuspend) {
@@ -132,7 +132,7 @@ export default class adminService {
     if (!check) return "USER_NOT_FOUND";
 
     //Reactive user:
-    const reactiveUser = await daoAdmin.reactivateUser(user_id);
+    const reactiveUser = await daoAdmin.reactivateUserAdmin(user_id);
 
     //Log:
     if (reactiveUser) {

@@ -1,6 +1,6 @@
 import { daoRoles, daoUser } from "../../..";
-import { RolInterface } from "../../../../interfaces/userInterface/rol.interface";
-import { UserInterface } from "../../../../interfaces/userInterface/user.interface";
+import { rolObjectIF } from "../../../../interfaces/userInterface/rol.interface";
+import { userObjectIF } from "../../../../interfaces/userInterface/user.interface";
 import Rol from "../../../../models/sql/usersModel/Rol.model";
 import sequelize from "sequelize";
 const Op = sequelize.Op;
@@ -16,13 +16,9 @@ export class daoAdminSQL extends superUser {
   async staffUpgrade(user_id: string) {
     try {
       //Find user:
-      const user: UserInterface | any = await daoUser.getUser(
-        "id",
-        user_id,
-        true
-      );
+      const user: userObjectIF = await daoUser.getUser("id", user_id, true);
       if (!user) return "USER_NOT_FOUND";
-      const rol: RolInterface | any = await daoRoles.findRol("staff");
+      const rol: rolObjectIF = await daoRoles.findRol("staff");
       if (!rol) return "ROL_NOT_FOUND";
       user.set({ rol_id: rol.rol_id });
 
@@ -36,13 +32,9 @@ export class daoAdminSQL extends superUser {
   async staffDowngrade(user_id: string) {
     try {
       //Find user:
-      const user: UserInterface | any = await daoUser.getUser(
-        "id",
-        user_id,
-        true
-      );
+      const user: userObjectIF = await daoUser.getUser("id", user_id, true);
       if (!user) return "USER_NOT_FOUND";
-      const rol: RolInterface | any = await daoRoles.findRol("user");
+      const rol: rolObjectIF = await daoRoles.findRol("user");
       if (!rol) return "ROL_NOT_FOUND";
       user.set({ rol_id: rol.rol_id });
 
@@ -56,13 +48,9 @@ export class daoAdminSQL extends superUser {
   async adminUpgrade(user_id: string) {
     try {
       //Find user:
-      const user: UserInterface | any = await daoUser.getUser(
-        "id",
-        user_id,
-        true
-      );
+      const user: userObjectIF = await daoUser.getUser("id", user_id, true);
       if (!user) return "USER_NOT_FOUND";
-      const rol: RolInterface | any = await daoRoles.findRol("admin");
+      const rol: rolObjectIF = await daoRoles.findRol("admin");
       if (!rol) return "ROL_NOT_FOUND";
       user.set({ rol_id: rol.rol_id });
       const admin = await user.save();
@@ -75,13 +63,9 @@ export class daoAdminSQL extends superUser {
   async admindowngrade(user_id: string) {
     try {
       //Find user:
-      const user: UserInterface | any = await daoUser.getUser(
-        "id",
-        user_id,
-        true
-      );
+      const user: userObjectIF = await daoUser.getUser("id", user_id, true);
       if (!user) return "USER_NOT_FOUND";
-      const rol: RolInterface | any = await daoRoles.findRol("user");
+      const rol: rolObjectIF = await daoRoles.findRol("user");
       if (!rol) return "ROL_NOT_FOUND";
       user.set({ rol_id: rol.rol_id });
       const admin = await user.save();
@@ -92,9 +76,9 @@ export class daoAdminSQL extends superUser {
   }
 
   /** --------- DELETE USER --------- */
-  async deleteUser(user_id: string) {
+  async deleteUserAdmin(user_id: string) {
     try {
-      const user: UserInterface | any = await daoUser.getUser("id", user_id);
+      const user: userObjectIF = await daoUser.getUser("id", user_id);
 
       user.set({ user_status: "deleted" });
       return await user.save();
@@ -104,9 +88,9 @@ export class daoAdminSQL extends superUser {
   }
 
   /** --------- SUSPEND USER --------- */
-  async suspendUser(user_id: string) {
+  async suspendUserAdmin(user_id: string) {
     try {
-      const user: UserInterface | any = await daoUser.getUser("id", user_id);
+      const user: userObjectIF = await daoUser.getUser("id", user_id);
 
       user.set({ user_status: "suspended" });
       return await user.save();
@@ -116,9 +100,9 @@ export class daoAdminSQL extends superUser {
   }
 
   /** --------- REACTIVATE USER --------- */
-  async reactivateUser(user_id: string) {
+  async reactivateUserAdmin(user_id: string) {
     try {
-      const user: UserInterface | any = await daoUser.getUser("id", user_id);
+      const user: userObjectIF = await daoUser.getUser("id", user_id);
 
       user.set({ user_status: "active" });
       return await user.save();
@@ -132,10 +116,10 @@ export class daoAdminSQL extends superUser {
     try {
       const { limit, offset } = getPagination(page, size);
       //Find rol id:
-      const staff: RolInterface | any = await Rol.findOne({
+      const staff: rolObjectIF = await Rol.findOne({
         where: { rol_name: "staff" },
       });
-      const admin: RolInterface | any = await Rol.findOne({
+      const admin: rolObjectIF = await Rol.findOne({
         where: { rol_name: "admin" },
       });
       if (!staff || !admin) return "FIND_ROL_ERROR";

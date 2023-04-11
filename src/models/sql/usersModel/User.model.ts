@@ -1,6 +1,6 @@
 import { sequelize } from "../../../config/sql/postgres";
-
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, BuildOptions } from "sequelize";
+import { userObjectIF } from "../../../interfaces/userInterface/user.interface";
 
 /**  ==================== ASSOCIATION MODELS =========================  **/
 import Birthday from "./Birthday.model";
@@ -13,6 +13,10 @@ import Comment from "../commentsModel/comment.model";
 import NotificationUser from "../notificationModel/Notification.model";
 import ActivityLogUser from "../activityLogs/ALogUser.model";
 /**=====================================================================**/
+
+type userTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): userObjectIF;
+};
 
 const User = sequelize.define(
   "user",
@@ -56,7 +60,7 @@ const User = sequelize.define(
     },
   },
   { freezeTableName: true, timestamps: true }
-);
+) as userTypeModel;
 
 /** =========================  ASSOCIATIONS  ==========================  **/
 //Birthday:

@@ -3,7 +3,10 @@ import sequelize from "sequelize";
 const Op = sequelize.Op;
 
 //Interfaces:
-import { productInterface } from "../../../../interfaces/productInterface/product.interface";
+import {
+  productBodyIF,
+  productObjectIF,
+} from "../../../../interfaces/productInterface/product.interface";
 
 //Models:
 import Product from "../../../../models/sql/productsModel/product.model";
@@ -29,7 +32,7 @@ export class daoProductSQL extends basecontainer {
   }
 
   /**~~~~~~~~~~~~~~~~~ CREATE PRODUCT ~~~~~~~~~~~~~~~~~~~**/
-  async createProduct(product: productInterface) {
+  async createProduct(product: productBodyIF) {
     try {
       return await Product.create({
         product_id: product.product_id,
@@ -222,7 +225,7 @@ export class daoProductSQL extends basecontainer {
   }
 
   /**~~~~~~~~~~~~~~~~~ EDIT PRODUCT ~~~~~~~~~~~~~~~~~~~**/
-  async editProduct(data: productInterface) {
+  async editProduct(data: productBodyIF) {
     try {
       //Find Product:
       const editProduct = await Product.findOne({
@@ -282,7 +285,7 @@ export class daoProductSQL extends basecontainer {
   async updateViews(product_id: string) {
     try {
       //check Product:
-      const product: productInterface | any = await Product.findOne({
+      const product: productObjectIF = await Product.findOne({
         where: { product_id },
       });
       if (!product) return "PRODUCT_NOT_FOUND";
@@ -345,7 +348,7 @@ export class daoProductSQL extends basecontainer {
   /**~~~~~~~~~~~~~~~~~  PAUSE PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
   async pauseProduct(product_id: string) {
     try {
-      const product: productInterface | any = await Product.findOne({
+      const product: productObjectIF = await Product.findOne({
         where: { product_id },
       });
       if (!product) return "PRODUCT_NOT_FOUND";
@@ -358,7 +361,7 @@ export class daoProductSQL extends basecontainer {
   /**~~~~~~~~~~~~~~~~~  REACTIVATE PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
   async reactivateProduct(product_id: string) {
     try {
-      const product: productInterface | any = await Product.findOne({
+      const product: productObjectIF = await Product.findOne({
         where: { product_id },
       });
       if (!product) return "PRODUCT_NOT_FOUND";
@@ -373,7 +376,7 @@ export class daoProductSQL extends basecontainer {
   /**~~~~~~~~~~~~~~~~~  DELETE PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
   async deleteProduct(product_id: string) {
     try {
-      const product: productInterface | any = await Product.findOne({
+      const product: productObjectIF = await Product.findOne({
         where: { product_id },
       });
       if (!product) return "PRODUCT_NOT_FOUND";
@@ -387,7 +390,7 @@ export class daoProductSQL extends basecontainer {
   /**~~~~~~~~~~~~~~~~~  IMAGE THUMBNAIL PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
   async updateThumbnail(product_id: string, path: string) {
     try {
-      const product: productInterface | any = await Product.findOne({
+      const product: productObjectIF = await Product.findOne({
         where: { product_id },
       });
       if (!product) return "PRODUCT_NOT_FOUND";

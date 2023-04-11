@@ -1,5 +1,11 @@
 import { sequelize } from "../../../config/sql/postgres";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, BuildOptions } from "sequelize";
+
+import { NotificationObjectIF } from "../../../interfaces/notificationInterface/notification.interface";
+
+type NotificationTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): NotificationObjectIF;
+};
 
 const NotificationUser = sequelize.define(
   "notification_user",
@@ -23,6 +29,6 @@ const NotificationUser = sequelize.define(
     },
   },
   { timestamps: true, freezeTableName: true }
-);
+) as NotificationTypeModel;
 
 export default NotificationUser;

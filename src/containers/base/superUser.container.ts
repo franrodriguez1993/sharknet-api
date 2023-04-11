@@ -1,6 +1,6 @@
 import { daoRoles, daoUser } from "..";
-import { UserInterface } from "../../interfaces/userInterface/user.interface";
-import { RolInterface } from "../../interfaces/userInterface/rol.interface";
+import { userObjectIF } from "../../interfaces/userInterface/user.interface";
+import { rolObjectIF } from "../../interfaces/userInterface/rol.interface";
 
 export class superUser {
   constructor() {}
@@ -9,13 +9,9 @@ export class superUser {
   async verifyUser(user_id: string) {
     try {
       //Find user:
-      const user: UserInterface | any = await daoUser.getUser(
-        "id",
-        user_id,
-        true
-      );
+      const user: userObjectIF = await daoUser.getUser("id", user_id, true);
       if (!user) return "USER_NOT_FOUND";
-      const rol: RolInterface | any = await daoRoles.findRol("store");
+      const rol: rolObjectIF = await daoRoles.findRol("store");
       if (!rol) return "ROL_NOT_FOUND";
       user.set({ rol_id: rol.rol_id });
       const updated = await user.save();
@@ -28,13 +24,9 @@ export class superUser {
   async unverifyUser(user_id: string) {
     try {
       //Find user:
-      const user: UserInterface | any = await daoUser.getUser(
-        "id",
-        user_id,
-        true
-      );
+      const user: userObjectIF = await daoUser.getUser("id", user_id, true);
       if (!user) return "USER_NOT_FOUND";
-      const rol: RolInterface | any = await daoRoles.findRol("user");
+      const rol: rolObjectIF = await daoRoles.findRol("user");
       if (!rol) return "ROL_NOT_FOUND";
       user.set({ rol_id: rol.rol_id });
 
@@ -48,7 +40,7 @@ export class superUser {
 
   async deleteUser(user_id: string) {
     try {
-      const user: UserInterface | any = await daoUser.getUser("id", user_id);
+      const user: userObjectIF = await daoUser.getUser("id", user_id);
       //Check authorization:
       if (user.Rol.rol_name === "staff" || user.Rol.rol_name === "admin")
         return "UNAUTHORIZED_DELETE_ROL";
@@ -64,7 +56,7 @@ export class superUser {
   /** --------- SUSPEND USER --------- */
   async suspendUser(user_id: string) {
     try {
-      const user: UserInterface | any = await daoUser.getUser("id", user_id);
+      const user: userObjectIF = await daoUser.getUser("id", user_id);
       //Check authorization:
       if (user.Rol.rol_name === "staff" || user.Rol.rol_name === "admin")
         return "UNAUTHORIZED_SUSPEND_ROL";
@@ -79,7 +71,7 @@ export class superUser {
   /** --------- REACTIVATE USER --------- */
   async reactivateUser(user_id: string) {
     try {
-      const user: UserInterface | any = await daoUser.getUser("id", user_id);
+      const user: userObjectIF = await daoUser.getUser("id", user_id);
       if (user.Rol.rol_name === "staff" || user.Rol.rol_name === "admin")
         return "UNAUTHORIZED_REACTIVE_ROL";
       user.set({ user_status: "active" });

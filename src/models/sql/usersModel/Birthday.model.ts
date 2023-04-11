@@ -1,6 +1,10 @@
 import { sequelize } from "../../../config/sql/postgres";
+import { birthdayObjectIF } from "../../../interfaces/userInterface/birthday.interface";
+import { DataTypes, Model, BuildOptions } from "sequelize";
 
-import { DataTypes } from "sequelize";
+type birthdayTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): birthdayObjectIF;
+};
 
 const Birthday = sequelize.define(
   "user_birthday",
@@ -23,6 +27,6 @@ const Birthday = sequelize.define(
     },
   },
   { freezeTableName: true, timestamps: false }
-);
+) as birthdayTypeModel;
 
 export default Birthday;

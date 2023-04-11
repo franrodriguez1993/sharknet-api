@@ -1,4 +1,6 @@
-export interface creditCardInterface {
+import { Model } from "sequelize";
+
+export interface creditCardBodyIF {
   cc_id?: string;
   user_id?: string;
   cc_name?: string;
@@ -7,3 +9,7 @@ export interface creditCardInterface {
   cc_code?: string;
   cc_bank?: string;
 }
+
+export interface creditCardObjectIF
+  extends creditCardBodyIF,
+    Model<creditCardBodyIF> {}

@@ -1,8 +1,11 @@
-import { addressInterface } from "../../../../interfaces/userInterface/address.Interface";
-import { birthdayInterface } from "../../../../interfaces/userInterface/birthday.interface";
-import { creditCardInterface } from "../../../../interfaces/userInterface/creditCard.interface";
-import { RolInterface } from "../../../../interfaces/userInterface/rol.interface";
-import { UserInterface } from "../../../../interfaces/userInterface/user.interface";
+import { addressBodyIF } from "../../../../interfaces/userInterface/address.Interface";
+import { birthdayBodyIF } from "../../../../interfaces/userInterface/birthday.interface";
+import { creditCardBodyIF } from "../../../../interfaces/userInterface/creditCard.interface";
+import { rolObjectIF } from "../../../../interfaces/userInterface/rol.interface";
+import {
+  userObjectIF,
+  userBodyIF,
+} from "../../../../interfaces/userInterface/user.interface";
 import ProductFavorite from "../../../../models/sql/productsModel/PFavorite.models";
 import Address from "../../../../models/sql/usersModel/Address.model";
 import Birthday from "../../../../models/sql/usersModel/Birthday.model";
@@ -18,10 +21,10 @@ export class daoUserSQL extends basecontainer {
 
   /** ------------------------- REGISTER USER -------------------------- **/
 
-  async registerUser(data: UserInterface) {
+  async registerUser(data: userBodyIF) {
     try {
       //Find user rol:
-      const rolID: RolInterface | any = await Rol.findOne({
+      const rolID: rolObjectIF = await Rol.findOne({
         where: { rol_name: "user" },
       });
       const user = await User.create({
@@ -69,7 +72,7 @@ export class daoUserSQL extends basecontainer {
       ];
     }
     try {
-      const user: UserInterface | any = await User.findOne({
+      const user: userObjectIF = await User.findOne({
         ...options,
       });
       return user;
@@ -91,10 +94,10 @@ export class daoUserSQL extends basecontainer {
   }
 
   /** ---------------------------------- UPDATE USER   ----------------------------- **/
-  async updateProfile(data: UserInterface) {
+  async updateProfile(data: userBodyIF) {
     try {
       //Find user:
-      const user = await this.getUser("id", data.user_id);
+      const user: userObjectIF = await this.getUser("id", data.user_id);
       if (!user) return "USER_NOT_FOUND";
       let fields = {};
       if (data.user_name) {
@@ -127,7 +130,7 @@ export class daoUserSQL extends basecontainer {
   async changeFields(id: string, field: string, data: string) {
     try {
       //Find user:
-      const user = await this.getUser("id", id);
+      const user: userObjectIF = await this.getUser("id", id);
       if (!user) return "USER_NOT_FOUND";
 
       //Update specific field:
@@ -144,7 +147,7 @@ export class daoUserSQL extends basecontainer {
   }
 
   /** --------------------------- ADD BIRTHDAY ---------------------------- **/
-  async addBirthday(data: birthdayInterface) {
+  async addBirthday(data: birthdayBodyIF) {
     try {
       //Check birthday:
       const dataBirthday = await Birthday.findOne({
@@ -181,7 +184,7 @@ export class daoUserSQL extends basecontainer {
   }
 
   /** --------------------------- ADD ADDRESS ---------------------------- **/
-  async addAddress(data: addressInterface) {
+  async addAddress(data: addressBodyIF) {
     try {
       //Check limit:
       const limit = await Address.findAll({ where: { user_id: data.user_id } });
@@ -230,7 +233,7 @@ export class daoUserSQL extends basecontainer {
   }
 
   /** --------------------------- ADD CREDIT CARD ---------------------------- **/
-  async addCreditCard(data: creditCardInterface) {
+  async addCreditCard(data: creditCardBodyIF) {
     try {
       //Check limit:
       const ccLimit = await CreditCard.findAll({
@@ -284,7 +287,7 @@ export class daoUserSQL extends basecontainer {
   //img: image URL
   async uploadProfileImage(uid: string, img: string) {
     try {
-      const user: UserInterface | any = await User.findOne({
+      const user: userObjectIF = await User.findOne({
         where: { user_id: uid },
       });
       if (!user) return "USER_NOT_FOUND";

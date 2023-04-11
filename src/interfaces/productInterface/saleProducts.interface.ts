@@ -1,3 +1,4 @@
+//This interface represent the info that client has to provide to buy a product.
 export interface productSale {
   pid: string;
   uid: string;

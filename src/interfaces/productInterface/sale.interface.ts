@@ -1,4 +1,18 @@
-export interface saleInterface {
+import { Model } from "sequelize";
+
+export interface saleProductBodyIF {
+  sp_id?: string;
+  sp_quantity?: number;
+  product_id?: string;
+  user_id?: string;
+  sale_id?: string;
+}
+
+export interface saleProductObjectIF
+  extends saleProductBodyIF,
+    Model<saleProductBodyIF> {}
+
+export interface saleBodyIF {
   sale_id?: string;
   sale_seller?: string;
   sale_product?: string;
@@ -7,4 +21,7 @@ export interface saleInterface {
   sale_amount?: number;
   sale_instalments?: number;
   cc_id?: string;
+  productsSale?: Array<saleProductObjectIF>;
 }
+
+export interface saleObjectIF extends saleBodyIF, Model<saleBodyIF> {}

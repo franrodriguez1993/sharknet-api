@@ -1,8 +1,12 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, BuildOptions } from "sequelize";
 import { sequelize } from "../../../config/sql/postgres";
-
+import { saleObjectIF } from "../../../interfaces/productInterface/sale.interface";
 /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Association Models ~~~~~~~~~~~~~~~~~~~~~~~~~~~~  **/
 import SaleProducts from "./SaleProduct.models";
+
+type saleTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): saleObjectIF;
+};
 
 /**~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ **/
 const Sale = sequelize.define(
@@ -26,7 +30,7 @@ const Sale = sequelize.define(
     },
   },
   { freezeTableName: true, timestamps: true }
-);
+) as saleTypeModel;
 
 /** =========================  ASSOCIATIONS  ==========================  **/
 //Sale products:

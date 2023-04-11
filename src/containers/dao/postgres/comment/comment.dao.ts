@@ -1,6 +1,6 @@
 import basecontainer from "../../../base/base.container";
 import Comment from "../../../../models/sql/commentsModel/comment.model";
-import { commentInterface } from "../../../../interfaces/commentInterface/comment.interface";
+import { commentBodyIF } from "../../../../interfaces/commentInterface/comment.interface";
 import User from "../../../../models/sql/usersModel/User.model";
 
 import {
@@ -12,7 +12,7 @@ export class daoCommentSQL extends basecontainer {
     super(Comment);
   }
   /** --------------- COMMENT PRODUCT --------------- **/
-  async createComment(data: commentInterface) {
+  async createComment(data: commentBodyIF) {
     try {
       return await Comment.create({
         comment_id: data.comment_id,

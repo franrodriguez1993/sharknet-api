@@ -1,5 +1,10 @@
 import { sequelize } from "../../../config/sql/postgres";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, BuildOptions } from "sequelize";
+import { productObjectIF } from "../../../interfaces/productInterface/product.interface";
+
+type productTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): productObjectIF;
+};
 
 /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Association Models ~~~~~~~~~~~~~~~~~~~~~~~~~~~~  **/
 import ProductTypes from "./PType.models";
@@ -74,7 +79,7 @@ const Product = sequelize.define(
     },
   },
   { timestamps: true, freezeTableName: true }
-);
+) as productTypeModel;
 
 /** =========================  ASSOCIATIONS  ==========================  **/
 //Type:

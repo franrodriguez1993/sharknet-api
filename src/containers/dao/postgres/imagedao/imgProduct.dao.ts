@@ -1,13 +1,13 @@
 import basecontainer from "../../../base/base.container";
 import ImageProduct from "../../../../models/sql/imagesModel/ImageProd.model";
-import { imgProductInterface } from "../../../../interfaces/imageInterface/imgProd.interface";
+import { imgProductBodyIF } from "../../../../interfaces/imageInterface/imgProd.interface";
 
 export class daoImgProductSQL extends basecontainer {
   constructor() {
     super(ImageProduct);
   }
   /** ------------- CREATE --------------**/
-  async createImg(data: imgProductInterface) {
+  async createImg(data: imgProductBodyIF) {
     try {
       return await ImageProduct.create({
         ip_id: data.ip_id,

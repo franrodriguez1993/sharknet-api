@@ -1,6 +1,7 @@
-import { UserInterface } from "../userInterface/user.interface";
+import { Model } from "sequelize";
+import { userBodyIF } from "../userInterface/user.interface";
 
-export interface productInterface {
+export interface productBodyIF {
   product_id?: string;
   pt_id?: string;
   user_id?: string;
@@ -17,5 +18,6 @@ export interface productInterface {
   address_id?: string;
   pc_id?: string;
   product_condition?: string;
-  User?: UserInterface;
+  User?: userBodyIF;
 }
+export interface productObjectIF extends productBodyIF, Model<productBodyIF> {}

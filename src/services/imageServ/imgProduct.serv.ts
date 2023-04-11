@@ -1,7 +1,7 @@
 //DAOs:
 import { daoImgProduct, daoProduct } from "../../containers";
 //Interface:
-import { productInterface } from "../../interfaces/productInterface/product.interface";
+import { productObjectIF } from "../../interfaces/productInterface/product.interface";
 import imageKitClass from "../../utils/imageKitClass";
 
 const uploaderManager = new imageKitClass();
@@ -14,7 +14,7 @@ export default class imageProductService {
     image: Buffer
   ) {
     //Check Product:
-    const product: productInterface | any = await daoProduct.getProduct(
+    const product: productObjectIF = await daoProduct.getProduct(
       productId,
       true
     );

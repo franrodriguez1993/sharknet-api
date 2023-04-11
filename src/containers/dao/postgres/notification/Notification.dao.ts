@@ -5,7 +5,10 @@ import { v4 as uuidv4 } from "uuid";
 import NotificationUser from "../../../../models/sql/notificationModel/Notification.model";
 
 //Interface:
-import { NotificationInterface } from "../../../../interfaces/notificationInterface/notification.interface";
+import {
+  NotificationBodyIF,
+  NotificationObjectIF,
+} from "../../../../interfaces/notificationInterface/notification.interface";
 
 //pagination:
 import {
@@ -17,7 +20,7 @@ export class daoNotificationSQL {
   constructor() {}
 
   /** -------------- CREATE NOTIFICATION -------------- **/
-  async createNotification(data: NotificationInterface) {
+  async createNotification(data: NotificationBodyIF) {
     try {
       const notification_id = uuidv4();
       return await NotificationUser.create({
@@ -33,8 +36,9 @@ export class daoNotificationSQL {
   /** -------------- SEEN NOTIFICATION -------------- **/
   async checkSeen(notification_id: string) {
     try {
-      const notification: NotificationInterface | any =
-        await NotificationUser.findOne({ where: { notification_id } });
+      const notification: NotificationObjectIF = await NotificationUser.findOne(
+        { where: { notification_id } }
+      );
       if (!notification) return "NOTIFICATION_NOT_FOUND";
       notification.set({ notification_seen: true });
       await notification.save();

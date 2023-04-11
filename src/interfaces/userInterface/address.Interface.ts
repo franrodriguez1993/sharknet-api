@@ -1,4 +1,6 @@
-export interface addressInterface {
+import { Model } from "sequelize";
+
+export interface addressBodyIF {
   address_id?: string;
   address_street?: string;
   address_number?: string;
@@ -8,3 +10,5 @@ export interface addressInterface {
   address_state?: string;
   user_id?: string;
 }
+
+export interface addressObjectIF extends addressBodyIF, Model<addressBodyIF> {}

@@ -151,7 +151,7 @@ export default class userController {
       //Return:
       if (data === "USER_NOT_FOUND")
         return res.json({ status: 404, msg: data });
-      else if (data === "CHANGE_EMAIL" || data === "MAIL_IN_USE")
+      else if (data === "MAIL_IN_USE")
         return res.json({ status: 400, msg: data });
 
       //Ok:

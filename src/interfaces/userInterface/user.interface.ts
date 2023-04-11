@@ -1,6 +1,7 @@
-import { RolInterface } from "./rol.interface";
+import { Model } from "sequelize";
+import { rolBodyIF } from "./rol.interface";
 
-export interface UserInterface {
+export interface userBodyIF {
   user_id?: string;
   user_name?: string;
   user_lastname?: string;
@@ -11,6 +12,8 @@ export interface UserInterface {
   user_phone?: string;
   user_status?: string;
   rol_id?: string;
-  Rol?: RolInterface;
+  Rol?: rolBodyIF;
   user_image?: string;
 }
+
+export interface userObjectIF extends userBodyIF, Model<userBodyIF> {}

@@ -1,6 +1,10 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, BuildOptions } from "sequelize";
 import { sequelize } from "../../../config/sql/postgres";
+import { imgProductObjectIF } from "../../../interfaces/imageInterface/imgProd.interface";
 
+type imgProductTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): imgProductObjectIF;
+};
 const ImageProduct = sequelize.define(
   "image_product",
   {
@@ -16,5 +20,6 @@ const ImageProduct = sequelize.define(
     },
   },
   { timestamps: true, freezeTableName: true }
-);
+) as imgProductTypeModel;
+
 export default ImageProduct;

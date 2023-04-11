@@ -1,5 +1,11 @@
 import { sequelize } from "../../../config/sql/postgres";
-import { DataTypes } from "sequelize";
+
+import { DataTypes, Model, BuildOptions } from "sequelize";
+import { LogUserObjectIF } from "../../../interfaces/logsInterface/LogUser.interface";
+
+type LogUserTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): LogUserObjectIF;
+};
 
 const ActivityLogUser = sequelize.define(
   "activity_log_user",
@@ -16,5 +22,5 @@ const ActivityLogUser = sequelize.define(
     },
   },
   { timestamps: true, freezeTableName: true }
-);
+) as LogUserTypeModel;
 export default ActivityLogUser;

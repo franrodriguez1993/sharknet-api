@@ -1,5 +1,10 @@
 import { sequelize } from "../../../config/sql/postgres";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, BuildOptions } from "sequelize";
+import { commentObjectIF } from "../../../interfaces/commentInterface/comment.interface";
+
+type commentTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): commentObjectIF;
+};
 
 const Comment = sequelize.define(
   "comment",
@@ -25,7 +30,7 @@ const Comment = sequelize.define(
     },
   },
   { timestamps: true, freezeTableName: true }
-);
+) as commentTypeModel;
 /** =========================  ASSOCIATIONS  ==========================  **/
 Comment.hasMany(Comment, {
   foreignKey: "comment_reply",

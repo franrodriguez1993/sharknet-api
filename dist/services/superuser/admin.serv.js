@@ -74,7 +74,7 @@ class adminService {
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)
                 return "USER_NOT_FOUND";
-            const resDelete = yield containers_1.daoAdmin.deleteUser(user_id);
+            const resDelete = yield containers_1.daoAdmin.deleteUserAdmin(user_id);
             //Create log Activity:
             if (resDelete) {
                 yield containers_1.daoLogActivity.createUserLog(tokenData.uid, user_id, "DELETE", tokenData.rol);
@@ -89,7 +89,7 @@ class adminService {
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)
                 return "USER_NOT_FOUND";
-            const resSuspend = yield containers_1.daoAdmin.suspendUser(user_id);
+            const resSuspend = yield containers_1.daoAdmin.suspendUserAdmin(user_id);
             //Create log Activity:
             if (resSuspend) {
                 yield containers_1.daoLogActivity.createUserLog(tokenData.uid, user_id, "SUSPEND", tokenData.rol);
@@ -105,7 +105,7 @@ class adminService {
             if (!check)
                 return "USER_NOT_FOUND";
             //Reactive user:
-            const reactiveUser = yield containers_1.daoAdmin.reactivateUser(user_id);
+            const reactiveUser = yield containers_1.daoAdmin.reactivateUserAdmin(user_id);
             //Log:
             if (reactiveUser) {
                 yield containers_1.daoLogActivity.createUserLog(tokenData.uid, user_id, "REACTIVE", tokenData.rol);

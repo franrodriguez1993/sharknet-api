@@ -1,6 +1,5 @@
 import { daoProduct } from "../../..";
-import { productInterface } from "../../../../interfaces/productInterface/product.interface";
-import { saleInterface } from "../../../../interfaces/productInterface/sale.interface";
+import { productObjectIF } from "../../../../interfaces/productInterface/product.interface";
 import Sale from "../../../../models/sql/productsModel/Sale.model";
 import SaleProducts from "../../../../models/sql/productsModel/SaleProduct.models";
 import basecontainer from "../../../base/base.container";
@@ -16,6 +15,10 @@ import {
   productSale,
   saleProductsInterface,
 } from "../../../../interfaces/productInterface/saleProducts.interface";
+import {
+  saleProductObjectIF,
+  saleObjectIF,
+} from "../../../../interfaces/productInterface/sale.interface";
 export class daoSaleSQL extends basecontainer {
   constructor() {
     super(Sale);
@@ -69,7 +72,7 @@ export class daoSaleSQL extends basecontainer {
       const sale_price = prices.reduce((a, b) => a + b);
 
       //Creating sale:
-      const sale = await Sale.create({
+      const sale: saleObjectIF = await Sale.create({
         sale_id: data.sale_id,
         sale_buyer: data.sale_buyer,
         sale_amount: sale_price,
@@ -80,7 +83,7 @@ export class daoSaleSQL extends basecontainer {
 
       //create sale products:
 
-      const productsSale = await Promise.all(
+      const productsSale: Array<saleProductObjectIF> = await Promise.all(
         data.sale_product.map(async (p) => {
           return await SaleProducts.create({
             sp_id: `${uuidv4()}`,
@@ -91,7 +94,7 @@ export class daoSaleSQL extends basecontainer {
           });
         })
       );
-
+      //Update product quantity:
       Promise.all(
         productList.map(async (p: any) => {
           p.product_stock = p.product_stock - getQuantity(p.product_id);
@@ -100,7 +103,8 @@ export class daoSaleSQL extends basecontainer {
       );
 
       //everything ok:
-      return { sale, productsSale };
+      sale.productsSale = productsSale;
+      return sale;
     } catch (e: any) {
       throw new Error(e.message);
     }
@@ -222,9 +226,7 @@ export class daoSaleSQL extends basecontainer {
   ) {
     try {
       //Check product:
-      const product: productInterface | any = await daoProduct.getProduct(
-        product_id
-      );
+      const product: productObjectIF = await daoProduct.getProduct(product_id);
       if (!product) return "PRODUCT_NOT_FOUND";
       if (product.product_stock < sp_quantity) return "NO_STOCK";
 

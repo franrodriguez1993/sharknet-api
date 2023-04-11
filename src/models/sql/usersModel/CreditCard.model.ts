@@ -1,5 +1,10 @@
 import { sequelize } from "../../../config/sql/postgres";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, BuildOptions } from "sequelize";
+import { creditCardObjectIF } from "../../../interfaces/userInterface/creditCard.interface";
+
+type creditCardTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): creditCardObjectIF;
+};
 
 /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Association Models ~~~~~~~~~~~~~~~~~~~~~~~~~~~~  **/
 import Sale from "../productsModel/Sale.model";
@@ -33,7 +38,7 @@ const CreditCard = sequelize.define(
     },
   },
   { freezeTableName: true, timestamps: true }
-);
+) as creditCardTypeModel;
 
 /** =========================  ASSOCIATIONS  ==========================  **/
 CreditCard.hasMany(Sale, {

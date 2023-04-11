@@ -1,6 +1,10 @@
 import { sequelize } from "../../../config/sql/postgres";
+import { addressObjectIF } from "../../../interfaces/userInterface/address.Interface";
+import { DataTypes, Model, BuildOptions } from "sequelize";
 
-import { DataTypes } from "sequelize";
+type addressTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): addressObjectIF;
+};
 
 const Address = sequelize.define(
   "user_address",
@@ -32,5 +36,6 @@ const Address = sequelize.define(
     },
   },
   { freezeTableName: true, timestamps: true }
-);
+) as addressTypeModel;
+
 export default Address;

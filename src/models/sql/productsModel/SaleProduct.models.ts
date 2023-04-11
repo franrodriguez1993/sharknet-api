@@ -1,5 +1,11 @@
 import { sequelize } from "../../../config/sql/postgres";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, BuildOptions } from "sequelize";
+
+import { saleProductObjectIF } from "../../../interfaces/productInterface/sale.interface";
+
+type saleProductTypeModel = typeof Model & {
+  new (values?: object, options?: BuildOptions): saleProductObjectIF;
+};
 
 const SaleProducts = sequelize.define(
   "sale_product",
@@ -22,6 +28,6 @@ const SaleProducts = sequelize.define(
     },
   },
   { freezeTableName: true, timestamps: true }
-);
+) as saleProductTypeModel;
 
 export default SaleProducts;

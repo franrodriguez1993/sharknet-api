@@ -9,10 +9,13 @@ import { generateToken, generateRefreshToken } from "../../utils/jwtHandler";
 import { daoUser } from "../../containers";
 
 //Interfaces:
-import { UserInterface } from "../../interfaces/userInterface/user.interface";
-import { birthdayInterface } from "../../interfaces/userInterface/birthday.interface";
-import { addressInterface } from "../../interfaces/userInterface/address.Interface";
-import { creditCardInterface } from "../../interfaces/userInterface/creditCard.interface";
+import {
+  userBodyIF,
+  userObjectIF,
+} from "../../interfaces/userInterface/user.interface";
+import { birthdayBodyIF } from "../../interfaces/userInterface/birthday.interface";
+import { addressBodyIF } from "../../interfaces/userInterface/address.Interface";
+import { creditCardBodyIF } from "../../interfaces/userInterface/creditCard.interface";
 
 //Image Manager:
 import imageKitClass from "../../utils/imageKitClass";
@@ -20,7 +23,7 @@ const uploaderManager = new imageKitClass();
 
 export default class userService {
   /**====================== REGISTER USER ======================**/
-  async registerUserServ(data: UserInterface) {
+  async registerUserServ(data: userBodyIF) {
     //Check email:
     const isEmail = await daoUser.getUser("mail", data.user_mail, true);
     if (isEmail) return "MAIL_IN_USE";
@@ -47,7 +50,7 @@ export default class userService {
 
   /**====================== LOGIN USER =========================**/
   async loginUserServ(mail: string, password: string) {
-    const user: UserInterface | any = await daoUser.getUser("mail", mail);
+    const user: userBodyIF | any = await daoUser.getUser("mail", mail);
 
     //User not found:
     if (!user) return "USER_NOT_FOUND";
@@ -68,7 +71,7 @@ export default class userService {
 
   /**======================= REFRESH SESSION ========================**/
   async refreshSessionServ(uid: string) {
-    const user: UserInterface | any = await daoUser.getUser("id", uid, true);
+    const user: userObjectIF = await daoUser.getUser("id", uid, true);
     if (!user) return "USER_NOT_FOUND";
     else if (user.user_status === "suspended") return "USER_SUSPENDED";
     else if (user.user_status === "deleted") return "USER_DELETED";
@@ -95,7 +98,7 @@ export default class userService {
   }
 
   /**==================== EDIT PROFILE USER ====================**/
-  async editProfileServ(data: UserInterface) {
+  async editProfileServ(data: userBodyIF) {
     if (data.user_username) {
       const check = await daoUser.getUser("username", data.user_username, true);
       if (check) return "USERNAME_IN_USE";
@@ -136,7 +139,7 @@ export default class userService {
   }
 
   /** =================== ADD BIRTHDAY ====================== **/
-  async addBirthdayServ(data: birthdayInterface) {
+  async addBirthdayServ(data: birthdayBodyIF) {
     //Check User:
     const isUser = await daoUser.getUser("id", data.user_id, true);
     if (!isUser) return "USER_NOT_FOUND";
@@ -150,7 +153,7 @@ export default class userService {
   }
 
   /** ===================== ADD ADDRESS ========================= **/
-  async addAddressServ(data: addressInterface) {
+  async addAddressServ(data: addressBodyIF) {
     //Check user:
     const isUser = await daoUser.getUser("id", data.user_id, true);
     if (!isUser) return "USER_NOT_FOUND";
@@ -175,7 +178,7 @@ export default class userService {
   }
 
   /** ======================= ADD CREDITCARD ========================= **/
-  async addCreditCardServ(data: creditCardInterface) {
+  async addCreditCardServ(data: creditCardBodyIF) {
     //checkUser:
     const isUser = await daoUser.getUser("id", data.user_id, true);
     if (!isUser) return "USER_NOT_FOUND";
