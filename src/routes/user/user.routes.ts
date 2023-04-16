@@ -1,5 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
+
 //Controllers:
 import userController from "../../controllers/user/user.ctrl";
 const controller = new userController();
@@ -7,13 +8,10 @@ const upload = multer({ storage: multer.memoryStorage() });
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //Middlewares:
-import requireRefresh from "../../middlewares/RequireRefresh";
 import { requireToken } from "../../middlewares/requireToken";
 import { checkIdentity } from "../../middlewares/checkIdentity";
 import {
-  validateBodyLogin,
   validateBodyProfile,
-  validateBodyRegister,
   validatorAddressUser,
   validatorBirthdayUser,
 } from "../../middlewares/validatorManager";
@@ -21,11 +19,6 @@ import {
 
 const router = Router();
 
-//LOGIN - REGISTER:
-router.post("/register", validateBodyRegister, controller.registerUserCtrl);
-router.post("/login", validateBodyLogin, controller.loginUserCtrl);
-router.post("/session", requireRefresh, controller.refreshSessionCtrl);
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //GET USER:
 router.get("/data/id/:id", requireToken, controller.getUserIdCtrl);
 router.post("/data/mail", requireToken, controller.getUserMailCtrl);

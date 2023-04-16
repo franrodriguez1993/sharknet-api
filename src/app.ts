@@ -8,6 +8,7 @@ import { commentRouter } from "./routes/comment";
 import { imageRouters } from "./routes/imgRoute";
 import { superRouters } from "./routes/superuser";
 import { notificationtRouters } from "./routes/notification";
+import { authRouter } from "./routes/auth/auth.routes";
 
 const app = express();
 
@@ -42,4 +43,5 @@ app.use(commentRouter);
 app.use(imageRouters);
 app.use(superRouters);
 app.use(notificationtRouters);
+app.use("/api/v1/auth", authRouter);
 export default app;
