@@ -1,10 +1,14 @@
 import { daoAdmin, daoLogActivity, daoUser } from "../../containers";
-
+import { validate as isValidUUID } from "uuid";
 import { ReqTokenDataInterface } from "../../interfaces/userInterface/reqTokenData.interface";
 
 export default class adminService {
   /** ===============  STAFF UPGRADE  =============== **/
   async staffUpgradeServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     //dao:
     const resData = await daoAdmin.staffUpgrade(user_id);
 
@@ -22,6 +26,10 @@ export default class adminService {
 
   /** =================  STAFF DOWNGRADE  ================= **/
   async staffDowngradeServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     //dao:
     const resData = await daoAdmin.staffDowngrade(user_id);
 
@@ -39,6 +47,10 @@ export default class adminService {
 
   /** ===============  ADMIN UPGRADE  =============== **/
   async adminUpgradeServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     // check user:
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";
@@ -59,6 +71,10 @@ export default class adminService {
 
   /** ===============  ADMIN DOWNGRADE  ================ **/
   async adminDowngradeServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     // check user:
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";
@@ -79,6 +95,10 @@ export default class adminService {
 
   /** ============= DELETE USER  ============== **/
   async adminDeleteUserServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     // check user:
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";
@@ -103,6 +123,10 @@ export default class adminService {
     tokenData: ReqTokenDataInterface,
     user_id: string
   ) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     // check user:
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";
@@ -127,6 +151,10 @@ export default class adminService {
     tokenData: ReqTokenDataInterface,
     user_id: string
   ) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     // check user:
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";
@@ -148,6 +176,10 @@ export default class adminService {
 
   /**  =====================  LIST LOGS ACTIVITY ====================  **/
   async listLogActivityServ(user_id: string, page: number, size: number) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     // check user:
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";

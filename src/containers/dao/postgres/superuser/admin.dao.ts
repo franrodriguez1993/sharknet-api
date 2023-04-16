@@ -11,6 +11,7 @@ import {
   getPaginationSuperuser,
 } from "../../../../utils/paginationfunction";
 import User from "../../../../models/sql/usersModel/User.model";
+
 export class daoAdminSQL extends superUser {
   /** -------------- STAFF UPGRADE-------------- **/
   async staffUpgrade(user_id: string) {

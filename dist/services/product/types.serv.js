@@ -21,6 +21,10 @@ class typesProductService {
                 return "PRODUCT_TYPE_REQUIRED";
             else if (pc_id.trim() === "")
                 return "CATEGORY_ID_REQUIRED";
+            //valid uuid:
+            if (!(0, uuid_1.validate)(pc_id)) {
+                return "INVALID_PRODUCT_CATEGORY_ID";
+            }
             const pt_id = (0, uuid_1.v4)();
             return yield containers_1.daoProductTypes.createType(pt_id, pt_name, pc_id);
         });
@@ -34,6 +38,10 @@ class typesProductService {
     /**============= DELETE PRODUCT TYPE ==================**/
     delPTypesServ(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(id)) {
+                return "INVALID_PRODUCT_TYPE_ID";
+            }
             return yield containers_1.daoProductTypes.deleteTypes(id);
         });
     }

@@ -14,7 +14,6 @@ import {
   validateBodyLogin,
   validateBodyProfile,
   validateBodyRegister,
-  validateCreditCard,
   validatorAddressUser,
   validatorBirthdayUser,
 } from "../../middlewares/validatorManager";
@@ -67,13 +66,7 @@ router.post(
   validatorAddressUser,
   controller.addAddressCtrl
 );
-router.post(
-  "/creditcard/add/:id",
-  requireToken,
-  checkIdentity,
-  validateCreditCard,
-  controller.addCreditCardCtrl
-);
+
 router.put(
   "/image/:id",
   requireToken,
@@ -82,13 +75,6 @@ router.put(
   controller.uploadProfileImage
 );
 
-//DELETE DATA:
-router.delete("/address/del/:id", requireToken, controller.deleteAddressCtrl);
-router.delete(
-  "/creditcard/del/:id",
-  requireToken,
-  controller.deleteCreditCardCtrl
-);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 export { router };

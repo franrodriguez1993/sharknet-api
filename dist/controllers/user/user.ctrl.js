@@ -97,10 +97,10 @@ class userController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const user = yield service.getUserIdServ(id);
-                if (user === "USER_NOT_FOUND")
-                    return res.json({ status: 400, msg: user });
-                return res.json({ status: 200, msg: "OK", data: user });
+                const resService = yield service.getUserIdServ(id);
+                if (resService === "USER_NOT_FOUND" || resService === "INVALID_USER_ID")
+                    return res.json({ status: 400, msg: resService });
+                return res.json({ status: 200, msg: "OK", data: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -130,6 +130,7 @@ class userController {
             try {
                 //Data body:
                 const { id } = req.params;
+                const tokenID = req.uid;
                 const data = {
                     user_id: id,
                     user_username: req.body.username,
@@ -139,16 +140,19 @@ class userController {
                     user_phone: req.body.phone,
                 };
                 //Service:
-                const user = yield service.editProfileServ(data);
+                const resService = yield service.editProfileServ(data, tokenID);
                 //Response:
-                if (!user)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (user === "USER_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: user });
-                else if (user === "USERNAME_IN_USE")
-                    return res.status(400).json({ status: 400, msg: user });
-                else if (user === "USER_UPDATED")
-                    return res.json({ status: 200, msg: user });
+                else if (resService === "USER_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
+                else if (resService === "UNAUTHORIZED_ACTION")
+                    return res.status(401).json({ status: 401, msg: resService });
+                else if (resService === "USERNAME_IN_USE" ||
+                    resService === "INVALID_USER_ID")
+                    return res.status(400).json({ status: 400, msg: resService });
+                else if (resService === "USER_UPDATED")
+                    return res.json({ status: 200, msg: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -164,12 +168,12 @@ class userController {
                 const { id } = req.params;
                 const { mail } = req.body;
                 //service:
-                const data = yield service.changeEmailServ(id, mail);
+                const resService = yield service.changeEmailServ(id, mail);
                 //Return:
-                if (data === "USER_NOT_FOUND")
-                    return res.json({ status: 404, msg: data });
-                else if (data === "MAIL_IN_USE")
-                    return res.json({ status: 400, msg: data });
+                if (resService === "USER_NOT_FOUND")
+                    return res.json({ status: 404, msg: resService });
+                else if (resService === "MAIL_IN_USE" || resService === "INVALID_USER_ID")
+                    return res.json({ status: 400, msg: resService });
                 //Ok:
                 return res.json({ status: 200, msg: "EMAIL_UPDATED" });
             }
@@ -187,10 +191,13 @@ class userController {
                 const { id } = req.params;
                 const { password } = req.body;
                 //Service:
-                const user = yield service.changePassServ(id, password);
+                const resService = yield service.changePassServ(id, password);
                 //Response:
-                if (user === "USER_NOT_FOUND")
-                    return res.json({ status: 404, msg: user });
+                if (resService === "USER_NOT_FOUND")
+                    return res.json({ status: 404, msg: resService });
+                else if (resService === "INVALID_USER_ID") {
+                    return res.json({ status: 400, msg: resService });
+                }
                 return res.json({ status: 200, msg: "PASSWORD_UPDATED" });
             }
             catch (e) {
@@ -212,15 +219,18 @@ class userController {
                     birthday_year: req.body.year,
                 };
                 //Service:
-                const birthday = yield service.addBirthdayServ(data);
+                const resService = yield service.addBirthdayServ(data);
                 //Return:
-                if (!birthday)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (birthday === "USER_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: birthday });
-                else if (birthday === "BIRTHDAY_UPDATED" ||
-                    birthday === "BIRTHDAY_CREATED")
-                    return res.json({ status: 201, msg: birthday });
+                else if (resService === "INVALID_USER_ID") {
+                    return res.status(400).json({ status: 400, msg: resService });
+                }
+                else if (resService === "USER_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
+                else if (resService === "BIRTHDAY_UPDATED" ||
+                    resService === "BIRTHDAY_CREATED")
+                    return res.json({ status: 201, msg: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -244,16 +254,16 @@ class userController {
                     user_id: id,
                 };
                 //Service:
-                const address = yield service.addAddressServ(data);
+                const resService = yield service.addAddressServ(data);
                 //Return:
-                if (!address)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (address === "MAX_LIMIT")
-                    return res.json({ status: 400, msg: address });
-                else if (address === "USER_NOT_FOUND")
-                    return res.json({ status: 404, msg: address });
-                else if (address === "ADDRESS_CREATED")
-                    return res.json({ status: 201, msg: address });
+                else if (resService === "MAX_LIMIT" || resService === "INVALID_USER_ID")
+                    return res.json({ status: 400, msg: resService });
+                else if (resService === "USER_NOT_FOUND")
+                    return res.json({ status: 404, msg: resService });
+                else if (resService === "ADDRESS_CREATED")
+                    return res.json({ status: 201, msg: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -272,62 +282,11 @@ class userController {
                 //Return:
                 if (!resDelete)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+                else if (resDelete === "INVALID_ADDRESS_ID") {
+                    return res.status(400).json({ status: 400, msg: resDelete });
+                }
                 else
                     return res.json({ status: 200, msg: "ADDRESS_DELETED" });
-            }
-            catch (e) {
-                logger_1.default.error(e.message);
-                return res.status(500).json({ status: 500, msg: e.message });
-            }
-        });
-    }
-    /** ======================== ADD CREDITCARD =========================== **/
-    addCreditCardCtrl(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                //data:
-                const { id } = req.params;
-                const data = {
-                    user_id: id,
-                    cc_name: req.body.name,
-                    cc_number: req.body.number,
-                    cc_date: req.body.date,
-                    cc_code: req.body.code,
-                    cc_bank: req.body.bank,
-                };
-                //Service:
-                const newCreditCard = yield service.addCreditCardServ(data);
-                //Return:
-                if (!newCreditCard)
-                    return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (newCreditCard === "USER_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: newCreditCard });
-                else if (newCreditCard === "MAX_LIMIT" ||
-                    newCreditCard === "CREDITCARD_IN_USE")
-                    return res.status(400).json({ status: 400, msg: newCreditCard });
-                else if (newCreditCard === "CREDITCARD_REGISTERED")
-                    return res
-                        .status(201)
-                        .json({ status: 201, msg: "OK", data: newCreditCard });
-            }
-            catch (e) {
-                logger_1.default.error(e.message);
-                return res.status(500).json({ status: 500, msg: e.message });
-            }
-        });
-    }
-    /** ========================= DELETE CREDITCARD ========================= **/
-    deleteCreditCardCtrl(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                //data:
-                const { id } = req.params;
-                //Service:
-                const deleted = yield service.deleteCreditCardServ(id);
-                //Return:
-                if (!deleted)
-                    return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                return res.json({ status: 200, msg: "CREDITCARD_DELETED" });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -348,6 +307,9 @@ class userController {
                 const resUpdate = yield service.uploadImageProfile(id, file.buffer);
                 if (resUpdate === "ERROR_UPLOADING_IMAGE") {
                     return res.status(500).json({ status: 500, msg: resUpdate });
+                }
+                else if (resUpdate === "INVALID_USER_ID") {
+                    return res.status(400).json({ status: 400, msg: resUpdate });
                 }
                 else if (resUpdate === "USER_NOT_FOUND") {
                     return res.status(404).json({ status: 404, msg: resUpdate });

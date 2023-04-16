@@ -10,10 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const containers_1 = require("../../containers");
+const uuid_1 = require("uuid");
 class adminService {
     /** ===============  STAFF UPGRADE  =============== **/
     staffUpgradeServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             //dao:
             const resData = yield containers_1.daoAdmin.staffUpgrade(user_id);
             //Create log Activity:
@@ -26,6 +31,10 @@ class adminService {
     /** =================  STAFF DOWNGRADE  ================= **/
     staffDowngradeServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             //dao:
             const resData = yield containers_1.daoAdmin.staffDowngrade(user_id);
             //Create log Activity:
@@ -38,6 +47,10 @@ class adminService {
     /** ===============  ADMIN UPGRADE  =============== **/
     adminUpgradeServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             // check user:
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)
@@ -54,6 +67,10 @@ class adminService {
     /** ===============  ADMIN DOWNGRADE  ================ **/
     adminDowngradeServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             // check user:
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)
@@ -70,6 +87,10 @@ class adminService {
     /** ============= DELETE USER  ============== **/
     adminDeleteUserServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             // check user:
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)
@@ -85,6 +106,10 @@ class adminService {
     /** =============== SUSPEND USER  =============== **/
     adminSuspendUserServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             // check user:
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)
@@ -100,6 +125,10 @@ class adminService {
     /** ============ REACTIVE USER  ============ **/
     adminReactiveUserServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             // check user:
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)
@@ -116,6 +145,10 @@ class adminService {
     /**  =====================  LIST LOGS ACTIVITY ====================  **/
     listLogActivityServ(user_id, page, size) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             // check user:
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)

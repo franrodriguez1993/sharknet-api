@@ -26,7 +26,11 @@ export default class imageProductController {
       //Return:
       if (img === "PRODUCT_NOT_FOUND")
         return res.status(404).json({ status: 404, msg: img });
-      else if (img === "INVALID_ROUTE" || img === "INVALID_SELLER")
+      else if (
+        img === "INVALID_ROUTE" ||
+        img === "INVALID_SELLER" ||
+        img === "INVALID_PRODUCT_ID"
+      )
         return res.status(400).json({ status: 400, msg: img });
       else if (img === "UNAUTHORIZED_ACTION")
         return res.status(401).json({ status: 401, msg: img });
@@ -49,6 +53,9 @@ export default class imageProductController {
       //Return:
       if (!del)
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+      else if (del === "INVALID_IMAGE_ID") {
+        return res.status(400).json({ status: 400, msg: del });
+      }
       return res.json({ status: 200, msg: "IMAGE_DELETED" });
     } catch (e: any) {
       logger.error(e.message);

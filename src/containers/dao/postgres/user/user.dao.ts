@@ -1,6 +1,6 @@
 import { addressBodyIF } from "../../../../interfaces/userInterface/address.Interface";
 import { birthdayBodyIF } from "../../../../interfaces/userInterface/birthday.interface";
-import { creditCardBodyIF } from "../../../../interfaces/userInterface/creditCard.interface";
+
 import { rolObjectIF } from "../../../../interfaces/userInterface/rol.interface";
 import {
   userObjectIF,
@@ -9,7 +9,7 @@ import {
 import ProductFavorite from "../../../../models/sql/productsModel/PFavorite.models";
 import Address from "../../../../models/sql/usersModel/Address.model";
 import Birthday from "../../../../models/sql/usersModel/Birthday.model";
-import CreditCard from "../../../../models/sql/usersModel/CreditCard.model";
+
 import Rol from "../../../../models/sql/usersModel/Rol.model";
 import User from "../../../../models/sql/usersModel/User.model";
 import basecontainer from "../../../base/base.container";
@@ -64,7 +64,6 @@ export class daoUserSQL extends basecontainer {
         { model: Rol, attributes: ["rol_name"] },
         { model: Birthday, attributes: { exclude: ["user_id"] } },
         { model: Address, attributes: { exclude: ["user_id"] } },
-        { model: CreditCard, attributes: { exclude: ["user_id"] } },
         {
           model: ProductFavorite,
           attributes: ["product_id"],
@@ -227,57 +226,6 @@ export class daoUserSQL extends basecontainer {
       });
       //return:
       return deleteAddress;
-    } catch (e: any) {
-      throw new Error(e.message);
-    }
-  }
-
-  /** --------------------------- ADD CREDIT CARD ---------------------------- **/
-  async addCreditCard(data: creditCardBodyIF) {
-    try {
-      //Check limit:
-      const ccLimit = await CreditCard.findAll({
-        where: { user_id: data.user_id },
-      });
-      if (ccLimit.length >= 3) return "MAX_LIMIT";
-      //check creditCard:
-      const check = await CreditCard.findOne({
-        where: { cc_number: data.cc_number, cc_name: data.cc_name },
-      });
-      if (check) return "CREDITCARD_IN_USE";
-
-      //Create:
-      const creditCard = await CreditCard.create({
-        cc_id: data.cc_id,
-        user_id: data.user_id,
-        cc_name: data.cc_name,
-        cc_number: data.cc_number,
-        cc_date: data.cc_date,
-        cc_code: data.cc_code,
-        cc_bank: data.cc_bank,
-      });
-      if (creditCard) return "CREDITCARD_REGISTERED";
-    } catch (e: any) {
-      throw new Error(e.message);
-    }
-  }
-
-  /** --------------------------- DELETE CREDIT CARD ---------------------------- **/
-  async deleteCreditCard(ccid: string) {
-    try {
-      //delete:
-      const deleted = await CreditCard.destroy({ where: { cc_id: ccid } });
-
-      //return:
-      return deleted;
-    } catch (e: any) {
-      throw new Error(e.message);
-    }
-  }
-  /** --------------------------- GET CREDIT CARD ---------------------------- **/
-  async getCreditCard(cc_id: string) {
-    try {
-      return await CreditCard.findOne({ where: { cc_id } });
     } catch (e: any) {
       throw new Error(e.message);
     }

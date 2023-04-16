@@ -34,8 +34,4 @@ router.put("/update/mail/:id", requireToken_1.requireToken, checkIdentity_1.chec
 router.put("/update/password/:id", requireToken_1.requireToken, checkIdentity_1.checkIdentity, validatorManager_1.validateBodyProfile, controller.changePassCtrl);
 router.put("/update/birthday/:id", requireToken_1.requireToken, checkIdentity_1.checkIdentity, validatorManager_1.validatorBirthdayUser, controller.addBirthdayCtrl);
 router.post("/address/add/:id", requireToken_1.requireToken, checkIdentity_1.checkIdentity, validatorManager_1.validatorAddressUser, controller.addAddressCtrl);
-router.post("/creditcard/add/:id", requireToken_1.requireToken, checkIdentity_1.checkIdentity, validatorManager_1.validateCreditCard, controller.addCreditCardCtrl);
 router.put("/image/:id", requireToken_1.requireToken, checkIdentity_1.checkIdentity, upload.single("image"), controller.uploadProfileImage);
-//DELETE DATA:
-router.delete("/address/del/:id", requireToken_1.requireToken, controller.deleteAddressCtrl);
-router.delete("/creditcard/del/:id", requireToken_1.requireToken, controller.deleteCreditCardCtrl);

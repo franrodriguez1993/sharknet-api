@@ -11,10 +11,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 //DAOs:
 const containers_1 = require("../../containers");
+const uuid_1 = require("uuid");
 class staffService {
     /** ============== VERIFY USER  ============== **/
     verifyUserServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             //verify:
             const verified = yield containers_1.daoStaff.verifyUser(user_id);
             //create log:
@@ -27,6 +32,10 @@ class staffService {
     /** =============== UNVERIFY USER  =============== **/
     unverifyUserServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             //unverify:
             const unverified = yield containers_1.daoStaff.unverifyUser(user_id);
             //create log:
@@ -39,6 +48,10 @@ class staffService {
     /** =============== DELETE USER  =============== **/
     deleteUserServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             //Check user
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)
@@ -54,6 +67,10 @@ class staffService {
     /** =============== SUSPEND USER  =============== **/
     suspendUserServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             //Check user
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)
@@ -69,6 +86,10 @@ class staffService {
     /** =============== REACTIVE USER  =============== **/
     reactiveUserServ(tokenData, user_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             //Check user
             const check = yield containers_1.daoUser.getUser("id", user_id, true);
             if (!check)

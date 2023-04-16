@@ -9,7 +9,6 @@ const sequelize_1 = require("sequelize");
 const Birthday_model_1 = __importDefault(require("./Birthday.model"));
 const Rol_model_1 = __importDefault(require("./Rol.model"));
 const Address_model_1 = __importDefault(require("./Address.model"));
-const CreditCard_model_1 = __importDefault(require("./CreditCard.model"));
 const PFavorite_models_1 = __importDefault(require("../productsModel/PFavorite.models"));
 const Sale_model_1 = __importDefault(require("../productsModel/Sale.model"));
 const comment_model_1 = __importDefault(require("../commentsModel/comment.model"));
@@ -79,15 +78,6 @@ User.hasMany(Address_model_1.default, {
     sourceKey: "user_id",
 });
 Address_model_1.default.belongsTo(User, {
-    foreignKey: "user_id",
-    targetKey: "user_id",
-});
-//CreditCard:
-User.hasMany(CreditCard_model_1.default, {
-    foreignKey: "user_id",
-    sourceKey: "user_id",
-});
-CreditCard_model_1.default.belongsTo(User, {
     foreignKey: "user_id",
     targetKey: "user_id",
 });

@@ -6,7 +6,6 @@ import { userObjectIF } from "../../../interfaces/userInterface/user.interface";
 import Birthday from "./Birthday.model";
 import Rol from "./Rol.model";
 import Address from "./Address.model";
-import CreditCard from "./CreditCard.model";
 import ProductFavorite from "../productsModel/PFavorite.models";
 import Sale from "../productsModel/Sale.model";
 import Comment from "../commentsModel/comment.model";
@@ -90,15 +89,7 @@ Address.belongsTo(User, {
   foreignKey: "user_id",
   targetKey: "user_id",
 });
-//CreditCard:
-User.hasMany(CreditCard, {
-  foreignKey: "user_id",
-  sourceKey: "user_id",
-});
-CreditCard.belongsTo(User, {
-  foreignKey: "user_id",
-  targetKey: "user_id",
-});
+
 //Favorites:
 User.hasMany(ProductFavorite, {
   foreignKey: "user_id",

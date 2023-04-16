@@ -10,16 +10,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const containers_1 = require("../../containers");
+const uuid_1 = require("uuid");
 class notificationService {
     /** ===========  CHECK SEEN NOTIFICATION  ============== **/
     checkSeenServ(notification_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(notification_id)) {
+                return "INVALID_NOTIFICATION_ID";
+            }
             return yield containers_1.daoNotification.checkSeen(notification_id);
         });
     }
     /** ================  GET NOTIFICATIONS LIST  =============== **/
     getNotificationServ(tokenID, user_id, page, size, seen) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_USER_ID";
+            }
             //Check Authorization:
             if (tokenID.uid.toString() !== user_id.toString())
                 return "UNAUTHORIZED_ACTION";

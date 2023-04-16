@@ -1,5 +1,5 @@
 //uuid:
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, validate as isValidUUID } from "uuid";
 
 //Dao:
 import { daoProductCategory } from "../../containers";
@@ -20,6 +20,10 @@ export default class categoryProductService {
   /** ================ DELETE CATEGORY =================== **/
 
   async deleteCategoryServ(id: string) {
+    //valid uuid:
+    if (!isValidUUID(id)) {
+      return "INVALID_PRODUCT_CATEGORY_ID";
+    }
     return await daoProductCategory.deleteCategory(id);
   }
 }

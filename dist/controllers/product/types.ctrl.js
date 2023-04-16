@@ -24,16 +24,17 @@ class typesProductController {
                 //data:
                 const { name, category } = req.body;
                 //Service:
-                const newType = yield service.createPTypesServ(name, category);
+                const resService = yield service.createPTypesServ(name, category);
                 //Return:
-                if (!newType)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (newType === "PRODUCT_TYPE_ALREADY_EXISTS" ||
-                    newType === "CATEGORY_ID_REQUIRED" ||
-                    newType === "PRODUCT_TYPE_REQUIRED")
-                    return res.status(400).json({ status: 400, msg: newType });
-                else if (newType === "PRODUCT_TYPE_CREATED")
-                    return res.status(201).json({ status: 201, msg: newType });
+                else if (resService === "PRODUCT_TYPE_ALREADY_EXISTS" ||
+                    resService === "CATEGORY_ID_REQUIRED" ||
+                    resService === "PRODUCT_TYPE_REQUIRED" ||
+                    resService === "INVALID_PRODUCT_CATEGORY_ID")
+                    return res.status(400).json({ status: 400, msg: resService });
+                else if (resService === "PRODUCT_TYPE_CREATED")
+                    return res.status(201).json({ status: 201, msg: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -63,9 +64,12 @@ class typesProductController {
                 //data:
                 const { id } = req.params;
                 //Service:
-                const deleteRes = yield service.delPTypesServ(id);
-                if (!deleteRes)
+                const resService = yield service.delPTypesServ(id);
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+                else if (resService === "INVALID_PRODUCT_TYPE_ID") {
+                    return res.status(400).json({ status: 400, msg: resService });
+                }
                 else
                     return res.json({ status: 200, msg: "PRODUCT_TYPE_DELETED" });
             }

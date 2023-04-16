@@ -80,6 +80,10 @@ class userService {
     /**====================== GET USER BY ID ==========================**/
     getUserIdServ(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(id)) {
+                return "INVALID_USER_ID";
+            }
             const user = yield containers_1.daoUser.getUser("id", id);
             if (!user)
                 return "USER_NOT_FOUND";
@@ -99,8 +103,16 @@ class userService {
         });
     }
     /**==================== EDIT PROFILE USER ====================**/
-    editProfileServ(data) {
+    editProfileServ(data, tokenID) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(data.user_id)) {
+                return "INVALID_USER_ID";
+            }
+            // check authorization:
+            if (data.user_id.toString() !== tokenID.toString()) {
+                return "UNAUTHORIZED_ACTION";
+            }
             if (data.user_username) {
                 const check = yield containers_1.daoUser.getUser("username", data.user_username, true);
                 if (check)
@@ -113,6 +125,10 @@ class userService {
     /**====================== CHANGE EMAIL ========================**/
     changeEmailServ(uid, mail) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(uid)) {
+                return "INVALID_USER_ID";
+            }
             //Find user:
             const user = yield containers_1.daoUser.getUser("id", uid, true);
             if (!user)
@@ -131,6 +147,10 @@ class userService {
     /**======================== CHANGE PASSWORD ========================**/
     changePassServ(uid, pass) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(uid)) {
+                return "INVALID_USER_ID";
+            }
             //Find user:
             const user = yield containers_1.daoUser.getUser("id", uid, true);
             if (!user)
@@ -145,6 +165,10 @@ class userService {
     /** =================== ADD BIRTHDAY ====================== **/
     addBirthdayServ(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(data.user_id)) {
+                return "INVALID_USER_ID";
+            }
             //Check User:
             const isUser = yield containers_1.daoUser.getUser("id", data.user_id, true);
             if (!isUser)
@@ -159,6 +183,10 @@ class userService {
     /** ===================== ADD ADDRESS ========================= **/
     addAddressServ(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(data.user_id)) {
+                return "INVALID_USER_ID";
+            }
             //Check user:
             const isUser = yield containers_1.daoUser.getUser("id", data.user_id, true);
             if (!isUser)
@@ -173,38 +201,23 @@ class userService {
     /** ======================= DELETE ADDRESS ========================== **/
     deleteAddressServ(aid) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(aid)) {
+                return "INVALID_ADDRESS_ID";
+            }
             //Delete:
             const resDelete = yield containers_1.daoUser.deleteAddress(aid);
             //Return:
             return resDelete;
         });
     }
-    /** ======================= ADD CREDITCARD ========================= **/
-    addCreditCardServ(data) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //checkUser:
-            const isUser = yield containers_1.daoUser.getUser("id", data.user_id, true);
-            if (!isUser)
-                return "USER_NOT_FOUND";
-            //Create:
-            const cc_id = (0, uuid_1.v4)();
-            const newCreditCard = yield containers_1.daoUser.addCreditCard(Object.assign(Object.assign({}, data), { cc_id }));
-            //Return:
-            return newCreditCard;
-        });
-    }
-    /** ========================= DELETE CREDITCARD =========================== **/
-    deleteCreditCardServ(ccid) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //delete:
-            const deleted = yield containers_1.daoUser.deleteCreditCard(ccid);
-            //return:
-            return deleted;
-        });
-    }
     /**==================== PROFILE IMAGE =========================**/
     uploadImageProfile(uid, img) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(uid)) {
+                return "INVALID_USER_ID";
+            }
             //Upload image:
             const imgProfile = yield uploaderManager.uploadImage(img);
             if (!imgProfile)

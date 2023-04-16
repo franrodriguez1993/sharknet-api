@@ -20,7 +20,6 @@ export interface saleBodyIF {
   sale_buyer?: string;
   sale_amount?: number;
   sale_instalments?: number;
-  cc_id?: string;
   productsSale?: Array<saleProductObjectIF>;
 }
 

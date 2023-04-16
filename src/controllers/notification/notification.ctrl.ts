@@ -14,15 +14,15 @@ export default class notificationController {
       const { id } = req.params;
 
       //Service:
-      const seen = await service.checkSeenServ(id);
+      const resService = await service.checkSeenServ(id);
 
       //Return:
-      if (!seen)
+      if (!resService || resService === "INVALID_NOTIFICATION_ID")
         return res.status(400).json({ status: 400, msg: "ERROR_SEEN" });
-      else if (seen === "NOTIFICATION_NOT_FOUND")
-        return res.status(404).json({ status: 404, msg: seen });
-      else if (seen === "NOTIFICATION_SEEN")
-        return res.json({ status: 200, msg: seen });
+      else if (resService === "NOTIFICATION_NOT_FOUND")
+        return res.status(404).json({ status: 404, msg: resService });
+      else if (resService === "NOTIFICATION_SEEN")
+        return res.json({ status: 200, msg: resService });
     } catch (e: any) {
       logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
@@ -53,7 +53,9 @@ export default class notificationController {
       //Return:
       if (list === "UNAUTHORIZED_ACTION")
         return res.status(401).json({ status: 401, msg: list });
-      else if (list === "USER_NOT_FOUND")
+      else if (list === "INVALID_USER_ID") {
+        return res.status(400).json({ status: 400, msg: list });
+      } else if (list === "USER_NOT_FOUND")
         return res.status(404).json({ status: 404, msg: list });
 
       //Ok:

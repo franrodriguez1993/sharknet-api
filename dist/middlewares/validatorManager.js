@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validatorComment = exports.validatorQualifyUser = exports.validatorEditProduct = exports.validatorProduct = exports.validateCreditCard = exports.validatorAddressUser = exports.validatorBirthdayUser = exports.validateBodyProfile = exports.validateBodyLogin = exports.validateBodyRegister = void 0;
+exports.validatorComment = exports.validatorQualifyUser = exports.validatorEditProduct = exports.validatorProduct = exports.validatorAddressUser = exports.validatorBirthdayUser = exports.validateBodyProfile = exports.validateBodyLogin = exports.validateBodyRegister = void 0;
 const express_validator_1 = require("express-validator");
 const validatorManager = (req, res, next) => {
     const errors = (0, express_validator_1.validationResult)(req);
@@ -54,16 +54,6 @@ exports.validatorAddressUser = [
     (0, express_validator_1.body)("apartment").optional().escape(),
     (0, express_validator_1.body)("city").notEmpty().isLength({ min: 3, max: 40 }).escape(),
     (0, express_validator_1.body)("state").notEmpty().isLength({ min: 3, max: 40 }).escape(),
-    validatorManager,
-];
-/**-------------------------------------------------**/
-/** ------------- Body credictCard User ------------- **/
-exports.validateCreditCard = [
-    (0, express_validator_1.body)("name").notEmpty().isLength({ min: 3, max: 40 }).escape(),
-    (0, express_validator_1.body)("number").notEmpty().isLength({ min: 16, max: 20 }).escape(),
-    (0, express_validator_1.body)("date").notEmpty().isLength({ min: 3, max: 8 }),
-    (0, express_validator_1.body)("code").notEmpty().isLength({ min: 3, max: 3 }).escape(),
-    (0, express_validator_1.body)("bank").notEmpty().isLength({ min: 3, max: 40 }).escape(),
     validatorManager,
 ];
 /**-------------------------------------------------**/

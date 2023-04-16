@@ -75,3 +75,20 @@
 [2023-04-11T08:54:13.573] [INFO] default -  Running in dev mode: http://localhost:5000/
 [2023-04-11T08:58:30.277] [INFO] default -  Running in dev mode: http://localhost:5000/
 [2023-04-11T09:06:57.428] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-04-14T15:20:41.941] [INFO] default -  Running in dev mode: http://localhost:5000/
+[2023-04-14T15:40:32.143] [ERROR] default - getaddrinfo ENOTFOUND postgresql://postgres:1234@localhost:6000/postgres
+[2023-04-14T15:44:50.499] [ERROR] default - getaddrinfo ENOTFOUND postgresql://postgres:1234@localhost:6000/postgres
+[2023-04-14T15:52:05.451] [ERROR] default - getaddrinfo ENOTFOUND postgresql://postgres:1234@localhost:6000/postgres
+[2023-04-14T18:05:30.241] [ERROR] default - getaddrinfo ENOTFOUND postgresql://postgres:1234@localhost:6000/postgres
+[2023-04-14T18:12:44.788] [ERROR] default - connect ECONNREFUSED 127.0.0.1:5432
+[2023-04-14T18:23:27.994] [ERROR] default - connect ECONNREFUSED 127.0.0.1:5432
+[2023-04-14T18:34:33.294] [ERROR] default - connect ECONNREFUSED 127.0.0.1:5432
+[2023-04-14T18:44:17.460] [ERROR] default - connect ECONNREFUSED 127.0.0.1:5432
+[2023-04-14T18:53:19.913] [ERROR] default - connect ECONNREFUSED 172.19.0.2:6000
+[2023-04-15T12:41:53.255] [INFO] default -  Running in production mode: http://localhost:
+[2023-04-15T12:45:14.573] [INFO] default -  Running in production mode: http://localhost:
+[2023-04-15T14:18:32.794] [INFO] default -  Running in production mode: http://localhost:
+[2023-04-15T15:28:19.878] [INFO] default -  Running in production mode: http://localhost:
+[2023-04-15T17:06:23.390] [INFO] default -  Running in production mode: http://localhost:
+[2023-04-15T17:16:25.212] [INFO] default -  Running in production mode: http://localhost:
+[2023-04-16T09:06:33.296] [INFO] default -  Running in production mode: http://localhost:

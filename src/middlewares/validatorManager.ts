@@ -62,17 +62,6 @@ export const validatorAddressUser = [
 ];
 /**-------------------------------------------------**/
 
-/** ------------- Body credictCard User ------------- **/
-export const validateCreditCard = [
-  body("name").notEmpty().isLength({ min: 3, max: 40 }).escape(),
-  body("number").notEmpty().isLength({ min: 16, max: 20 }).escape(),
-  body("date").notEmpty().isLength({ min: 3, max: 8 }),
-  body("code").notEmpty().isLength({ min: 3, max: 3 }).escape(),
-  body("bank").notEmpty().isLength({ min: 3, max: 40 }).escape(),
-  validatorManager,
-];
-/**-------------------------------------------------**/
-
 /** ------------- Body Product ------------- **/
 export const validatorProduct = [
   body("type").notEmpty().trim(),

@@ -13,19 +13,20 @@ export default class typesProductController {
       const { name, category } = req.body;
 
       //Service:
-      const newType = await service.createPTypesServ(name, category);
+      const resService = await service.createPTypesServ(name, category);
 
       //Return:
-      if (!newType)
+      if (!resService)
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
       else if (
-        newType === "PRODUCT_TYPE_ALREADY_EXISTS" ||
-        newType === "CATEGORY_ID_REQUIRED" ||
-        newType === "PRODUCT_TYPE_REQUIRED"
+        resService === "PRODUCT_TYPE_ALREADY_EXISTS" ||
+        resService === "CATEGORY_ID_REQUIRED" ||
+        resService === "PRODUCT_TYPE_REQUIRED" ||
+        resService === "INVALID_PRODUCT_CATEGORY_ID"
       )
-        return res.status(400).json({ status: 400, msg: newType });
-      else if (newType === "PRODUCT_TYPE_CREATED")
-        return res.status(201).json({ status: 201, msg: newType });
+        return res.status(400).json({ status: 400, msg: resService });
+      else if (resService === "PRODUCT_TYPE_CREATED")
+        return res.status(201).json({ status: 201, msg: resService });
     } catch (e: any) {
       logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
@@ -54,10 +55,12 @@ export default class typesProductController {
       const { id } = req.params;
 
       //Service:
-      const deleteRes = await service.delPTypesServ(id);
-      if (!deleteRes)
+      const resService = await service.delPTypesServ(id);
+      if (!resService)
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-      else return res.json({ status: 200, msg: "PRODUCT_TYPE_DELETED" });
+      else if (resService === "INVALID_PRODUCT_TYPE_ID") {
+        return res.status(400).json({ status: 400, msg: resService });
+      } else return res.json({ status: 200, msg: "PRODUCT_TYPE_DELETED" });
     } catch (e: any) {
       logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });

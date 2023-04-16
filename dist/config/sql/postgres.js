@@ -11,7 +11,8 @@ exports.sequelize = new sequelize_1.Sequelize(configServer_1.default.postgres.db
     dialect: "postgres",
     logging: false,
 });
-// export const sequelize = new Sequelize("commerceDB", "postgres", "147258", {
-//   host: "localhost",
+// export const sequelize = new Sequelize("sharknet", "postgres", "123456", {
+//   host: "postgreserver",
 //   dialect: "postgres",
+//   port: 6000,
 // });

@@ -114,12 +114,20 @@ class productService {
     // use product id
     getProductServ(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //validate uuid:
+            if (!(0, uuid_1.validate)(id)) {
+                return "INVALID_PRODUCT_ID";
+            }
             return yield containers_1.daoProduct.getProduct(id);
         });
     }
     /**============== EDIT PRODUCT ================**/
     editProductServ(tokenData, data) {
         return __awaiter(this, void 0, void 0, function* () {
+            //validate uuid:
+            if (!(0, uuid_1.validate)(data.product_id)) {
+                return "INVALID_PRODUCT_ID";
+            }
             //Check Product:
             const product = yield containers_1.daoProduct.getProduct(data.product_id, true);
             if (!product)
@@ -150,12 +158,20 @@ class productService {
     /**=============== UPDATE VIEWS =================**/
     updateViewsServ(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //validate uuid:
+            if (!(0, uuid_1.validate)(id)) {
+                return "INVALID_PRODUCT_ID";
+            }
             return yield containers_1.daoProduct.updateViews(id);
         });
     }
     /** =================== ADD FAVORITE PRODUCT =================== **/
     addPFavoriteServ(tokenID, uid, pid) {
         return __awaiter(this, void 0, void 0, function* () {
+            //validate uuid:
+            if (!(0, uuid_1.validate)(pid)) {
+                return "INVALID_PRODUCT_ID";
+            }
             //Check ids:
             const isUser = yield containers_2.daoUser.getUser("id", uid, true);
             if (!isUser)
@@ -179,6 +195,10 @@ class productService {
     /** ================ LIST FAVORITE PRODUCT =============== **/
     listPFavoriteServ(uid, page, size) {
         return __awaiter(this, void 0, void 0, function* () {
+            //validate uuid:
+            if (!(0, uuid_1.validate)(uid)) {
+                return "INVALID_USER_ID";
+            }
             //check User:
             const isUser = yield containers_2.daoUser.getUser("id", uid, true);
             if (!isUser)
@@ -195,16 +215,14 @@ class productService {
                 if (tokenData.uid.toString() !== data.sale_buyer.toString() ||
                     tokenData.rol.toString() !== "user")
                     return "UNAUTHORIZED_ACTION";
+                //valid uuid:
+                if (!(0, uuid_1.validate)(data.sale_buyer)) {
+                    return "INVALID_USER_ID";
+                }
                 //check users:
                 const buyer = yield containers_2.daoUser.getUser("id", data.sale_buyer);
                 if (!buyer)
                     return "USER_NOT_FOUND";
-                //check creditCard:
-                const creditCard = yield containers_2.daoUser.getCreditCard(data.cc_id);
-                if (!creditCard)
-                    return "CREDITCARD_NOT_FOUND";
-                if (creditCard.user_id.toString() !== data.sale_buyer.toString())
-                    return "INVALID_CREDITCARD";
                 //Create sale:
                 const sale_id = (0, uuid_1.v4)();
                 const sale = yield containers_1.daoSale.Buy(Object.assign(Object.assign({}, data), { sale_id }));
@@ -227,12 +245,20 @@ class productService {
     /** ====================== GET SALE  ===================== **/
     getSaleServ(sale_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(sale_id)) {
+                return "INVALID_SALE_ID";
+            }
             return yield containers_1.daoSale.getSale(sale_id);
         });
     }
     /** =================== LIST USER SALES  ================== **/
     getUserSalesServ(tokenID, user_id, page, size) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_SALE_ID";
+            }
             //Check user:
             const user = yield containers_2.daoUser.getUser("id", user_id, true);
             if (!user)
@@ -246,6 +272,10 @@ class productService {
     /** ================== LIST USER BUYS  ================== **/
     getUserBuysServ(tokenID, user_id, page, size) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(user_id)) {
+                return "INVALID_SALE_ID";
+            }
             //Check user:
             const user = yield containers_2.daoUser.getUser("id", user_id, true);
             if (!user)
@@ -259,6 +289,10 @@ class productService {
     /** ================ PAUSE PRODUCT  ================== **/
     pauseProductServ(tokenID, product_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(product_id)) {
+                return "INVALID_PRODUCT_ID";
+            }
             //Check product:
             const product = yield containers_1.daoProduct.getProduct(product_id, true);
             if (!product)
@@ -272,6 +306,10 @@ class productService {
     /** =================== PAUSE PRODUCT  ================== **/
     reactivateProductServ(tokenID, product_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(product_id)) {
+                return "INVALID_PRODUCT_ID";
+            }
             //Check product:
             const product = yield containers_1.daoProduct.getProduct(product_id, true);
             if (!product)
@@ -285,6 +323,10 @@ class productService {
     /** ================== DELETE PRODUCT  =================== **/
     deleteProductServ(tokenID, product_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(product_id)) {
+                return "INVALID_PRODUCT_ID";
+            }
             //Check product:
             const product = yield containers_1.daoProduct.getProduct(product_id, true);
             if (!product)
@@ -311,6 +353,10 @@ class productService {
     /**~~~~~~~~~~~~~~~~~  IMAGE THUMBNAIL PRODUCT  ~~~~~~~~~~~~~~~~~~~**/
     updateThumbnailServ(tokenUID, product_id, image) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(product_id)) {
+                return "INVALID_PRODUCT_ID";
+            }
             //Check Product:
             const product = yield containers_1.daoProduct.getProduct(product_id, true);
             if (!product)

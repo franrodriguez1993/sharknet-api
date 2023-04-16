@@ -247,11 +247,14 @@ class productController {
                 //data:
                 const { id } = req.params;
                 //Service:
-                const product = yield service.getProductServ(id);
+                const resService = yield service.getProductServ(id);
                 //return:
-                if (!product)
+                if (!resService)
                     return res.status(404).json({ status: 404, msg: "PRODUCT_NOT_FOUND" });
-                return res.json({ status: 200, msg: "OK", data: product });
+                else if (resService === "INVALID_PRODUCT_ID") {
+                    return res.status(400).json({ status: 400, msg: resService });
+                }
+                return res.json({ status: 200, msg: "OK", data: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -280,20 +283,21 @@ class productController {
                 };
                 const tokenData = { uid: req.uid, rol: req.rol };
                 //service:
-                const updatedProduct = yield service.editProductServ(tokenData, data);
+                const resService = yield service.editProductServ(tokenData, data);
                 //Return:
-                if (!updatedProduct)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (updatedProduct === "PRODUCT_NOT_FOUND" ||
-                    updatedProduct === "ADDRESS_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: updatedProduct });
-                else if (updatedProduct === "UNAUTHORIZED_ACTION")
-                    return res.status(401).json({ status: 401, msg: updatedProduct });
-                else if (updatedProduct === "INVALID_PRODUCT_OFFER" ||
-                    updatedProduct === "INVALID_USER_ADDRESS")
-                    return res.status(400).json({ status: 400, msg: updatedProduct });
+                else if (resService === "PRODUCT_NOT_FOUND" ||
+                    resService === "ADDRESS_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
+                else if (resService === "UNAUTHORIZED_ACTION")
+                    return res.status(401).json({ status: 401, msg: resService });
+                else if (resService === "INVALID_PRODUCT_OFFER" ||
+                    resService === "INVALID_USER_ADDRESS" ||
+                    resService === "INVALID_PRODUCT_ID")
+                    return res.status(400).json({ status: 400, msg: resService });
                 //Ok:
-                return res.json({ status: 200, msg: "OK", data: updatedProduct });
+                return res.json({ status: 200, msg: "OK", data: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -308,14 +312,17 @@ class productController {
                 //data:
                 const { id } = req.params;
                 //Service:
-                const product = yield service.updateViewsServ(id);
+                const resService = yield service.updateViewsServ(id);
                 //return:
-                if (!product)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (product === "PRODUCT_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: product });
-                else if (product === "VIEWS_UPDATED")
-                    return res.json({ status: 200, msg: "OK", data: product });
+                else if (resService === "PRODUCT_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
+                else if (resService === "INVALID_PRODUCT_ID") {
+                    return res.status(400).json({ status: 400, msg: resService });
+                }
+                else if (resService === "VIEWS_UPDATED")
+                    return res.json({ status: 200, msg: "OK", data: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -331,18 +338,19 @@ class productController {
                 const { user, product } = req.body;
                 const tokenID = { uid: req.uid, rol: req.rol };
                 //Service:
-                const favorite = yield service.addPFavoriteServ(tokenID, user, product);
+                const resService = yield service.addPFavoriteServ(tokenID, user, product);
                 //return:
-                if (favorite === "USER_NOT_FOUND" || favorite === "PRODUCT_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: favorite });
-                else if (favorite === "IS_YOUR_PRODUCT" ||
-                    favorite === "UNAUTHORIZED_ACTION")
-                    return res.status(400).json({ status: 400, msg: favorite });
+                if (resService === "USER_NOT_FOUND" || resService === "PRODUCT_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
+                else if (resService === "IS_YOUR_PRODUCT" ||
+                    resService === "UNAUTHORIZED_ACTION" ||
+                    resService === "INVALID_PRODUCT_ID")
+                    return res.status(400).json({ status: 400, msg: resService });
                 //ok:
-                else if (favorite === "FAVORITE_ADDED")
-                    return res.json({ status: 201, msg: favorite });
-                else if (favorite === "FAVORITE_ELIMINATED")
-                    return res.json({ status: 200, msg: favorite });
+                else if (resService === "FAVORITE_ADDED")
+                    return res.json({ status: 201, msg: resService });
+                else if (resService === "FAVORITE_ELIMINATED")
+                    return res.json({ status: 200, msg: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -360,14 +368,17 @@ class productController {
                 const page = parseInt(req.query.page);
                 const size = parseInt(req.query.size);
                 //Service:
-                const list = yield service.listPFavoriteServ(id, page, size);
+                const resService = yield service.listPFavoriteServ(id, page, size);
                 //Return:
-                if (!list)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (list === "USER_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: list });
+                else if (resService === "INVALID_USER_ID") {
+                    return res.status(400).json({ status: 400, msg: resService });
+                }
+                else if (resService === "USER_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
                 //ok:
-                return res.json({ status: 200, msg: "OK", data: list });
+                return res.json({ status: 200, msg: "OK", data: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -384,7 +395,6 @@ class productController {
                     sale_buyer: req.body.buyer,
                     sale_product: req.body.products,
                     sale_instalments: req.body.instalments,
-                    cc_id: req.body.creditCard,
                 };
                 const tokenData = {
                     uid: req.uid,
@@ -395,13 +405,11 @@ class productController {
                 //Return:
                 if (!sale)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (sale === "USER_NOT_FOUND" ||
-                    sale === "CREDITCARD_NOT_FOUND" ||
-                    sale === "PRODUCT_NOT_FOUND")
+                else if (sale === "USER_NOT_FOUND" || sale === "PRODUCT_NOT_FOUND")
                     return res.status(404).json({ status: 404, msg: sale });
                 else if (sale === "ERROR_CREATING" ||
-                    sale === "INVALID_CREDITCARD" ||
-                    sale === "INVALID_PRODUCTS")
+                    sale === "INVALID_PRODUCTS" ||
+                    sale === "INVALID_USER_ID")
                     return res.status(400).json({ status: 400, msg: sale });
                 else if (sale === "UNAUTHORIZED_ACTION")
                     return res.status(401).json({ status: 401, msg: sale });
@@ -421,12 +429,15 @@ class productController {
                 //Data:
                 const { id } = req.params;
                 //Service:
-                const sale = yield service.getSaleServ(id);
+                const resService = yield service.getSaleServ(id);
                 //Return:
-                if (!sale)
+                if (!resService)
                     return res.status(404).json({ status: 404, msg: "SALE_NOT_FOUND" });
+                else if (resService === "INVALID_SALE_ID") {
+                    return res.status(400).json({ status: 400, msg: resService });
+                }
                 //Ok:
-                return res.json({ status: 200, msg: "OK", data: sale });
+                return res.json({ status: 200, msg: "OK", data: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -445,16 +456,19 @@ class productController {
                 const page = parseInt(req.query.page);
                 const size = parseInt(req.query.size);
                 //Service:
-                const list = yield service.getUserSalesServ(tokenID, id, page, size);
+                const resService = yield service.getUserSalesServ(tokenID, id, page, size);
                 //Return:
-                if (!list)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (list === "UNAUTHORIZED_ACTION")
-                    return res.status(401).json({ status: 401, msg: list });
-                else if (list === "USER_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: list });
+                else if (resService === "UNAUTHORIZED_ACTION")
+                    return res.status(401).json({ status: 401, msg: resService });
+                else if (resService === "INVALID_SALE_ID") {
+                    return res.status(400).json({ status: 400, msg: resService });
+                }
+                else if (resService === "USER_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
                 //Ok:
-                return res.json({ status: 200, msg: "OK", data: list });
+                return res.json({ status: 200, msg: "OK", data: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -473,16 +487,19 @@ class productController {
                 const page = parseInt(req.query.page);
                 const size = parseInt(req.query.size);
                 //Service:
-                const list = yield service.getUserBuysServ(tokenID, id, page, size);
+                const resService = yield service.getUserBuysServ(tokenID, id, page, size);
                 //Return:
-                if (!list)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (list === "UNAUTHORIZED_ACTION")
-                    return res.status(401).json({ status: 401, msg: list });
-                else if (list === "USER_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: list });
+                else if (resService === "UNAUTHORIZED_ACTION")
+                    return res.status(401).json({ status: 401, msg: resService });
+                else if (resService === "INVALID_SALE_ID") {
+                    return res.status(400).json({ status: 400, msg: resService });
+                }
+                else if (resService === "USER_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
                 //Ok:
-                return res.json({ status: 200, msg: "OK", data: list });
+                return res.json({ status: 200, msg: "OK", data: resService });
             }
             catch (e) {
                 logger_1.default.error(e.message);
@@ -498,14 +515,17 @@ class productController {
                 const { id } = req.params;
                 const tokenID = { uid: req.uid, rol: req.rol };
                 //Service:
-                const resPause = yield service.pauseProductServ(tokenID, id);
+                const resService = yield service.pauseProductServ(tokenID, id);
                 //Return:
-                if (!resPause)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (resPause === "PRODUCT_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: resPause });
-                else if (resPause === "UNAUTHORIZED_ACTION")
-                    return res.status(401).json({ status: 401, msg: resPause });
+                else if (resService === "PRODUCT_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
+                else if (resService === "INVALID_PRODUCT_ID") {
+                    return res.status(400).json({ status: 400, msg: resService });
+                }
+                else if (resService === "UNAUTHORIZED_ACTION")
+                    return res.status(401).json({ status: 401, msg: resService });
                 //Ok:
                 return res.json({ status: 200, msg: "PRODUCT_PAUSED" });
             }
@@ -523,16 +543,18 @@ class productController {
                 const { id } = req.params;
                 const tokenID = { uid: req.uid, rol: req.rol };
                 //Service:
-                const reactivate = yield service.reactivateProductServ(tokenID, id);
+                const resService = yield service.reactivateProductServ(tokenID, id);
                 //Return:
-                if (!reactivate)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (reactivate === "PRODUCT_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: reactivate });
-                else if (reactivate === "UNAUTHORIZED_ACTION")
-                    return res.status(401).json({ status: 401, msg: reactivate });
-                else if (reactivate === "PRODUCT_IS_DELETED")
-                    return res.status(400).json({ status: 400, msg: reactivate });
+                else if (resService === "PRODUCT_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
+                else if (resService === "UNAUTHORIZED_ACTION")
+                    return res.status(401).json({ status: 401, msg: resService });
+                else if (resService === "INVALID_PRODUCT_ID")
+                    return res.status(400).json({ status: 400, msg: resService });
+                else if (resService === "PRODUCT_IS_DELETED")
+                    return res.status(400).json({ status: 400, msg: resService });
                 //Ok:
                 return res.json({ status: 200, msg: "PRODUCT_REACTIVATED" });
             }
@@ -550,14 +572,16 @@ class productController {
                 const { id } = req.params;
                 const tokenID = { uid: req.uid, rol: req.rol };
                 //Service:
-                const resDelete = yield service.deleteProductServ(tokenID, id);
+                const resService = yield service.deleteProductServ(tokenID, id);
                 //Return:
-                if (!resDelete)
+                if (!resService)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-                else if (resDelete === "PRODUCT_NOT_FOUND")
-                    return res.status(404).json({ status: 404, msg: resDelete });
-                else if (resDelete === "UNAUTHORIZED_ACTION")
-                    return res.status(401).json({ status: 401, msg: resDelete });
+                else if (resService === "PRODUCT_NOT_FOUND")
+                    return res.status(404).json({ status: 404, msg: resService });
+                else if (resService === "INVALID_PRODUCT_ID")
+                    return res.status(400).json({ status: 400, msg: resService });
+                else if (resService === "UNAUTHORIZED_ACTION")
+                    return res.status(401).json({ status: 401, msg: resService });
                 //Ok:
                 return res.json({ status: 200, msg: "PRODUCT_DELETED" });
             }
@@ -607,7 +631,7 @@ class productController {
                 if (resUpdate === "PRODUCT_NOT_FOUND") {
                     return res.status(404).json({ status: 404, msg: resUpdate });
                 }
-                else if (resUpdate === "INVALID_SELLER") {
+                else if (resUpdate === "INVALID_SELLER" || "INVALID_PRODUCT_ID") {
                     return res.status(400).json({ status: 400, msg: resUpdate });
                 }
                 else if (resUpdate === "ERROR_UPLOADING_PHOTO") {

@@ -37,7 +37,9 @@ class commentController {
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
                 else if (comment === "PRODUCT_NOT_FOUND" || comment === "USER_NOT_FOUND")
                     return res.status(404).json({ status: 404, msg: comment });
-                else if (comment === "COMMENT_IS_REPLY" || comment === "USER_IS_SELLER")
+                else if (comment === "COMMENT_IS_REPLY" ||
+                    comment === "USER_IS_SELLER" ||
+                    comment === "INVALID_ID")
                     return res.status(400).json({ status: 400, msg: comment });
                 else if (comment === "UNAUTHORIZED_ACTION")
                     return res.status(401).json({ status: 401, msg: comment });
@@ -73,7 +75,8 @@ class commentController {
                     return res.status(404).json({ status: 404, msg: comment });
                 else if (comment === "COMMENT_ISNT_REPLY" ||
                     comment === "USER_ISNT_SELLER" ||
-                    comment === "COMMENT_ALREADY_REPLIED")
+                    comment === "COMMENT_ALREADY_REPLIED" ||
+                    comment === "INVALID_ID")
                     return res.status(400).json({ status: 400, msg: comment });
                 else if (comment === "UNAUTHORIZED_ACTION")
                     return res.status(401).json({ status: 401, msg: comment });
@@ -100,6 +103,9 @@ class commentController {
                 //Return:
                 if (!list)
                     return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
+                else if (list === "INVALID_PRODUCT_ID") {
+                    return res.status(400).json({ status: 400, msg: list });
+                }
                 else if (list === "PRODUCT_NOT_FOUND")
                     return res.status(404).json({ status: 404, msg: list });
                 //Ok:
@@ -120,6 +126,9 @@ class commentController {
                 if (comment === "COMMENT_NOT_FOUND") {
                     return res.status(404).json({ status: 404, msg: comment });
                 }
+                else if (comment === "INVALID_COMMENT_ID") {
+                    return res.status(400).json({ status: 400, msg: comment });
+                }
                 else {
                     return res.json({ status: 200, msg: "OK", data: comment });
                 }
@@ -139,6 +148,9 @@ class commentController {
                 //Service:
                 const del = yield service.delCommentServ(id);
                 //Return:
+                if (del === "INVALID_COMMENT_ID") {
+                    return res.status(400).json({ status: 400, msg: del });
+                }
                 return res.json({ status: 200, msg: "OK", data: del });
             }
             catch (e) {

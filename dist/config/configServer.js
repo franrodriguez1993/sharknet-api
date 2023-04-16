@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const serverConfigurations = {
     server: {
         port: process.env.PORT || 5000,
-        mode: process.env.MODE || "D",
+        mode: process.env.MODE,
         url_api: process.env.URL_API || "http://localhost:",
         jwt_secret: process.env.JWT_SECRET,
         jwt_refresh_secret: process.env.JWT_REFRESH,
@@ -11,10 +11,18 @@ const serverConfigurations = {
         jwt_refresh_expiration: process.env.JWT_REFRESH_EXPIRATION || "5d",
     },
     postgres: {
-        host: process.env.POSTGRES_HOST,
-        db: process.env.POSTGRES_DB,
-        username: process.env.POSTGRES_USERNAME,
-        password: process.env.POSTGRES_PASSWORD,
+        host: process.env.MODE === "P"
+            ? process.env.POSTGRES_HOST
+            : process.env.POSTGRES_HOST_DEV,
+        db: process.env.MODE === "P"
+            ? process.env.POSTGRES_DB
+            : process.env.POSTGRES_DB_DEV,
+        username: process.env.MODE === "P"
+            ? process.env.POSTGRES_USERNAME
+            : process.env.POSTGRES_USERNAME_DEV,
+        password: process.env.MODE === "P"
+            ? process.env.POSTGRES_PASSWORD
+            : process.env.POSTGRES_PASSWORD_DEV,
     },
     cors: {
         first: process.env.CORS_URL1,

@@ -1,10 +1,14 @@
 //DAOs:
 import { daoStaff, daoLogActivity, daoUser } from "../../containers";
 import { ReqTokenDataInterface } from "../../interfaces/userInterface/reqTokenData.interface";
-
+import { validate as isValidUUID } from "uuid";
 export default class staffService {
   /** ============== VERIFY USER  ============== **/
   async verifyUserServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     //verify:
     const verified = await daoStaff.verifyUser(user_id);
 
@@ -22,6 +26,10 @@ export default class staffService {
 
   /** =============== UNVERIFY USER  =============== **/
   async unverifyUserServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     //unverify:
     const unverified = await daoStaff.unverifyUser(user_id);
 
@@ -39,6 +47,10 @@ export default class staffService {
 
   /** =============== DELETE USER  =============== **/
   async deleteUserServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     //Check user
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";
@@ -60,6 +72,10 @@ export default class staffService {
   /** =============== SUSPEND USER  =============== **/
 
   async suspendUserServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     //Check user
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";
@@ -81,6 +97,10 @@ export default class staffService {
 
   /** =============== REACTIVE USER  =============== **/
   async reactiveUserServ(tokenData: ReqTokenDataInterface, user_id: string) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_USER_ID";
+    }
     //Check user
     const check = await daoUser.getUser("id", user_id, true);
     if (!check) return "USER_NOT_FOUND";

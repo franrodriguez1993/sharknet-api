@@ -13,12 +13,16 @@ export default class staffController {
       //Data:
       const { id } = req.params;
       const tokenData = { uid: req.uid, rol: req.rol };
+
       //Service:
       const user = await service.verifyUserServ(tokenData, id);
 
       //Return:
       if (user === "USER_NOT_FOUND" || user === "ROL_NOT_FOUND")
         return res.status(404).json({ status: 404, msg: user });
+      else if (user === "INVALID_USER_ID") {
+        return res.status(400).json({ status: 400, msg: user });
+      }
       //Ok:
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
@@ -39,6 +43,9 @@ export default class staffController {
       //Return:
       if (user === "USER_NOT_FOUND" || user === "ROL_NOT_FOUND")
         return res.status(404).json({ status: 404, msg: user });
+      else if (user === "INVALID_USER_ID") {
+        return res.status(400).json({ status: 400, msg: user });
+      }
       //Ok:
       return res.json({ status: 200, msg: "OK", data: user });
     } catch (e: any) {
@@ -61,7 +68,9 @@ export default class staffController {
         return res.status(401).json({ status: 401, msg: del });
       else if (del === "USER_NOT_FOUND")
         return res.status(404).json({ status: 404, msg: del });
-
+      else if (del === "INVALID_USER_ID") {
+        return res.status(400).json({ status: 400, msg: del });
+      }
       //Ok:
       return res.json({ status: 200, msg: "OK", data: del });
     } catch (e: any) {
@@ -85,6 +94,9 @@ export default class staffController {
         return res.status(401).json({ status: 401, msg: suspend });
       else if (suspend === "USER_NOT_FOUND")
         return res.status(404).json({ status: 404, msg: suspend });
+      else if (suspend === "INVALID_USER_ID") {
+        return res.status(400).json({ status: 400, msg: suspend });
+      }
 
       //Ok:
       return res.json({ status: 200, msg: "OK", data: suspend });
@@ -109,6 +121,9 @@ export default class staffController {
         return res.status(401).json({ status: 401, msg: reactive });
       else if (reactive === "USER_NOT_FOUND")
         return res.status(404).json({ status: 404, msg: reactive });
+      else if (reactive === "INVALID_USER_ID") {
+        return res.status(400).json({ status: 400, msg: reactive });
+      }
       //Ok:
       return res.json({ status: 200, msg: "OK", data: reactive });
     } catch (e: any) {

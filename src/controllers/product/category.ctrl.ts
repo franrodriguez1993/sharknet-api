@@ -51,13 +51,14 @@ export default class categoryProductController {
       const { id } = req.params;
 
       //Service:
-      const deleted = await service.deleteCategoryServ(id);
+      const resService = await service.deleteCategoryServ(id);
 
       //return:
-      if (!deleted)
+      if (!resService)
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-      else if (deleted)
-        return res.json({ status: 200, msg: "CATEGORY_DELETED" });
+      else if (resService === "INVALID_PRODUCT_CATEGORY_ID") {
+        return res.status(400).json({ status: 400, msg: resService });
+      } else return res.json({ status: 200, msg: "CATEGORY_DELETED" });
     } catch (e: any) {
       logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });

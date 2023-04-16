@@ -3,7 +3,7 @@ import { daoImgProduct, daoProduct } from "../../containers";
 //Interface:
 import { productObjectIF } from "../../interfaces/productInterface/product.interface";
 import imageKitClass from "../../utils/imageKitClass";
-
+import { validate as isValidUUID } from "uuid";
 const uploaderManager = new imageKitClass();
 
 export default class imageProductService {
@@ -13,6 +13,10 @@ export default class imageProductService {
     productId: string,
     image: Buffer
   ) {
+    //valid uuid:
+    if (!isValidUUID(productId)) {
+      return "INVALID_PRODUCT_ID";
+    }
     //Check Product:
     const product: productObjectIF = await daoProduct.getProduct(
       productId,
@@ -40,6 +44,10 @@ export default class imageProductService {
 
   /** ============== DELETE IMG PRODUCT ================ **/
   async delImgProductServ(ip_id: string) {
+    //valid uuid:
+    if (!isValidUUID(ip_id)) {
+      return "INVALID_IMAGE_ID";
+    }
     await uploaderManager.deleteImage(ip_id);
     return await daoImgProduct.deleteImg(ip_id);
   }

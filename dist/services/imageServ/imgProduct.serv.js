@@ -15,11 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //DAOs:
 const containers_1 = require("../../containers");
 const imageKitClass_1 = __importDefault(require("../../utils/imageKitClass"));
+const uuid_1 = require("uuid");
 const uploaderManager = new imageKitClass_1.default();
 class imageProductService {
     /** ============= CREATE IMG PRODUCT ============= **/
     createImgProductServ(tokenUID, productId, image) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(productId)) {
+                return "INVALID_PRODUCT_ID";
+            }
             //Check Product:
             const product = yield containers_1.daoProduct.getProduct(productId, true);
             if (!product)
@@ -45,6 +50,10 @@ class imageProductService {
     /** ============== DELETE IMG PRODUCT ================ **/
     delImgProductServ(ip_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(ip_id)) {
+                return "INVALID_IMAGE_ID";
+            }
             yield uploaderManager.deleteImage(ip_id);
             return yield containers_1.daoImgProduct.deleteImg(ip_id);
         });

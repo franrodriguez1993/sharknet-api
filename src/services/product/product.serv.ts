@@ -1,5 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
-
+import { v4 as uuidv4, validate as isValidUUID } from "uuid";
 import imageKitClass from "../../utils/imageKitClass";
 
 const uploaderManager = new imageKitClass();
@@ -14,7 +13,6 @@ import {
 } from "../../interfaces/productInterface/product.interface";
 import { saleObjectIF } from "../../interfaces/productInterface/sale.interface";
 import { addressObjectIF } from "../../interfaces/userInterface/address.Interface";
-import { creditCardObjectIF } from "../../interfaces/userInterface/creditCard.interface";
 import { ReqTokenDataInterface } from "../../interfaces/userInterface/reqTokenData.interface";
 import { saleProductsInterface } from "../../interfaces/productInterface/saleProducts.interface";
 
@@ -111,11 +109,19 @@ export default class productService {
   /**=============== GET PRODUCT BY ID ===================**/
   // use product id
   async getProductServ(id: string) {
+    //validate uuid:
+    if (!isValidUUID(id)) {
+      return "INVALID_PRODUCT_ID";
+    }
     return await daoProduct.getProduct(id);
   }
 
   /**============== EDIT PRODUCT ================**/
   async editProductServ(tokenData: ReqTokenDataInterface, data: productBodyIF) {
+    //validate uuid:
+    if (!isValidUUID(data.product_id)) {
+      return "INVALID_PRODUCT_ID";
+    }
     //Check Product:
     const product: productObjectIF = await daoProduct.getProduct(
       data.product_id,
@@ -154,6 +160,10 @@ export default class productService {
 
   /**=============== UPDATE VIEWS =================**/
   async updateViewsServ(id: string) {
+    //validate uuid:
+    if (!isValidUUID(id)) {
+      return "INVALID_PRODUCT_ID";
+    }
     return await daoProduct.updateViews(id);
   }
 
@@ -163,6 +173,10 @@ export default class productService {
     uid: string,
     pid: string
   ) {
+    //validate uuid:
+    if (!isValidUUID(pid)) {
+      return "INVALID_PRODUCT_ID";
+    }
     //Check ids:
     const isUser = await daoUser.getUser("id", uid, true);
     if (!isUser) return "USER_NOT_FOUND";
@@ -187,6 +201,10 @@ export default class productService {
 
   /** ================ LIST FAVORITE PRODUCT =============== **/
   async listPFavoriteServ(uid: string, page: number, size: number) {
+    //validate uuid:
+    if (!isValidUUID(uid)) {
+      return "INVALID_USER_ID";
+    }
     //check User:
     const isUser = await daoUser.getUser("id", uid, true);
     if (!isUser) return "USER_NOT_FOUND";
@@ -207,17 +225,14 @@ export default class productService {
         tokenData.rol.toString() !== "user"
       )
         return "UNAUTHORIZED_ACTION";
+
+      //valid uuid:
+      if (!isValidUUID(data.sale_buyer)) {
+        return "INVALID_USER_ID";
+      }
       //check users:
       const buyer = await daoUser.getUser("id", data.sale_buyer);
       if (!buyer) return "USER_NOT_FOUND";
-
-      //check creditCard:
-      const creditCard: creditCardObjectIF = await daoUser.getCreditCard(
-        data.cc_id
-      );
-      if (!creditCard) return "CREDITCARD_NOT_FOUND";
-      if (creditCard.user_id.toString() !== data.sale_buyer.toString())
-        return "INVALID_CREDITCARD";
 
       //Create sale:
       const sale_id = uuidv4();
@@ -242,6 +257,11 @@ export default class productService {
 
   /** ====================== GET SALE  ===================== **/
   async getSaleServ(sale_id: string) {
+    //valid uuid:
+    if (!isValidUUID(sale_id)) {
+      return "INVALID_SALE_ID";
+    }
+
     return await daoSale.getSale(sale_id);
   }
 
@@ -253,6 +273,10 @@ export default class productService {
     page: number,
     size: number
   ) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_SALE_ID";
+    }
     //Check user:
     const user = await daoUser.getUser("id", user_id, true);
     if (!user) return "USER_NOT_FOUND";
@@ -272,6 +296,11 @@ export default class productService {
     page: number,
     size: number
   ) {
+    //valid uuid:
+    if (!isValidUUID(user_id)) {
+      return "INVALID_SALE_ID";
+    }
+
     //Check user:
     const user = await daoUser.getUser("id", user_id, true);
     if (!user) return "USER_NOT_FOUND";
@@ -285,6 +314,11 @@ export default class productService {
 
   /** ================ PAUSE PRODUCT  ================== **/
   async pauseProductServ(tokenID: ReqTokenDataInterface, product_id: string) {
+    //valid uuid:
+    if (!isValidUUID(product_id)) {
+      return "INVALID_PRODUCT_ID";
+    }
+
     //Check product:
     const product: productObjectIF = await daoProduct.getProduct(
       product_id,
@@ -303,6 +337,10 @@ export default class productService {
     tokenID: ReqTokenDataInterface,
     product_id: string
   ) {
+    //valid uuid:
+    if (!isValidUUID(product_id)) {
+      return "INVALID_PRODUCT_ID";
+    }
     //Check product:
     const product: productObjectIF = await daoProduct.getProduct(
       product_id,
@@ -318,6 +356,10 @@ export default class productService {
 
   /** ================== DELETE PRODUCT  =================== **/
   async deleteProductServ(tokenID: ReqTokenDataInterface, product_id: string) {
+    //valid uuid:
+    if (!isValidUUID(product_id)) {
+      return "INVALID_PRODUCT_ID";
+    }
     //Check product:
     const product: productObjectIF = await daoProduct.getProduct(
       product_id,
@@ -366,6 +408,11 @@ export default class productService {
     product_id: string,
     image: Buffer
   ) {
+    //valid uuid:
+    if (!isValidUUID(product_id)) {
+      return "INVALID_PRODUCT_ID";
+    }
+
     //Check Product:
     const product: productObjectIF = await daoProduct.getProduct(
       product_id,

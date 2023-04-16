@@ -82,10 +82,11 @@ export default class userController {
   async getUserIdCtrl(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const user = await service.getUserIdServ(id);
-      if (user === "USER_NOT_FOUND")
-        return res.json({ status: 400, msg: user });
-      return res.json({ status: 200, msg: "OK", data: user });
+      const resService = await service.getUserIdServ(id);
+
+      if (resService === "USER_NOT_FOUND" || resService === "INVALID_USER_ID")
+        return res.json({ status: 400, msg: resService });
+      return res.json({ status: 200, msg: "OK", data: resService });
     } catch (e: any) {
       logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
@@ -107,10 +108,11 @@ export default class userController {
   }
 
   /**======================= EDIT PROFILE USER ==========================**/
-  async editProfileCtrl(req: Request, res: Response) {
+  async editProfileCtrl(req: RequestExt, res: Response) {
     try {
       //Data body:
       const { id } = req.params;
+      const tokenID = req.uid;
       const data = {
         user_id: id,
         user_username: req.body.username,
@@ -121,17 +123,22 @@ export default class userController {
       };
 
       //Service:
-      const user = await service.editProfileServ(data);
+      const resService = await service.editProfileServ(data, tokenID);
 
       //Response:
-      if (!user)
+      if (!resService)
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-      else if (user === "USER_NOT_FOUND")
-        return res.status(404).json({ status: 404, msg: user });
-      else if (user === "USERNAME_IN_USE")
-        return res.status(400).json({ status: 400, msg: user });
-      else if (user === "USER_UPDATED")
-        return res.json({ status: 200, msg: user });
+      else if (resService === "USER_NOT_FOUND")
+        return res.status(404).json({ status: 404, msg: resService });
+      else if (resService === "UNAUTHORIZED_ACTION")
+        return res.status(401).json({ status: 401, msg: resService });
+      else if (
+        resService === "USERNAME_IN_USE" ||
+        resService === "INVALID_USER_ID"
+      )
+        return res.status(400).json({ status: 400, msg: resService });
+      else if (resService === "USER_UPDATED")
+        return res.json({ status: 200, msg: resService });
     } catch (e: any) {
       logger.error(e.message);
       return res.json({ status: 500, msg: e.message });
@@ -146,13 +153,13 @@ export default class userController {
       const { mail } = req.body;
 
       //service:
-      const data = await service.changeEmailServ(id, mail);
+      const resService = await service.changeEmailServ(id, mail);
 
       //Return:
-      if (data === "USER_NOT_FOUND")
-        return res.json({ status: 404, msg: data });
-      else if (data === "MAIL_IN_USE")
-        return res.json({ status: 400, msg: data });
+      if (resService === "USER_NOT_FOUND")
+        return res.json({ status: 404, msg: resService });
+      else if (resService === "MAIL_IN_USE" || resService === "INVALID_USER_ID")
+        return res.json({ status: 400, msg: resService });
 
       //Ok:
       return res.json({ status: 200, msg: "EMAIL_UPDATED" });
@@ -170,11 +177,14 @@ export default class userController {
       const { password } = req.body;
 
       //Service:
-      const user = await service.changePassServ(id, password);
+      const resService = await service.changePassServ(id, password);
 
       //Response:
-      if (user === "USER_NOT_FOUND")
-        return res.json({ status: 404, msg: user });
+      if (resService === "USER_NOT_FOUND")
+        return res.json({ status: 404, msg: resService });
+      else if (resService === "INVALID_USER_ID") {
+        return res.json({ status: 400, msg: resService });
+      }
       return res.json({ status: 200, msg: "PASSWORD_UPDATED" });
     } catch (e: any) {
       logger.error(e.message);
@@ -195,18 +205,20 @@ export default class userController {
         birthday_year: req.body.year,
       };
       //Service:
-      const birthday = await service.addBirthdayServ(data);
+      const resService = await service.addBirthdayServ(data);
 
       //Return:
-      if (!birthday)
+      if (!resService)
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-      else if (birthday === "USER_NOT_FOUND")
-        return res.status(404).json({ status: 404, msg: birthday });
+      else if (resService === "INVALID_USER_ID") {
+        return res.status(400).json({ status: 400, msg: resService });
+      } else if (resService === "USER_NOT_FOUND")
+        return res.status(404).json({ status: 404, msg: resService });
       else if (
-        birthday === "BIRTHDAY_UPDATED" ||
-        birthday === "BIRTHDAY_CREATED"
+        resService === "BIRTHDAY_UPDATED" ||
+        resService === "BIRTHDAY_CREATED"
       )
-        return res.json({ status: 201, msg: birthday });
+        return res.json({ status: 201, msg: resService });
     } catch (e: any) {
       logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
@@ -229,17 +241,17 @@ export default class userController {
         user_id: id,
       };
       //Service:
-      const address = await service.addAddressServ(data);
+      const resService = await service.addAddressServ(data);
 
       //Return:
-      if (!address)
+      if (!resService)
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-      else if (address === "MAX_LIMIT")
-        return res.json({ status: 400, msg: address });
-      else if (address === "USER_NOT_FOUND")
-        return res.json({ status: 404, msg: address });
-      else if (address === "ADDRESS_CREATED")
-        return res.json({ status: 201, msg: address });
+      else if (resService === "MAX_LIMIT" || resService === "INVALID_USER_ID")
+        return res.json({ status: 400, msg: resService });
+      else if (resService === "USER_NOT_FOUND")
+        return res.json({ status: 404, msg: resService });
+      else if (resService === "ADDRESS_CREATED")
+        return res.json({ status: 201, msg: resService });
     } catch (e: any) {
       logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
@@ -258,62 +270,9 @@ export default class userController {
       //Return:
       if (!resDelete)
         return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-      else return res.json({ status: 200, msg: "ADDRESS_DELETED" });
-    } catch (e: any) {
-      logger.error(e.message);
-      return res.status(500).json({ status: 500, msg: e.message });
-    }
-  }
-
-  /** ======================== ADD CREDITCARD =========================== **/
-  async addCreditCardCtrl(req: Request, res: Response) {
-    try {
-      //data:
-      const { id } = req.params;
-      const data = {
-        user_id: id,
-        cc_name: req.body.name,
-        cc_number: req.body.number,
-        cc_date: req.body.date,
-        cc_code: req.body.code,
-        cc_bank: req.body.bank,
-      };
-      //Service:
-      const newCreditCard = await service.addCreditCardServ(data);
-
-      //Return:
-      if (!newCreditCard)
-        return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-      else if (newCreditCard === "USER_NOT_FOUND")
-        return res.status(404).json({ status: 404, msg: newCreditCard });
-      else if (
-        newCreditCard === "MAX_LIMIT" ||
-        newCreditCard === "CREDITCARD_IN_USE"
-      )
-        return res.status(400).json({ status: 400, msg: newCreditCard });
-      else if (newCreditCard === "CREDITCARD_REGISTERED")
-        return res
-          .status(201)
-          .json({ status: 201, msg: "OK", data: newCreditCard });
-    } catch (e: any) {
-      logger.error(e.message);
-      return res.status(500).json({ status: 500, msg: e.message });
-    }
-  }
-
-  /** ========================= DELETE CREDITCARD ========================= **/
-  async deleteCreditCardCtrl(req: Request, res: Response) {
-    try {
-      //data:
-      const { id } = req.params;
-
-      //Service:
-      const deleted = await service.deleteCreditCardServ(id);
-
-      //Return:
-      if (!deleted)
-        return res.status(500).json({ status: 500, msg: "SERVER_ERROR" });
-      return res.json({ status: 200, msg: "CREDITCARD_DELETED" });
+      else if (resDelete === "INVALID_ADDRESS_ID") {
+        return res.status(400).json({ status: 400, msg: resDelete });
+      } else return res.json({ status: 200, msg: "ADDRESS_DELETED" });
     } catch (e: any) {
       logger.error(e.message);
       return res.status(500).json({ status: 500, msg: e.message });
@@ -333,6 +292,8 @@ export default class userController {
       const resUpdate = await service.uploadImageProfile(id, file.buffer);
       if (resUpdate === "ERROR_UPLOADING_IMAGE") {
         return res.status(500).json({ status: 500, msg: resUpdate });
+      } else if (resUpdate === "INVALID_USER_ID") {
+        return res.status(400).json({ status: 400, msg: resUpdate });
       } else if (resUpdate === "USER_NOT_FOUND") {
         return res.status(404).json({ status: 404, msg: resUpdate });
       } else if (resUpdate === "IMAGE_UPDATED") {

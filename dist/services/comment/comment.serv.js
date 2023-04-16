@@ -17,6 +17,10 @@ class commentService {
     /** ===============  COMMENT PRODUCT ===============**/
     commentProductServ(tokenUID, data) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(data.user_id) || !(0, uuid_1.validate)(data.product_id)) {
+                return "INVALID_ID";
+            }
             //Check authorization:
             if (tokenUID.uid.toString() !== data.user_id.toString() ||
                 tokenUID.rol.toString() !== "user")
@@ -52,6 +56,10 @@ class commentService {
     /** ===============  REPLY COMMENT =================**/
     replyCommentServ(tokenUID, data) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(data.user_id) || !(0, uuid_1.validate)(data.product_id)) {
+                return "INVALID_ID";
+            }
             //Check authorization:
             if (tokenUID.toString() !== data.user_id.toString())
                 return "UNAUTHORIZED_ACTION";
@@ -93,6 +101,10 @@ class commentService {
     /** ====================  LIST COMMENT =====================**/
     listCommentServ(product_id, page, size) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(product_id)) {
+                return "INVALID_PRODUCT_ID";
+            }
             const product = yield containers_1.daoProduct.getProduct(product_id, true);
             if (!product)
                 return "PRODUCT_NOT_FOUND";
@@ -102,6 +114,10 @@ class commentService {
     /** ===============  GET COMMENT BY ID ===============**/
     getCommentByIDServ(comment_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(comment_id)) {
+                return "INVALID_COMMENT_ID";
+            }
             const comment = yield containers_1.daoComment.getCommentByID(comment_id);
             if (!comment)
                 return "COMMENT_NOT_FOUND";
@@ -111,6 +127,10 @@ class commentService {
     /** ==================  DELETE COMMENT ====================**/
     delCommentServ(comment_id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(comment_id)) {
+                return "INVALID_COMMENT_ID";
+            }
             return yield containers_1.daoComment.deleteComment(comment_id);
         });
     }

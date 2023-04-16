@@ -77,7 +77,6 @@ export class daoSaleSQL extends basecontainer {
         sale_buyer: data.sale_buyer,
         sale_amount: sale_price,
         sale_instalments: data.sale_instalments,
-        cc_id: data.cc_id,
       });
       if (!sale) return "ERROR_CREATING";
 

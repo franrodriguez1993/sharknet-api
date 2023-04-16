@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, validate as isValidUUID } from "uuid";
 // BcryptJS:
 import { encrypt, verified } from "../../utils/bcryptHandler";
 
@@ -15,7 +15,6 @@ import {
 } from "../../interfaces/userInterface/user.interface";
 import { birthdayBodyIF } from "../../interfaces/userInterface/birthday.interface";
 import { addressBodyIF } from "../../interfaces/userInterface/address.Interface";
-import { creditCardBodyIF } from "../../interfaces/userInterface/creditCard.interface";
 
 //Image Manager:
 import imageKitClass from "../../utils/imageKitClass";
@@ -82,6 +81,10 @@ export default class userService {
 
   /**====================== GET USER BY ID ==========================**/
   async getUserIdServ(id: string) {
+    //valid uuid:
+    if (!isValidUUID(id)) {
+      return "INVALID_USER_ID";
+    }
     const user = await daoUser.getUser("id", id);
     if (!user) return "USER_NOT_FOUND";
     return user;
@@ -98,7 +101,16 @@ export default class userService {
   }
 
   /**==================== EDIT PROFILE USER ====================**/
-  async editProfileServ(data: userBodyIF) {
+  async editProfileServ(data: userBodyIF, tokenID: string) {
+    //valid uuid:
+    if (!isValidUUID(data.user_id)) {
+      return "INVALID_USER_ID";
+    }
+    // check authorization:
+    if (data.user_id.toString() !== tokenID.toString()) {
+      return "UNAUTHORIZED_ACTION";
+    }
+
     if (data.user_username) {
       const check = await daoUser.getUser("username", data.user_username, true);
       if (check) return "USERNAME_IN_USE";
@@ -110,6 +122,10 @@ export default class userService {
 
   /**====================== CHANGE EMAIL ========================**/
   async changeEmailServ(uid: string, mail: string) {
+    //valid uuid:
+    if (!isValidUUID(uid)) {
+      return "INVALID_USER_ID";
+    }
     //Find user:
     const user = await daoUser.getUser("id", uid, true);
     if (!user) return "USER_NOT_FOUND";
@@ -126,6 +142,10 @@ export default class userService {
 
   /**======================== CHANGE PASSWORD ========================**/
   async changePassServ(uid: string, pass: string) {
+    //valid uuid:
+    if (!isValidUUID(uid)) {
+      return "INVALID_USER_ID";
+    }
     //Find user:
     const user = await daoUser.getUser("id", uid, true);
     if (!user) return "USER_NOT_FOUND";
@@ -140,6 +160,11 @@ export default class userService {
 
   /** =================== ADD BIRTHDAY ====================== **/
   async addBirthdayServ(data: birthdayBodyIF) {
+    //valid uuid:
+    if (!isValidUUID(data.user_id)) {
+      return "INVALID_USER_ID";
+    }
+
     //Check User:
     const isUser = await daoUser.getUser("id", data.user_id, true);
     if (!isUser) return "USER_NOT_FOUND";
@@ -154,6 +179,10 @@ export default class userService {
 
   /** ===================== ADD ADDRESS ========================= **/
   async addAddressServ(data: addressBodyIF) {
+    //valid uuid:
+    if (!isValidUUID(data.user_id)) {
+      return "INVALID_USER_ID";
+    }
     //Check user:
     const isUser = await daoUser.getUser("id", data.user_id, true);
     if (!isUser) return "USER_NOT_FOUND";
@@ -170,6 +199,11 @@ export default class userService {
   /** ======================= DELETE ADDRESS ========================== **/
 
   async deleteAddressServ(aid: string) {
+    //valid uuid:
+    if (!isValidUUID(aid)) {
+      return "INVALID_ADDRESS_ID";
+    }
+
     //Delete:
     const resDelete = await daoUser.deleteAddress(aid);
 
@@ -177,32 +211,13 @@ export default class userService {
     return resDelete;
   }
 
-  /** ======================= ADD CREDITCARD ========================= **/
-  async addCreditCardServ(data: creditCardBodyIF) {
-    //checkUser:
-    const isUser = await daoUser.getUser("id", data.user_id, true);
-    if (!isUser) return "USER_NOT_FOUND";
-
-    //Create:
-    const cc_id = uuidv4();
-    const newCreditCard = await daoUser.addCreditCard({ ...data, cc_id });
-
-    //Return:
-    return newCreditCard;
-  }
-
-  /** ========================= DELETE CREDITCARD =========================== **/
-
-  async deleteCreditCardServ(ccid: string) {
-    //delete:
-    const deleted = await daoUser.deleteCreditCard(ccid);
-
-    //return:
-    return deleted;
-  }
-
   /**==================== PROFILE IMAGE =========================**/
   async uploadImageProfile(uid: string, img: Buffer) {
+    //valid uuid:
+    if (!isValidUUID(uid)) {
+      return "INVALID_USER_ID";
+    }
+
     //Upload image:
     const imgProfile = await uploaderManager.uploadImage(img);
     if (!imgProfile) return "ERROR_UPLOADING_IMAGE";

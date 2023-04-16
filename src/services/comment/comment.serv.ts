@@ -1,5 +1,5 @@
 //uuid:
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, validate as isValidUUID } from "uuid";
 
 //DAOs:
 import {
@@ -24,6 +24,10 @@ export default class commentService {
     tokenUID: ReqTokenDataInterface,
     data: commentBodyIF
   ) {
+    //valid uuid:
+    if (!isValidUUID(data.user_id) || !isValidUUID(data.product_id)) {
+      return "INVALID_ID";
+    }
     //Check authorization:
     if (
       tokenUID.uid.toString() !== data.user_id.toString() ||
@@ -67,6 +71,10 @@ export default class commentService {
   /** ===============  REPLY COMMENT =================**/
 
   async replyCommentServ(tokenUID: string, data: commentBodyIF) {
+    //valid uuid:
+    if (!isValidUUID(data.user_id) || !isValidUUID(data.product_id)) {
+      return "INVALID_ID";
+    }
     //Check authorization:
     if (tokenUID.toString() !== data.user_id.toString())
       return "UNAUTHORIZED_ACTION";
@@ -123,6 +131,10 @@ export default class commentService {
   /** ====================  LIST COMMENT =====================**/
 
   async listCommentServ(product_id: string, page: number, size: number) {
+    //valid uuid:
+    if (!isValidUUID(product_id)) {
+      return "INVALID_PRODUCT_ID";
+    }
     const product = await daoProduct.getProduct(product_id, true);
     if (!product) return "PRODUCT_NOT_FOUND";
     return await daoComment.listComment(product_id, page, size);
@@ -130,6 +142,10 @@ export default class commentService {
 
   /** ===============  GET COMMENT BY ID ===============**/
   async getCommentByIDServ(comment_id: string) {
+    //valid uuid:
+    if (!isValidUUID(comment_id)) {
+      return "INVALID_COMMENT_ID";
+    }
     const comment = await daoComment.getCommentByID(comment_id);
     if (!comment) return "COMMENT_NOT_FOUND";
     return comment;
@@ -137,6 +153,10 @@ export default class commentService {
 
   /** ==================  DELETE COMMENT ====================**/
   async delCommentServ(comment_id: string) {
+    //valid uuid:
+    if (!isValidUUID(comment_id)) {
+      return "INVALID_COMMENT_ID";
+    }
     return await daoComment.deleteComment(comment_id);
   }
 }

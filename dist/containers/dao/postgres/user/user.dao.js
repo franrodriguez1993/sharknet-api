@@ -16,7 +16,6 @@ exports.daoUserSQL = void 0;
 const PFavorite_models_1 = __importDefault(require("../../../../models/sql/productsModel/PFavorite.models"));
 const Address_model_1 = __importDefault(require("../../../../models/sql/usersModel/Address.model"));
 const Birthday_model_1 = __importDefault(require("../../../../models/sql/usersModel/Birthday.model"));
-const CreditCard_model_1 = __importDefault(require("../../../../models/sql/usersModel/CreditCard.model"));
 const Rol_model_1 = __importDefault(require("../../../../models/sql/usersModel/Rol.model"));
 const User_model_1 = __importDefault(require("../../../../models/sql/usersModel/User.model"));
 const base_container_1 = __importDefault(require("../../../base/base.container"));
@@ -74,7 +73,6 @@ class daoUserSQL extends base_container_1.default {
                     { model: Rol_model_1.default, attributes: ["rol_name"] },
                     { model: Birthday_model_1.default, attributes: { exclude: ["user_id"] } },
                     { model: Address_model_1.default, attributes: { exclude: ["user_id"] } },
-                    { model: CreditCard_model_1.default, attributes: { exclude: ["user_id"] } },
                     {
                         model: PFavorite_models_1.default,
                         attributes: ["product_id"],
@@ -254,65 +252,6 @@ class daoUserSQL extends base_container_1.default {
                 });
                 //return:
                 return deleteAddress;
-            }
-            catch (e) {
-                throw new Error(e.message);
-            }
-        });
-    }
-    /** --------------------------- ADD CREDIT CARD ---------------------------- **/
-    addCreditCard(data) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                //Check limit:
-                const ccLimit = yield CreditCard_model_1.default.findAll({
-                    where: { user_id: data.user_id },
-                });
-                if (ccLimit.length >= 3)
-                    return "MAX_LIMIT";
-                //check creditCard:
-                const check = yield CreditCard_model_1.default.findOne({
-                    where: { cc_number: data.cc_number, cc_name: data.cc_name },
-                });
-                if (check)
-                    return "CREDITCARD_IN_USE";
-                //Create:
-                const creditCard = yield CreditCard_model_1.default.create({
-                    cc_id: data.cc_id,
-                    user_id: data.user_id,
-                    cc_name: data.cc_name,
-                    cc_number: data.cc_number,
-                    cc_date: data.cc_date,
-                    cc_code: data.cc_code,
-                    cc_bank: data.cc_bank,
-                });
-                if (creditCard)
-                    return "CREDITCARD_REGISTERED";
-            }
-            catch (e) {
-                throw new Error(e.message);
-            }
-        });
-    }
-    /** --------------------------- DELETE CREDIT CARD ---------------------------- **/
-    deleteCreditCard(ccid) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                //delete:
-                const deleted = yield CreditCard_model_1.default.destroy({ where: { cc_id: ccid } });
-                //return:
-                return deleted;
-            }
-            catch (e) {
-                throw new Error(e.message);
-            }
-        });
-    }
-    /** --------------------------- GET CREDIT CARD ---------------------------- **/
-    getCreditCard(cc_id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield CreditCard_model_1.default.findOne({ where: { cc_id } });
             }
             catch (e) {
                 throw new Error(e.message);

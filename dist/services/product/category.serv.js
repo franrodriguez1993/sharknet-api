@@ -33,6 +33,10 @@ class categoryProductService {
     /** ================ DELETE CATEGORY =================== **/
     deleteCategoryServ(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            //valid uuid:
+            if (!(0, uuid_1.validate)(id)) {
+                return "INVALID_PRODUCT_CATEGORY_ID";
+            }
             return yield containers_1.daoProductCategory.deleteCategory(id);
         });
     }

@@ -1,3 +1,9 @@
 node_modules
 .env
 env
+Dockerfile
+Dockerfile.dev
+.yml
+yml
+.dev
+.dockerignore
