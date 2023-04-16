@@ -12,18 +12,12 @@ const controller = new user_ctrl_1.default();
 const upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() });
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Middlewares:
-const RequireRefresh_1 = __importDefault(require("../../middlewares/RequireRefresh"));
 const requireToken_1 = require("../../middlewares/requireToken");
 const checkIdentity_1 = require("../../middlewares/checkIdentity");
 const validatorManager_1 = require("../../middlewares/validatorManager");
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const router = (0, express_1.Router)();
 exports.router = router;
-//LOGIN - REGISTER:
-router.post("/register", validatorManager_1.validateBodyRegister, controller.registerUserCtrl);
-router.post("/login", validatorManager_1.validateBodyLogin, controller.loginUserCtrl);
-router.post("/session", RequireRefresh_1.default, controller.refreshSessionCtrl);
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //GET USER:
 router.get("/data/id/:id", requireToken_1.requireToken, controller.getUserIdCtrl);
 router.post("/data/mail", requireToken_1.requireToken, controller.getUserMailCtrl);

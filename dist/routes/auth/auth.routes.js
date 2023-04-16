@@ -1,0 +1,19 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authRouter = void 0;
+const express_1 = require("express");
+//Midlewares:
+const validatorManager_1 = require("../../middlewares/validatorManager");
+const RequireRefresh_1 = __importDefault(require("../../middlewares/RequireRefresh"));
+//Controllers:
+const user_ctrl_1 = __importDefault(require("../../controllers/user/user.ctrl"));
+const controller = new user_ctrl_1.default();
+const authRouter = (0, express_1.Router)();
+exports.authRouter = authRouter;
+//LOGIN - REGISTER:
+authRouter.post("/register", validatorManager_1.validateBodyRegister, controller.registerUserCtrl);
+authRouter.post("/login", validatorManager_1.validateBodyLogin, controller.loginUserCtrl);
+authRouter.post("/session", RequireRefresh_1.default, controller.refreshSessionCtrl);

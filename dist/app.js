@@ -13,6 +13,7 @@ const comment_1 = require("./routes/comment");
 const imgRoute_1 = require("./routes/imgRoute");
 const superuser_1 = require("./routes/superuser");
 const notification_1 = require("./routes/notification");
+const auth_routes_1 = require("./routes/auth/auth.routes");
 const app = (0, express_1.default)();
 /** =========================  CORS  ==========================  **/
 const urlList = [
@@ -43,4 +44,5 @@ app.use(comment_1.commentRouter);
 app.use(imgRoute_1.imageRouters);
 app.use(superuser_1.superRouters);
 app.use(notification_1.notificationtRouters);
+app.use("/api/v1/auth", auth_routes_1.authRouter);
 exports.default = app;
