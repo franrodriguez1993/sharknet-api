@@ -3,7 +3,6 @@ node_modules
 env
 Dockerfile
 Dockerfile.dev
-.yml
-yml
+docker-compose.yml
 .dev
 .dockerignore
