@@ -26,10 +26,10 @@ function main() {
             yield postgres_1.sequelize.sync();
             app_1.default.listen(PORT, () => {
                 if (configServer_1.default.server.mode === "P") {
-                    logger_1.default.info(` Running in production mode: ${URL_API}`);
+                    logger_1.default.info(` Running in production mode: ${URL_API} - PID:${process.pid} `);
                 }
                 else {
-                    logger_1.default.info(` Running in dev mode: ${URL_API}${PORT}/`);
+                    logger_1.default.info(` Running in dev mode: ${URL_API}${PORT}/ - PID:${process.pid} `);
                 }
             });
         }

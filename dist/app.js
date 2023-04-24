@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const configServer_1 = __importDefault(require("./config/configServer"));
+const express_rate_limit_1 = require("express-rate-limit");
 /** ------ ROUTES ------  **/
 const user_1 = require("./routes/user");
 const product_1 = require("./routes/product");
@@ -15,6 +16,8 @@ const superuser_1 = require("./routes/superuser");
 const notification_1 = require("./routes/notification");
 const auth_routes_1 = require("./routes/auth/auth.routes");
 const app = (0, express_1.default)();
+//API request limiter::
+const apiLimiter = (0, express_rate_limit_1.rateLimit)({ windowMs: 2 * 60 * 1000, max: 100 });
 /** =========================  CORS  ==========================  **/
 const urlList = [
     configServer_1.default.cors.first,
@@ -36,6 +39,7 @@ const corsOptions = {
     },
 };
 app.use((0, cors_1.default)(corsOptions));
+app.use(apiLimiter);
 app.use(express_1.default.json());
 /** =========================  ROUTER  ==========================  **/
 app.use(user_1.userRouters);

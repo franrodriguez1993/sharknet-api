@@ -6,15 +6,20 @@ import serverConfigurations from "./config/configServer";
 
 const PORT = serverConfigurations.server.port;
 const URL_API = serverConfigurations.server.url_api;
+
 async function main() {
   try {
     //sincronizamos con postgres:
     await sequelize.sync();
     app.listen(PORT, () => {
       if (serverConfigurations.server.mode === "P") {
-        logger.info(` Running in production mode: ${URL_API}`);
+        logger.info(
+          ` Running in production mode: ${URL_API} - PID:${process.pid} `
+        );
       } else {
-        logger.info(` Running in dev mode: ${URL_API}${PORT}/`);
+        logger.info(
+          ` Running in dev mode: ${URL_API}${PORT}/ - PID:${process.pid} `
+        );
       }
     });
   } catch (e: any) {

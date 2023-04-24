@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import serverConfigurations from "./config/configServer";
+import { rateLimit } from "express-rate-limit";
 /** ------ ROUTES ------  **/
 import { userRouters } from "./routes/user";
 import { productRouters } from "./routes/product";
@@ -11,6 +12,9 @@ import { notificationtRouters } from "./routes/notification";
 import { authRouter } from "./routes/auth/auth.routes";
 
 const app = express();
+
+//API request limiter::
+const apiLimiter = rateLimit({ windowMs: 2 * 60 * 1000, max: 100 });
 
 /** =========================  CORS  ==========================  **/
 
@@ -33,6 +37,8 @@ const corsOptions = {
   },
 };
 app.use(cors(corsOptions));
+
+app.use(apiLimiter);
 
 app.use(express.json());
 
