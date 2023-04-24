@@ -4,9 +4,18 @@ import app from "./app";
 import logger from "./utils/logger";
 import serverConfigurations from "./config/configServer";
 
+import os from "os";
+import cluster from "cluster";
+
+//cluster cpu numbers:
+const cpuNumbers = os.cpus().length;
+
+const MODE = serverConfigurations.server.mode;
 const PORT = serverConfigurations.server.port;
 const URL_API = serverConfigurations.server.url_api;
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Init function:
 async function main() {
   try {
     //sincronizamos con postgres:
@@ -23,9 +32,38 @@ async function main() {
       }
     });
   } catch (e: any) {
-    console.log(e);
+    logger.info(e);
     logger.error(e.message);
   }
 }
-//Ejecutamos el server:
-main();
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Cluster configuration:
+function clusterConfig() {
+  if (cluster.isPrimary) {
+    logger.info(`Primary ${process.pid} is running`);
+
+    // Fork workers.
+    for (let i = 0; i < cpuNumbers; i++) {
+      cluster.fork();
+    }
+
+    cluster.on("exit", (worker, code, signal) => {
+      logger.error(`worker ${worker.process.pid} died`);
+      logger.info("starting new cluster");
+      cluster.fork();
+    });
+  } else {
+    main();
+    logger.info(`Worker ${process.pid} started`);
+  }
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// SERVER INIT:
+
+if (MODE === "P") {
+  clusterConfig();
+} else {
+  main();
+}

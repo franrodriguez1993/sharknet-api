@@ -9,22 +9,10 @@ const serverConfigurations = {
     jwt_refresh_expiration: process.env.JWT_REFRESH_EXPIRATION || "5d",
   },
   postgres: {
-    host:
-      process.env.MODE === "P"
-        ? process.env.POSTGRES_HOST
-        : process.env.POSTGRES_HOST_DEV,
-    db:
-      process.env.MODE === "P"
-        ? process.env.POSTGRES_DB
-        : process.env.POSTGRES_DB_DEV,
-    username:
-      process.env.MODE === "P"
-        ? process.env.POSTGRES_USERNAME
-        : process.env.POSTGRES_USERNAME_DEV,
-    password:
-      process.env.MODE === "P"
-        ? process.env.POSTGRES_PASSWORD
-        : process.env.POSTGRES_PASSWORD_DEV,
+    host: process.env.POSTGRES_HOST,
+    db: process.env.POSTGRES_DB,
+    username: process.env.POSTGRES_USERNAME,
+    password: process.env.POSTGRES_PASSWORD,
   },
   cors: {
     first: process.env.CORS_URL1,
